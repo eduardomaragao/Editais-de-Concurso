@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+{% block titulo %}{{ e.slug }} — revisão{% endblock %}
+{% block conteudo %}
+<h1>{{ doc.edital.orgao }} — {{ doc.edital.cargo }}</h1>
+<p>
+  Edital {{ doc.edital.numero }} · {{ doc.edital.banca }} ·
+  {% if e.publicado %}<span class="selo publicado">publicado</span>
+  {% elif travas %}<span class="selo travado">{{ travas|length }} trava(s)</span>
+  {% else %}<span class="selo rascunho">pronto para publicar</span>{% endif %}
+  <span class="silencioso mono">{{ doc.edital.versao_arquivo }}</span>
+</p>
+
+<div class="cartao">
+  <h3>Travas de publicação</h3>
+  {% if travas %}
+  <ul class="limpa">
+    {% for t in travas %}<li class="trava">✗ {{ t }}</li>{% endfor %}
+  </ul>
+  {% else %}<p class="ok">✓ Tudo revisado — publicação liberada.</p>{% endif %}
+  <p style="margin-top:12px">
+    <form class="inline" action="/editais/{{ e.id }}/publicar" method="post">
+      <button class="dourado" {% if travas %}disabled{% endif %}>Publicar edital</button>
+    </form>
+    <form class="inline" action="/editais/{{ e.id }}/radar" method="post">
+      <button class="secundario">Rodar radar agora</button>
+    </form>
+  </p>
+</div>
+
+<div class="cartao">
+  <h3>Corte de lei &amp; jurisprudência {% if e.corte_revisado %}<span class="ok">✓ confirmado</span>{% endif %}</h3>
+  <p class="mono silencioso">{{ doc.edital.corte_conteudo.fonte }} — “{{ doc.edital.corte_conteudo.trecho }}”</p>
+  {% if e.candidatas_corte %}
+  <p class="trava">Candidatas em conflito: {{ e.candidatas_corte }}</p>
+  {% endif %}
+  <form action="/editais/{{ e.id }}/confirmar-corte" method="post">
+    <label>Legislação até
+      <input type="date" name="legislacao_ate" value="{{ doc.edital.corte_conteudo.legislacao_ate or '' }}"></label>
+    <label>Jurisprudência até
+      <input type="date" name="jurisprudencia_ate" value="{{ doc.edital.corte_conteudo.jurisprudencia_ate or '' }}"></label>
+    <button type="submit">Confirmar corte</button>
+  </form>
+  <p class="silencioso">Retificação <strong>não move</strong> o corte (âncora na 1ª publicação).</p>
+</div>
+
+<div class="cartao">
+  <h3>Datas de prova {% if e.datas_revisadas %}<span class="ok">✓ confirmadas</span>{% endif %}</h3>
+  <table>
+    <tr><th>Tipo</th><th>Título</th><th>Início</th><th>Fim</th></tr>
+    {% for ev in doc.cronograma if ev.tipo in ("prova_objetiva", "provas_discursivas", "prova_oral") %}
+    <tr><td class="mono">{{ ev.tipo }}</td><td>{{ ev.titulo }}</td>
+        <td>{{ ev.inicio }}</td><td>{{ ev.fim or "—" }}</td></tr>
+    {% endfor %}
+  </table>
+  <form action="/editais/{{ e.id }}/confirmar-datas" method="post" style="margin-top:10px">
+    <button type="submit">Confirmar datas de prova</button>
+  </form>
+</div>
+
+<div class="cartao">
+  <h3>Árvore de conteúdo {% if e.conteudo_revisado %}<span class="ok">✓ revisada</span>{% endif %}</h3>
+  <p>{{ doc.conteudo | length }} nós ·
+     <a href="/editais/{{ e.id }}/conteudo">abrir revisão da árvore →</a></p>
+</div>
+
+<div class="cartao">
+  <h3>Radar</h3>
+  <p>
+    Incorporadas: <span class="mono">{{ doc.edital.retificacoes_incorporadas | join(", ") }}</span> ·
+    Última publicada:
+    <span class="mono">{{ doc.edital.ultima_retificacao_publicada or "radar não rodado" }}</span>
+    {% if doc.edital.radar_desatualizado %}<span class="selo travado">desatualizado</span>
+    {% elif doc.edital.radar_desatualizado is false %}<span class="selo publicado">em dia</span>{% endif %}
+  </p>
+</div>
+
+<div class="cartao">
+  <h3>Relatório de revisão do parser</h3>
+  {% if e.relatorio %}
+  <ul>{% for linha in e.relatorio %}<li class="silencioso">{{ linha }}</li>{% endfor %}</ul>
+  {% else %}<p class="silencioso">Sem pendências do parser.</p>{% endif %}
+</div>
+{% endblock %}

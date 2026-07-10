@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{% block titulo %}Editais — Painel de revisão{% endblock %}</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root { --verde:#17553F; --dourado:#B8862F; --papel:#FBFAF6; --tinta:#26251F; }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--papel); color:var(--tinta);
+         font-family:Inter,system-ui,sans-serif; font-size:15px; line-height:1.5; }
+  h1,h2,h3 { font-family:Fraunces,Georgia,serif; color:var(--verde); margin:0 0 .4em; }
+  header.topo { background:var(--verde); color:#fff; padding:14px 28px; }
+  header.topo a { color:#fff; text-decoration:none; font-family:Fraunces,Georgia,serif;
+                  font-size:20px; font-weight:600; }
+  header.topo .sub { color:#cfe0d8; font-size:13px; margin-left:10px; }
+  main { max-width:980px; margin:28px auto; padding:0 20px; }
+  .cartao { background:#fff; border:1px solid #e5e1d5; border-radius:10px;
+            padding:18px 22px; margin-bottom:18px; }
+  .selo { display:inline-block; border-radius:999px; padding:2px 12px; font-size:12px;
+          font-weight:600; }
+  .selo.rascunho { background:#f3ead5; color:#7a5b17; }
+  .selo.publicado { background:#e0ecdf; color:var(--verde); }
+  .selo.travado { background:#f7dfdc; color:#8c2f24; }
+  .aviso-erro { background:#f7dfdc; border:1px solid #e5b7b0; color:#8c2f24;
+                border-radius:8px; padding:10px 14px; margin-bottom:16px; }
+  table { border-collapse:collapse; width:100%; }
+  td,th { padding:8px 10px; border-bottom:1px solid #eee8da; text-align:left;
+          vertical-align:top; }
+  th { font-size:12px; text-transform:uppercase; letter-spacing:.05em; color:#8a8574; }
+  button, .botao { background:var(--verde); color:#fff; border:0; border-radius:8px;
+           padding:8px 16px; font:inherit; font-weight:600; cursor:pointer; }
+  button.secundario { background:#fff; color:var(--verde); border:1px solid var(--verde); }
+  button.mini { padding:2px 9px; font-size:12px; font-weight:500; }
+  button.dourado { background:var(--dourado); }
+  button:disabled { background:#c9c4b4; cursor:not-allowed; }
+  input[type=text], input[type=date] { font:inherit; padding:7px 10px;
+        border:1px solid #d8d2c0; border-radius:7px; background:#fff; }
+  form.inline { display:inline; }
+  ul.limpa { list-style:none; padding-left:0; margin:0; }
+  .trava { color:#8c2f24; }
+  .ok { color:var(--verde); }
+  .mono { font-family:ui-monospace,Consolas,monospace; font-size:13px; }
+  .silencioso { color:#8a8574; font-size:13px; }
+</style>
+</head>
+<body>
+<header class="topo">
+  <a href="/">Editais</a><span class="sub">painel de revisão — eduardoaragao.com</span>
+</header>
+<main>
+{% if erro %}<div class="aviso-erro">{{ erro }}</div>{% endif %}
+{% block conteudo %}{% endblock %}
+</main>
+</body>
+</html>

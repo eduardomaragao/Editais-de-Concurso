@@ -10,17 +10,21 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-# API + admin + banco entram na fase 3 do roadmap; ja listados para nao esquecer.
 api = [
     "fastapi>=0.115",
     "uvicorn[standard]>=0.32",
     "jinja2>=3.1",
     "sqlalchemy>=2.0",
+    "python-multipart>=0.0.12",
+]
+# Producao com Postgres (dev usa SQLite): pip install -e ".[api,postgres]"
+postgres = [
     "alembic>=1.14",
     "psycopg[binary]>=3.2",
 ]
 dev = [
     "pytest>=8.3",
+    "httpx>=0.27",
 ]
 
 [build-system]

@@ -24,6 +24,9 @@ app/pubspec.lock
 Thumbs.db
 .DS_Store
 
+# Banco local do painel + uploads
+backend/data/
+
 # Secrets / local
 .env
 *.local

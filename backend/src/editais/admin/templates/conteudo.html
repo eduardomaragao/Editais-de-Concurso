@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block titulo %}{{ e.slug }} — árvore de conteúdo{% endblock %}
+{% block conteudo %}
+<h1>Árvore de conteúdo</h1>
+<p><a href="/editais/{{ e.id }}">← voltar ao edital</a> ·
+   {{ e.documento.conteudo | length }} nós ·
+   {% if e.conteudo_revisado %}<span class="selo publicado">revisada</span>
+   {% else %}<span class="selo rascunho">em revisão</span>{% endif %}</p>
+
+<div class="cartao">
+  <p class="silencioso">Texto deve ficar <strong>literal ao edital</strong>. “↑” promove um
+  nível (subtópico → tópico); “↓” rebaixa para dentro do irmão anterior. Qualquer edição
+  fecha a trava de novo.</p>
+  <form action="/editais/{{ e.id }}/confirmar-arvore" method="post">
+    <button class="dourado" type="submit">Confirmar árvore revisada</button>
+  </form>
+</div>
+
+{% macro linha_no(item, eid) %}
+  <li style="margin:4px 0">
+    <form class="inline" action="/editais/{{ eid }}/conteudo/{{ item.no.id }}/titulo" method="post">
+      <span class="mono silencioso">{{ item.no.ordem }}</span>
+      <input type="text" name="titulo" value="{{ item.no.titulo }}"
+             size="{{ [item.no.titulo|length, 30] | max }}">
+      <button class="mini secundario" title="salvar título">salvar</button>
+    </form>
+    <form class="inline" action="/editais/{{ eid }}/conteudo/{{ item.no.id }}/promover" method="post">
+      <button class="mini" title="promover um nível">↑</button>
+    </form>
+    <form class="inline" action="/editais/{{ eid }}/conteudo/{{ item.no.id }}/rebaixar" method="post">
+      <button class="mini" title="rebaixar para o irmão anterior">↓</button>
+    </form>
+    {% if item.filhos %}
+    <ul class="limpa" style="padding-left:26px">
+      {% for filho in item.filhos %}{{ linha_no(filho, eid) }}{% endfor %}
+    </ul>
+    {% endif %}
+  </li>
+{% endmacro %}
+
+{% for materia in materias %}
+<div class="cartao">
+  <h2>{{ materia.no.titulo }}
+    {% if materia.no.fases %}<span class="selo rascunho">{{ materia.no.fases | join(" · ") }}</span>{% endif %}
+  </h2>
+  <ul class="limpa">
+    {% for topico in materia.filhos %}{{ linha_no(topico, e.id) }}{% endfor %}
+  </ul>
+</div>
+{% endfor %}
+{% endblock %}

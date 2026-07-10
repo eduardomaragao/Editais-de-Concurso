@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block conteudo %}
+<h1>Editais</h1>
+
+<div class="cartao">
+  <h3>Subir edital consolidado (PDF)</h3>
+  <p class="silencioso">Sempre a versão "atualizada conforme retificações". Reupload do
+  mesmo edital substitui o rascunho e fecha as travas de novo.</p>
+  <form action="/upload" method="post" enctype="multipart/form-data">
+    <input type="file" name="arquivo" accept="application/pdf" required>
+    <button type="submit">Processar edital</button>
+  </form>
+</div>
+
+<div class="cartao">
+  {% if editais %}
+  <table>
+    <tr><th>Edital</th><th>Órgão / cargo</th><th>Status</th><th>Travas</th></tr>
+    {% for e in editais %}
+    <tr>
+      <td><a href="/editais/{{ e.id }}">{{ e.slug }}</a></td>
+      <td>{{ e.documento.edital.orgao }} — {{ e.documento.edital.cargo }}</td>
+      <td>
+        {% if e.publicado %}<span class="selo publicado">publicado</span>
+        {% else %}<span class="selo rascunho">rascunho</span>{% endif %}
+      </td>
+      <td>{{ travas(e) | length }}</td>
+    </tr>
+    {% endfor %}
+  </table>
+  {% else %}
+  <p class="silencioso">Nenhum edital ainda — suba o primeiro PDF acima.</p>
+  {% endif %}
+</div>
+{% endblock %}
