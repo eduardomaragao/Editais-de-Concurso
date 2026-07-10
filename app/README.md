@@ -1,27 +1,50 @@
 # App mobile (Flutter)
 
-Placeholder — o Flutter SDK ainda não está instalado nesta máquina.
+App do candidato — consome a API do backend (só editais **publicados**).
 
-## Quando o SDK estiver instalado
+## Rodar em dev
 
-1. Instalar: https://docs.flutter.dev/get-started/install/windows
-2. Gerar o projeto **dentro desta pasta** (o `.` no final importa):
+O backend precisa estar de pé com um edital publicado:
 
-   ```powershell
-   cd app
-   flutter create --org com.eduardoaragao --project-name editais_app .
-   ```
+```powershell
+cd ..\backend
+.\.venv\Scripts\python.exe scripts\seed_pge_al.py --publicar
+.\.venv\Scripts\python.exe -m uvicorn --factory editais.admin.app:criar_app --port 8123
+```
 
-## O que o app implementa (ver `referencia/proto_app_pge_al.html`)
+Depois o app (SDK em `%USERPROFILE%\flutter`):
 
-- **Edital (hub):** cartões de navegação + selo do radar + card do corte.
-- **Dados da prova:** dia/horário do edital + local preenchido pelo candidato
-  (CEP + sala) com deep links de Uber, 99 e Google Maps.
-- **Conteúdo:** árvore com checkbox à esquerda e expandir à direita;
-  progresso por candidato + edital.
-- **Datas:** calendário + tabela de status + exportação `.ics`.
-- **Provas anteriores:** abas Objetivas / Subjetivas / Orais (2020+).
-  Nunca hospedar gravação de prova oral.
+```powershell
+cd app
+%USERPROFILE%\flutter\bin\flutter run -d web-server --web-port 8124
+# ou num emulador/dispositivo: flutter run
+```
 
-Design: verde bottle `#17553F` · dourado `#B8862F` · papel `#FBFAF6`.
-Tipografia: Fraunces (títulos) + Inter (corpo). Labels em português (BR).
+Backend em outro endereço: `flutter run --dart-define=API_BASE=https://...`
+
+## Verificação
+
+```powershell
+flutter analyze
+flutter test
+```
+
+## Estrutura
+
+| Arquivo | O que é |
+|---|---|
+| `lib/modelos.dart` | Acesso tipado ao documento do contrato + árvore aninhada |
+| `lib/api.dart` | Cliente da API (`/api/editais`) |
+| `lib/armazenamento.dart` | Dados do USUÁRIO no aparelho: progresso + locais de prova |
+| `lib/ics.dart` | Exportação do cronograma (.ics) e status de eventos |
+| `lib/tema.dart` | Identidade visual (verde `#17553F` · dourado `#B8862F` · papel `#FBFAF6`, Fraunces + Inter) |
+| `lib/telas/` | Home · Hub do edital · Conteúdo · Datas · Dados da prova · Provas anteriores |
+
+Regras de produto no app:
+- **Conteúdo:** checkbox à esquerda marca o tópico inteiro; expandir à direita
+  mostra subtópicos marcáveis um a um. Progresso por candidato + edital.
+- **Dados da prova:** local é do candidato (CEP via ViaCEP + sala), com deep
+  links de Uber, 99 e Google Maps (carro/transporte público). Vários locais.
+- **Provas anteriores:** abas Objetivas/Subjetivas/Orais; na oral, nunca a
+  gravação — só pontos e espelho.
+- **Radar:** selo no hub avisa quando há retificação não incorporada.

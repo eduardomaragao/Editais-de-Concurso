@@ -13,6 +13,7 @@ from pathlib import Path
 from urllib.parse import quote
 
 from fastapi import Depends, FastAPI, Form, HTTPException, Request, UploadFile
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import RedirectResponse
 from fastapi.templating import Jinja2Templates
 
@@ -29,6 +30,13 @@ def criar_app(engine=None) -> FastAPI:
     SessaoLocal = criar_sessionmaker(engine)
 
     app = FastAPI(title="Editais — Painel de revisão")
+    # O app Flutter (web, em dev) roda em outra porta e consome /api.
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=["*"],
+        allow_methods=["GET"],
+        allow_headers=["*"],
+    )
     templates = Jinja2Templates(directory=str(TEMPLATES_DIR))
 
     def sessao():

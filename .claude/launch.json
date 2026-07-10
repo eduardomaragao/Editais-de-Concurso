@@ -6,6 +6,13 @@
       "runtimeExecutable": "backend/.venv/Scripts/python.exe",
       "runtimeArgs": ["-m", "uvicorn", "--factory", "editais.admin.app:criar_app", "--port", "8123"],
       "port": 8123
+    },
+    {
+      "name": "app",
+      "runtimeExecutable": "C:/Users/eduar/flutter/bin/flutter.bat",
+      "runtimeArgs": ["run", "-d", "web-server", "--web-port", "8124"],
+      "cwd": "app",
+      "port": 8124
     }
   ]
 }

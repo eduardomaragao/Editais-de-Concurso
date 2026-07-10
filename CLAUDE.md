@@ -56,13 +56,20 @@ Painel admin (dev):
 .\.venv\Scripts\python.exe scripts\seed_pge_al.py     # semeia o SQLite local com o piloto
 .\.venv\Scripts\python.exe -m uvicorn --factory editais.admin.app:criar_app --port 8123
 ```
-App Flutter: SDK ainda não instalado — ver `app/README.md` para gerar o projeto quando instalar.
+App Flutter (SDK em `%USERPROFILE%\flutter`, fora do PATH — usar caminho completo ou adicionar):
+```powershell
+cd app
+%USERPROFILE%\flutter\bin\flutter analyze
+%USERPROFILE%\flutter\bin\flutter test
+%USERPROFILE%\flutter\bin\flutter run -d web-server --web-port 8124   # precisa do backend + edital publicado
+```
 
 ## Estado atual
 - Scaffold do monorepo pronto: `backend/` (pacote `editais` com stubs documentados de parser/radar/api/admin/db) + `app/` (placeholder até instalar o Flutter SDK). Admin será Jinja2+HTMX dentro do backend; radar é módulo do backend.
 - `backend/tests/test_contract.py` valida o golden `pge_al.instance.json` contra o schema — se quebrar, o contrato mudou; resolver antes de mexer no parser.
 - **Parser v1 completo**: `assemble.parse_edital(pdf)` roda o pipeline inteiro (pdf_text → sectioner → todos os extratores), emite documento **válido contra o schema** + relatório de revisão + candidatas de corte. Golden test de ponta a ponta em `tests/test_golden.py` passa contra o PDF real (826 nós de conteúdo, 22 eventos, corte 2026-03-31, retificações ["no 2","no 3"]). Campos do radar (`ultima_retificacao_publicada`/`radar_desatualizado`) ficam de fora do assemble — quem preenche é o radar.
 - **Painel de revisão pronto** (`admin/app.py` + `admin/servico.py` + `db/`): upload de PDF → rascunho travado; árvore com editar título/promover/rebaixar (edição fecha a trava de novo); confirmações de corte e datas; radar; publicar só com as 4 travas abertas. SQLite em `backend/data/` (gitignored), Postgres via `EDITAIS_DATABASE_URL`. API JSON (`/api/editais`) só expõe publicados. Toda mutação valida contra o schema antes de gravar. **Cuidado aprendido:** commit da sessão precisa acontecer ANTES do redirect (ver `_mutar` em `app.py`) — o commit no teardown da dependency corre contra o GET do redirect.
+- **App Flutter v1 pronto** (`app/lib/`): as 5 telas do protótipo consumindo `/api` — home, hub (selo do radar + card do corte), conteúdo (checkbox marca subárvore, expandir mostra subtópicos; progresso persistido por edital), datas (status + .ics via clipboard), dados da prova (ViaCEP + deep links Uber/99/Maps), provas anteriores (abas). Verificado no navegador contra o backend real. Polimentos pendentes: .ics como download/share nativo, deep link real do 99, coordenadas para os links.
 - **Radar pronto** (`radar/core.py` + `radar/cebraspe.py`): `verificar(documento, fetcher)` compara retificações incorporadas × publicadas e grava os campos no documento. Só **retificação** trava a publicação; editais que não retificam (relação de isenção etc.) viram alerta informativo. Fetcher plugável por banca; o da Cebraspe separa parse de HTML do download (testes sem rede). Aceite do piloto passa: arquivo até nº 3 + site com nº 5 → travado, `ultima="no 5 (2026-06-08)"`. Falta o **serviço agendado** que chama o fetcher (cache, robots.txt, intervalo) — entra junto com a API/admin (fase 3 do roadmap).
 - PDFs ficam em `editais/<orgao-uf-ano>/` (consolidado = fonte da verdade do parser) e provas anteriores em `provas/<orgao-uf-ano>/` — convenções nos READMEs de cada pasta. Os 10 PDFs do piloto já estão no repo; o consolidado (entrada do parser) é `editais/pge-al-2026/PGE_AL_2026_Edital_1_Abertura_Atualizado.pdf` (consolida até o nº 3; os nº 5–7 vieram depois → caso de teste do radar).
 - Verificado no PDF real: 16.32/16.32.1 e o formato do item 17 batem com as premissas de `outline.py`/`corte.py`. Atenção para os próximos extractors: o item 17 tem preâmbulo (17.1 HABILIDADES) antes das disciplinas, e o Anexo I intercala linhas de horário ("Das 10 horas...") entre as datas.
