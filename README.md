@@ -12,6 +12,8 @@ Piloto: **PGE/AL — Procurador do Estado (Cebraspe, Edital 01/2026)**.
 | Pasta | O que é |
 |---|---|
 | `referencia/` | Contrato de dados (`edital.schema.json`), caso de teste dourado (`pge_al.instance.json`), spec do parser e protótipo das telas. **Fonte da verdade — não editar sem combinar.** |
+| `editais/` | PDFs oficiais dos editais, uma subpasta por concurso (`pge-al-2026/`…). O consolidado é o que o parser lê. |
+| `provas/` | Provas anteriores (curadoria), uma subpasta por concurso de origem. Nunca gravações de prova oral. |
 | `backend/` | Python: parser de editais (PDF → JSON), API (FastAPI), painel admin (Jinja2/HTMX) e radar de retificações. |
 | `app/` | App mobile Flutter (iOS + Android). Placeholder até o Flutter SDK ser instalado. |
 

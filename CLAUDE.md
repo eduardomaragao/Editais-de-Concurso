@@ -57,7 +57,7 @@ App Flutter: SDK ainda não instalado — ver `app/README.md` para gerar o proje
 - Scaffold do monorepo pronto: `backend/` (pacote `editais` com stubs documentados de parser/radar/api/admin/db) + `app/` (placeholder até instalar o Flutter SDK). Admin será Jinja2+HTMX dentro do backend; radar é módulo do backend.
 - `backend/tests/test_contract.py` valida o golden `pge_al.instance.json` contra o schema — se quebrar, o contrato mudou; resolver antes de mexer no parser.
 - **Parser ainda não implementado.** Próximo passo: parser v1 na ordem da `referencia/PARSER_SPEC.md` §12 (pdf_text → sectioner → **outline com testes primeiro** → corte → demais extratores → assemble/validate).
-- O PDF oficial consolidado ainda não está no repo; quando chegar, salvar como `referencia/pge_al.pdf` (testes de fumaça do pdf_text dependem dele).
+- PDFs ficam em `editais/<orgao-uf-ano>/` (consolidado = fonte da verdade do parser) e provas anteriores em `provas/<orgao-uf-ano>/` — convenções nos READMEs de cada pasta. O consolidado do piloto ainda não está no repo; quando chegar, salvar como `editais/pge-al-2026/edital-01-2026-consolidado.pdf` (testes de fumaça do pdf_text dependem dele).
 
 ## Convenções
 - Código e commits podem ser em inglês; **conteúdo/labels do app em português (BR)**.

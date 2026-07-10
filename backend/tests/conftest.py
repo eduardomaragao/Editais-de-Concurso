@@ -9,7 +9,8 @@ REFERENCIA = REPO_ROOT / "referencia"
 
 SCHEMA_PATH = REFERENCIA / "edital.schema.json"
 GOLDEN_PATH = REFERENCIA / "pge_al.instance.json"
-PDF_PATH = REFERENCIA / "pge_al.pdf"  # ainda nao existe; testes de fumaca pulam
+# Ainda nao existe; testes de fumaca pulam ate o Eduardo colocar o PDF.
+PDF_PATH = REPO_ROOT / "editais" / "pge-al-2026" / "edital-01-2026-consolidado.pdf"
 
 
 @pytest.fixture(scope="session")
