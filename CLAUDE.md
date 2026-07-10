@@ -57,7 +57,8 @@ App Flutter: SDK ainda não instalado — ver `app/README.md` para gerar o proje
 - Scaffold do monorepo pronto: `backend/` (pacote `editais` com stubs documentados de parser/radar/api/admin/db) + `app/` (placeholder até instalar o Flutter SDK). Admin será Jinja2+HTMX dentro do backend; radar é módulo do backend.
 - `backend/tests/test_contract.py` valida o golden `pge_al.instance.json` contra o schema — se quebrar, o contrato mudou; resolver antes de mexer no parser.
 - **Parser ainda não implementado.** Próximo passo: parser v1 na ordem da `referencia/PARSER_SPEC.md` §12 (pdf_text → sectioner → **outline com testes primeiro** → corte → demais extratores → assemble/validate).
-- PDFs ficam em `editais/<orgao-uf-ano>/` (consolidado = fonte da verdade do parser) e provas anteriores em `provas/<orgao-uf-ano>/` — convenções nos READMEs de cada pasta. O consolidado do piloto ainda não está no repo; quando chegar, salvar como `editais/pge-al-2026/edital-01-2026-consolidado.pdf` (testes de fumaça do pdf_text dependem dele).
+- PDFs ficam em `editais/<orgao-uf-ano>/` (consolidado = fonte da verdade do parser) e provas anteriores em `provas/<orgao-uf-ano>/` — convenções nos READMEs de cada pasta. Os 10 PDFs do piloto já estão no repo; o consolidado (entrada do parser) é `editais/pge-al-2026/PGE_AL_2026_Edital_1_Abertura_Atualizado.pdf` (consolida até o nº 3; os nº 5–7 vieram depois → caso de teste do radar).
+- Verificado no PDF real: 16.32/16.32.1 e o formato do item 17 batem com as premissas de `outline.py`/`corte.py`. Atenção para os próximos extractors: o item 17 tem preâmbulo (17.1 HABILIDADES) antes das disciplinas, e o Anexo I intercala linhas de horário ("Das 10 horas...") entre as datas.
 
 ## Convenções
 - Código e commits podem ser em inglês; **conteúdo/labels do app em português (BR)**.
