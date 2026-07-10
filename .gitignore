@@ -1,0 +1,29 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+dist/
+build/
+
+# Flutter / Dart (app/)
+app/.dart_tool/
+app/.flutter-plugins*
+app/build/
+app/.packages
+app/pubspec.lock
+
+# IDE / OS
+.idea/
+.vscode/
+*.swp
+Thumbs.db
+.DS_Store
+
+# Secrets / local
+.env
+*.local

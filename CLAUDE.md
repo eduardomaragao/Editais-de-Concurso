@@ -1,0 +1,63 @@
+# Projeto — App de acompanhamento de editais de concurso
+
+## O que é
+Produto para candidatos de concursos públicos jurídicos (base de alunos de **eduardoaragao.com**). O app pega um edital, destrincha tudo (datas, local, corte de lei/jurisprudência, conteúdo programático) e deixa o candidato acompanhar estudo e prazos. Piloto: **PGE/AL — Procurador do Estado (Cebraspe, Edital 01/2026)**.
+
+Este projeto foi especificado passo a passo com o Eduardo. Antes de codar, **leia `referencia/`** — lá estão o contrato de dados, um edital real já processado e o protótipo navegável das telas.
+
+## Arquitetura (proposta; refine se fizer sentido)
+- **Backend Python** — parser de editais (PDF → JSON) + API. Sugestão: FastAPI; extração com `pymupdf`/`pdfplumber`. Postgres para persistência.
+- **App mobile** — **Flutter** (um código só para iOS e Android). Consome a API.
+- **Painel admin (web)** — onde o Eduardo revisa e aprova o que o parser extraiu antes de publicar.
+- **Radar** — serviço que monitora o site da banca: descobre novos editais e detecta retificações de editais já cadastrados.
+
+## Modelo de entrada (decisão do Eduardo)
+O Eduardo **sobe o PDF oficial consolidado** ("atualizado conforme retificações"). O parser extrai → o Eduardo revisa → publica. A busca automática é só um **radar** que avisa quando há retificação nova; não é a fonte da verdade.
+
+## Contrato de dados
+Toda saída do parser **valida** contra `referencia/edital.schema.json` (JSON Schema draft 2020-12). `referencia/pge_al.instance.json` é um exemplo real **válido** — use como caso de teste dourado. `referencia/ficha_campos_edital.md` é o dicionário de campos com a origem de cada um.
+
+Origem dos campos: **AUTO** (parser) · **REVISÃO** (Eduardo confirma) · **CURADORIA** (Eduardo insere) · **USUÁRIO** (candidato preenche no app).
+
+## Regras invioláveis (human-in-the-loop)
+1. **Árvore de conteúdo** (matéria → tópico → subtópico) e os **títulos** saem do parser como rascunho, mas a **estrutura e o texto são REVISÃO**. Nada publica sem `edital.conteudo_revisado == true`. O texto do nó deve ser **literal do edital** (item 17).
+2. **Corte de lei/jurisprudência** = REVISÃO. Costuma vir como **referência relativa** ("data de publicação deste edital"); guardar o texto literal + a data resolvida. Ancora na **1ª publicação** — retificação **não move** o corte.
+3. **Data/hora de prova** = REVISÃO.
+4. **Sempre trabalhar do consolidado atualizado.** O radar compara `retificacoes_incorporadas` (no arquivo) com `ultima_retificacao_publicada` (site) e marca `radar_desatualizado`. Quando desatualizado, trava a publicação e pede reupload. (No piloto, o PDF consolidava só até o nº 3, mas o nº 5 já havia remarcado as provas para 05–06/09/2026 — o radar tem que pegar isso.)
+
+## Telas do app (ver `referencia/proto_app_pge_al.html`)
+- **Edital (hub):** cartões de navegação + selo do radar + card do corte.
+- **Dados da prova:** dia/horário (do edital) + **local preenchido pelo candidato** (CEP + sala) que gera deep links de **Uber, 99** e **Google Maps** (rota de carro / transporte público). Suporta mais de um local.
+- **Conteúdo:** árvore com **checkbox à esquerda** (marca o tópico inteiro) e **expandir à direita** (mostra subtópicos literais, marcáveis um a um). Progresso é dado do USUÁRIO, por candidato+edital.
+- **Datas:** calendário + tabela de status + botão **"Adicionar à agenda"** (exporta `.ics` para Google/Apple/Outlook).
+- **Provas anteriores:** de 2020+; abas **Objetivas / Subjetivas / Orais**; cada concurso com **Prova + Gabarito** (objetiva) / **Padrão de resposta** (subjetiva) / **Espelho** (oral). **Nunca hospedar a gravação da oral** (proibido pela banca) — só pontos/critérios.
+
+## Design
+Verde bottle `#17553F` (justiça) · dourado `#B8862F` (conquista/concluído) · papel `#FBFAF6`. Tipografia: **Fraunces** (títulos) + **Inter** (corpo). O protótipo já reflete isso.
+
+## Roadmap sugerido (primeiras tarefas)
+1. Scaffold do monorepo: `backend/` (Python), `app/` (Flutter), `admin/` (web).
+2. **Parser v1**: lê o PDF do edital e emite JSON que **passa** no `edital.schema.json`. Validar contra `pge_al.instance.json`. Focar primeiro em: identificação, cronograma (Anexo I), corte (16.32), árvore de conteúdo (item 17).
+3. **Painel de revisão** da árvore (promover/rebaixar/agrupar tópico↔subtópico; travar publicação).
+4. **App**: implementar as telas do protótipo consumindo a API.
+5. **Radar**: monitorar a página da banca e sinalizar retificações.
+
+## Comandos
+Backend (Python 3.12+; venv em `backend/.venv`):
+```powershell
+cd backend
+python -m venv .venv                          # só na primeira vez
+.\.venv\Scripts\python.exe -m pip install -e ".[dev]"
+.\.venv\Scripts\python.exe -m pytest          # roda os testes
+```
+Extras de API/admin/banco (fase 3): `pip install -e ".[api,dev]"`.
+App Flutter: SDK ainda não instalado — ver `app/README.md` para gerar o projeto quando instalar.
+
+## Estado atual
+- Scaffold do monorepo pronto: `backend/` (pacote `editais` com stubs documentados de parser/radar/api/admin/db) + `app/` (placeholder até instalar o Flutter SDK). Admin será Jinja2+HTMX dentro do backend; radar é módulo do backend.
+- `backend/tests/test_contract.py` valida o golden `pge_al.instance.json` contra o schema — se quebrar, o contrato mudou; resolver antes de mexer no parser.
+- **Parser ainda não implementado.** Próximo passo: parser v1 na ordem da `referencia/PARSER_SPEC.md` §12 (pdf_text → sectioner → **outline com testes primeiro** → corte → demais extratores → assemble/validate).
+- O PDF oficial consolidado ainda não está no repo; quando chegar, salvar como `referencia/pge_al.pdf` (testes de fumaça do pdf_text dependem dele).
+
+## Convenções
+- Código e commits podem ser em inglês; **conteúdo/labels do app em português (BR)**.

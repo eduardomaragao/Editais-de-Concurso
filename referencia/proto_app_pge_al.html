@@ -1,0 +1,399 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>App PGE/AL — protótipo</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap');
+  :root{
+    --paper:#FBFAF6;--card:#FFFFFF;--ink:#182420;--muted:#6B7772;
+    --green:#17553F;--green-soft:#E6EFEA;--gold:#B8862F;--gold-soft:#F6EEDC;
+    --line:#E9E5DB;--shadow:0 10px 30px rgba(24,36,32,.10);
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  body{margin:0;background:#EFEBE2;font-family:Inter,system-ui,sans-serif;color:var(--ink);display:flex;justify-content:center;padding:22px 12px;min-height:100vh}
+  .phone{width:100%;max-width:390px;height:820px;max-height:92vh;background:var(--paper);border-radius:38px;box-shadow:var(--shadow);overflow:hidden;position:relative;display:flex;flex-direction:column;border:1px solid rgba(0,0,0,.06)}
+  .statusbar{height:44px;flex:0 0 44px;background:var(--green);color:#fff;display:flex;align-items:center;justify-content:space-between;padding:0 20px;font-size:13px;font-weight:600}
+  .statusbar .proto{background:rgba(255,255,255,.16);padding:2px 8px;border-radius:20px;font-size:10px;letter-spacing:.4px}
+  .viewport{flex:1;overflow-y:auto;overflow-x:hidden}
+  .viewport::-webkit-scrollbar{display:none}
+  .screen{display:none;padding:20px 18px 28px}
+  .screen.active{display:block;animation:fade .25s ease}
+  @keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+  .eyebrow{font-size:11px;font-weight:700;letter-spacing:1.4px;text-transform:uppercase;color:var(--gold)}
+  h1.title{font-family:Fraunces,serif;font-weight:600;font-size:27px;line-height:1.1;margin:4px 0 2px}
+  .sub{color:var(--muted);font-size:13px;margin-bottom:14px}
+  .back{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;color:var(--green);background:none;border:none;padding:0;margin-bottom:10px;cursor:pointer}
+  .back svg{width:15px;height:15px;stroke:var(--green)}
+
+  .radar{display:flex;align-items:center;gap:8px;background:var(--gold-soft);border:1px solid #EAD9AE;border-radius:12px;padding:9px 12px;margin-bottom:18px}
+  .radar svg{width:15px;height:15px;stroke:var(--gold);flex:0 0 15px}
+  .radar span{font-size:11.5px;color:#7a5b1e;line-height:1.35;font-weight:500}
+
+  .hero{background:var(--green);color:#fff;border-radius:22px;padding:20px;margin-bottom:20px;display:flex;align-items:center;gap:16px}
+  .hero .meta{flex:1}
+  .hero .meta .k{font-size:11px;letter-spacing:1px;text-transform:uppercase;opacity:.75;font-weight:700}
+  .hero .meta h2{font-family:Fraunces,serif;font-weight:600;font-size:20px;margin:3px 0 2px}
+  .hero .meta p{margin:0;font-size:12px;opacity:.8}
+  .ring{width:74px;height:74px;flex:0 0 74px;position:relative}
+  .ring svg{transform:rotate(-90deg)}
+  .ring .pct{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+  .ring .pct b{font-family:Fraunces,serif;font-size:19px;line-height:1}
+  .ring .pct span{font-size:9px;opacity:.8;letter-spacing:.5px}
+
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .path{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:15px 14px;cursor:pointer;transition:transform .12s ease}
+  .path:active{transform:scale(.97)}
+  .path .ic{width:34px;height:34px;border-radius:11px;background:var(--green-soft);display:flex;align-items:center;justify-content:center;margin-bottom:10px}
+  .path .ic svg{width:18px;height:18px;stroke:var(--green)}
+  .path h3{font-size:14px;margin:0 0 3px;font-weight:600}
+  .path p{margin:0;font-size:11px;color:var(--muted);line-height:1.35}
+  .path.wide{grid-column:1 / -1;display:flex;align-items:center;gap:14px}
+  .path.wide .ic{margin:0;background:var(--gold-soft)}
+  .path.wide .ic svg{stroke:var(--gold)}
+  .path.wide div{flex:1}
+
+  .datacard{background:var(--card);border:1px solid var(--line);border-radius:18px;overflow:hidden;margin-bottom:14px}
+  .datarow{display:flex;gap:14px;padding:16px;border-bottom:1px solid var(--line)}
+  .datarow:last-child{border-bottom:none}
+  .datarow .ic{width:38px;height:38px;flex:0 0 38px;border-radius:12px;background:var(--green-soft);display:flex;align-items:center;justify-content:center}
+  .datarow .ic svg{width:19px;height:19px;stroke:var(--green)}
+  .datarow .k{font-size:11px;letter-spacing:.5px;text-transform:uppercase;color:var(--muted);font-weight:700}
+  .datarow b{display:block;font-size:15px;margin:2px 0 1px}
+  .datarow small{font-size:12px;color:var(--muted)}
+
+  .seclabel{font-family:Fraunces,serif;font-size:16px;font-weight:600;margin:22px 0 4px;display:flex;align-items:center;gap:8px}
+  .seclabel span{font-family:Inter;font-size:9px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:var(--gold);background:var(--gold-soft);padding:2px 7px;border-radius:20px}
+  .hint{font-size:12px;color:var(--muted);margin:0 0 14px;line-height:1.45}
+  .localblk{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:15px;margin-bottom:12px}
+  .localhead{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:2px}
+  .localhead b{font-size:14px}
+  .localhead small{font-size:11px;color:var(--muted);display:block;margin-top:1px}
+  .linkbtn{border:none;background:none;color:var(--green);font-weight:600;font-size:12px;cursor:pointer;padding:0;white-space:nowrap}
+  .addr{font-size:12.5px;line-height:1.5;padding:9px 0 12px;border-bottom:1px solid var(--line);margin-bottom:13px}
+  .tgrp{margin-bottom:12px}.tgrp:last-child{margin-bottom:0}
+  .tlab{font-size:10px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:6px}
+  .trow2{display:flex;gap:8px}
+  .tbtn{flex:1;text-align:center;text-decoration:none;padding:11px 6px;border-radius:11px;font-size:12.5px;font-weight:600;cursor:pointer;border:none}
+  .tbtn.uber{background:#111;color:#fff}
+  .tbtn.n99{background:#FFD400;color:#1a1a1a}
+  .tbtn.route{border:1px solid var(--line);background:#fff;color:var(--green)}
+  .editform{display:none;margin-top:13px;padding-top:13px;border-top:1px dashed var(--line)}
+  .fld{margin-bottom:10px}
+  .fld label{font-size:11px;font-weight:600;color:var(--muted);display:block;margin-bottom:4px}
+  .fld input{width:100%;border:1px solid var(--line);border-radius:10px;padding:10px 12px;font-family:Inter;font-size:13px;color:var(--ink);background:var(--paper)}
+  .fld input:focus{outline:none;border-color:var(--green)}
+  .fldrow{display:flex;gap:8px;align-items:flex-end;margin-bottom:10px}.fldrow .fld{flex:1;margin-bottom:0}
+  .fldrow2{display:flex;gap:8px}.fldrow2 .fld{flex:1}
+  .minibtn{border:none;background:var(--green);color:#fff;border-radius:10px;padding:0 16px;font-weight:600;font-size:12px;cursor:pointer;height:41px;flex:0 0 auto}
+  .savebtn{width:100%;background:var(--green);color:#fff;border:none;border-radius:11px;padding:12px;font-weight:600;font-size:13px;cursor:pointer;margin-top:4px}
+  .ghostbtn{width:100%;background:none;border:1.5px dashed var(--line);color:var(--green);border-radius:12px;padding:13px;font-weight:600;font-size:13px;cursor:pointer}
+
+  .bar{height:9px;background:var(--line);border-radius:9px;overflow:hidden;margin:2px 0 4px}
+  .bar > i{display:block;height:100%;background:var(--gold);border-radius:9px}
+  .allprog{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px 16px;margin-bottom:16px}
+  .allprog .row{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px}
+  .allprog .row b{font-family:Fraunces,serif;font-size:16px}
+  .allprog .row span{font-size:12px;color:var(--muted)}
+  .subj{background:var(--card);border:1px solid var(--line);border-radius:16px;margin-bottom:11px;overflow:hidden}
+  .subj > .head{display:flex;align-items:center;gap:12px;padding:14px 16px;cursor:pointer}
+  .subj .head .name{flex:1}
+  .subj .head .name b{font-size:14px;display:block}
+  .subj .head .name small{font-size:11px;color:var(--muted)}
+  .subj .head .mini{width:44px}
+  .chev{width:16px;height:16px;stroke:var(--muted);transition:transform .2s;flex:0 0 16px}
+  .subj.open .chev{transform:rotate(180deg)}
+  .topics{display:none;padding:2px 12px 8px}
+  .subj.open .topics{display:block}
+  .check{width:22px;height:22px;flex:0 0 22px;border:2px solid var(--line);border-radius:7px;display:flex;align-items:center;justify-content:center;transition:.15s;cursor:pointer}
+  .check svg{width:12px;height:12px;stroke:#fff;opacity:0}
+  .topic{border-top:1px solid var(--line)}
+  .topic .trow{display:flex;align-items:center;gap:11px;padding:11px 4px}
+  .topic .tbody{flex:1;cursor:pointer;min-width:0}
+  .topic .tbody span{font-size:13px;display:block}
+  .topic .tbody small{font-size:11px;color:var(--muted)}
+  .topic.done > .trow > .check{background:var(--gold);border-color:var(--gold)}
+  .topic.done > .trow > .check svg{opacity:1}
+  .topic.done > .trow .tbody span{color:var(--muted);text-decoration:line-through}
+  .exp{width:30px;height:30px;flex:0 0 30px;border:1px solid var(--line);background:#fff;border-radius:9px;display:flex;align-items:center;justify-content:center;cursor:pointer}
+  .exp svg{width:15px;height:15px;stroke:var(--green);transition:transform .2s}
+  .topic.expanded .exp svg{transform:rotate(180deg)}
+  .subs{display:none;padding:2px 0 8px 33px;border-top:1px dashed var(--line);margin-top:-2px}
+  .topic.expanded .subs{display:block}
+  .sub{display:flex;align-items:flex-start;gap:10px;padding:8px 0}
+  .sub .check{width:19px;height:19px;flex:0 0 19px;border-radius:6px}
+  .sub span{font-size:12.5px;line-height:1.4}
+  .sub.done .check{background:var(--gold);border-color:var(--gold)}
+  .sub.done .check svg{opacity:1}
+  .sub.done span{color:var(--muted);text-decoration:line-through}
+  .edital-tag{font-size:9px;font-weight:700;letter-spacing:.4px;color:var(--muted);background:var(--paper);border:1px solid var(--line);padding:1px 6px;border-radius:5px;margin-left:6px;text-transform:uppercase}
+
+  .cal{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px;margin-bottom:16px}
+  .cal .m{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+  .cal .m b{font-family:Fraunces,serif;font-size:16px}
+  .cal .m .nav{display:flex;gap:8px}
+  .cal .m .nav button{border:1px solid var(--line);background:#fff;border-radius:9px;width:28px;height:28px;color:var(--muted);cursor:pointer;font-size:14px}
+  .week{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;text-align:center}
+  .week .dow{font-size:10px;color:var(--muted);font-weight:600;padding-bottom:4px}
+  .week .d{font-size:12px;padding:7px 0;border-radius:9px}
+  .week .d.mut{color:#C7C2B6}
+  .week .d.ev{background:var(--green);color:#fff;font-weight:600}
+  .week .d.ev2{background:var(--gold-soft);color:var(--gold);font-weight:700}
+  .datelist .di{display:flex;align-items:center;gap:12px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 14px;margin-bottom:9px}
+  .datelist .dot{width:10px;height:10px;border-radius:50%;flex:0 0 10px}
+  .datelist .di .txt{flex:1}
+  .datelist .di .txt b{font-size:13px;display:block}
+  .datelist .di .txt small{font-size:11px;color:var(--muted)}
+  .chip{font-size:10px;font-weight:700;padding:3px 9px;border-radius:20px;letter-spacing:.3px}
+  .chip.ok{background:var(--green-soft);color:var(--green)}
+  .chip.soon{background:var(--gold-soft);color:var(--gold)}
+  .addbtn{width:100%;background:var(--green);color:#fff;border:none;border-radius:14px;padding:15px;font-family:Inter;font-weight:600;font-size:14px;margin-top:6px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:9px}
+  .addbtn svg{width:17px;height:17px;stroke:#fff}
+
+  .seg{display:flex;background:var(--line);border-radius:13px;padding:4px;margin-bottom:18px}
+  .seg button{flex:1;border:none;background:transparent;padding:9px 4px;border-radius:10px;font-family:Inter;font-weight:600;font-size:12.5px;color:var(--muted);cursor:pointer}
+  .seg button.on{background:#fff;color:var(--green);box-shadow:0 1px 4px rgba(0,0,0,.06)}
+  .prova{display:flex;align-items:center;gap:12px;background:var(--card);border:1px solid var(--line);border-radius:15px;padding:13px;margin-bottom:10px}
+  .prova .yr{width:42px;height:42px;flex:0 0 42px;border-radius:12px;background:var(--green-soft);color:var(--green);display:flex;align-items:center;justify-content:center;font-family:Fraunces,serif;font-weight:600;font-size:14px}
+  .prova .info{flex:1;min-width:0}
+  .prova .info b{font-size:13px;display:block}
+  .prova .info small{font-size:11px;color:var(--muted)}
+  .dls{display:flex;flex-direction:column;gap:6px;flex:0 0 auto}
+  .dlbtn{display:flex;align-items:center;gap:5px;border:1px solid var(--line);background:#fff;border-radius:9px;padding:6px 9px;font-size:11px;font-weight:600;color:var(--green);cursor:pointer;white-space:nowrap}
+  .dlbtn svg{width:13px;height:13px;stroke:var(--green)}
+  .dlbtn.alt{color:var(--gold);border-color:var(--gold-soft);background:var(--gold-soft)}
+  .dlbtn.alt svg{stroke:var(--gold)}
+  .note{font-size:11px;color:var(--muted);text-align:center;margin-top:6px}
+
+  .tabs{flex:0 0 66px;background:#fff;border-top:1px solid var(--line);display:flex;padding-bottom:6px}
+  .tab{flex:1;background:none;border:none;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;color:var(--muted);font-family:Inter;font-size:10px;font-weight:600;cursor:pointer;padding-top:8px}
+  .tab svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.8}
+  .tab.on{color:var(--green)}
+</style>
+
+<div class="phone">
+  <div class="statusbar"><span>9:41</span><span class="proto">PROTÓTIPO</span><span>PGE/AL</span></div>
+  <div class="viewport" id="vp">
+
+    <!-- EDITAL -->
+    <section class="screen active" data-screen="edital">
+      <div class="eyebrow">Edital em foco</div>
+      <h1 class="title">Procurador do Estado</h1>
+      <p class="sub">PGE/AL · Edital 01/2026 · Cebraspe · Maceió/AL</p>
+      <div class="radar" onclick="alert('Radar: o Edital nº 5 (08/06/2026) remarcou a objetiva de 11/07 para 05/09 e as discursivas para 06/09. Datas já atualizadas no app.')">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 8v4l3 2"/></svg>
+        <span><b>Radar:</b> provas remarcadas para 5–6/09 pelo Edital nº 5 — já atualizado.</span>
+      </div>
+      <div class="hero">
+        <div class="meta"><div class="k">Seu progresso</div><h2>Você está em ritmo</h2><p>34% do conteúdo · faltam 57 dias p/ a objetiva</p></div>
+        <div class="ring"><svg width="74" height="74" viewBox="0 0 74 74"><circle cx="37" cy="37" r="31" stroke="rgba(255,255,255,.25)" stroke-width="7" fill="none"/><circle cx="37" cy="37" r="31" stroke="#B8862F" stroke-width="7" fill="none" stroke-dasharray="195" stroke-dashoffset="129" stroke-linecap="round"/></svg><div class="pct"><b>34%</b><span>CONTEÚDO</span></div></div>
+      </div>
+      <div class="grid">
+        <div class="path" onclick="go('dados')"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8"><path d="M12 21s7-5.5 7-11a7 7 0 0 0-14 0c0 5.5 7 11 7 11z"/><circle cx="12" cy="10" r="2.5"/></svg></div><h3>Dados da prova</h3><p>Local, dia e horário</p></div>
+        <div class="path" onclick="go('datas')"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></div><h3>Datas &amp; prazos</h3><p>Cronograma completo</p></div>
+        <div class="path" onclick="go('conteudo')"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8"><path d="M4 5h16M4 12h16M4 19h10"/></svg></div><h3>Conteúdo</h3><p>10 matérias · item 17</p></div>
+        <div class="path" onclick="go('provas')"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8"><path d="M6 3h9l3 3v15H6z"/><path d="M14 3v4h4M9 13h6M9 17h6"/></svg></div><h3>Provas anteriores</h3><p>Prova + gabarito</p></div>
+        <div class="path" onclick="alert('Isenção: 13 a 22/04/2026. Seis hipóteses (desempregado, assistência social, doador de sangue, até 1 salário, doador de medula, mesário). A maioria exige residência em AL há ≥ 2 anos.')"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M9 12l2 2 4-4"/></svg></div><h3>Isenções</h3><p>6 hipóteses</p></div>
+        <div class="path" onclick="alert('Abre eduardoaragao.com — curso e materiais PGE/AL.')"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8"><path d="M10 14a5 5 0 0 0 7 0l2-2a5 5 0 0 0-7-7l-1 1M14 10a5 5 0 0 0-7 0l-2 2a5 5 0 0 0 7 7l1-1"/></svg></div><h3>Curso</h3><p>Material do professor</p></div>
+        <div class="path wide" onclick="alert('Corte de conteúdo (itens 16.32 / 16.32.1):\n\nLegislação vigente até 31/03/2026\nJurisprudência dos tribunais superiores até 31/03/2026\n\nAncorado na 1ª publicação — retificações não movem essa data.')"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8"><path d="M12 3v18M5 8l7-5 7 5M4 8h16l-1 9H5z"/></svg></div><div><h3>Corte de lei &amp; jurisprudência</h3><p>Lei e jurisprudência até 31/03/2026</p></div></div>
+      </div>
+    </section>
+
+    <!-- DADOS -->
+    <section class="screen" data-screen="dados">
+      <button class="back" onclick="go('edital')"><svg viewBox="0 0 24 24" fill="none"><path d="M15 6l-6 6 6 6"/></svg> Edital</button>
+      <div class="eyebrow">Dados da prova</div>
+      <h1 class="title">Onde e quando</h1>
+      <p class="sub">Prova objetiva (P1)</p>
+      <div class="datacard">
+        <div class="datarow"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 9h18M8 3v4M16 3v4"/></svg></div><div><div class="k">Dia</div><b>5 de setembro de 2026</b><small>Sábado · remarcada pelo Edital nº 5</small></div></div>
+        <div class="datarow"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></div><div><div class="k">Horário</div><b>Turno da tarde · 5 horas</b><small>Horário exato no comprovante de inscrição</small></div></div>
+      </div>
+      <div class="seclabel">Local de prova <span>você preenche</span></div>
+      <p class="hint">O edital (item 7.5.1) manda cada candidato consultar o próprio local. Cadastre pelo CEP + sala.</p>
+      <div id="locais">
+        <div class="localblk">
+          <div class="localhead"><div><b>Prova objetiva</b><small>Sala a definir</small></div><button class="linkbtn" onclick="toggleForm(this)">Editar</button></div>
+          <div class="addr">Cadastre seu local quando a Cebraspe divulgar (previsto 26/06) — em Maceió/AL.</div>
+          <div class="tgrp"><span class="tlab">Pedir transporte</span><div class="trow2">
+            <a class="tbtn uber" target="_blank" rel="noopener" href="https://m.uber.com/ul/?action=setPickup&pickup=my_location&dropoff[latitude]=-9.6512&dropoff[longitude]=-35.7250&dropoff[nickname]=Local%20de%20prova">Uber</a>
+            <a class="tbtn n99" target="_blank" rel="noopener" href="https://99app.com/">99</a>
+          </div></div>
+          <div class="tgrp"><span class="tlab">Ver trajeto no mapa</span><div class="trow2">
+            <a class="tbtn route" target="_blank" rel="noopener" href="https://www.google.com/maps/dir/?api=1&destination=-9.6512,-35.7250&travelmode=driving">De carro</a>
+            <a class="tbtn route" target="_blank" rel="noopener" href="https://www.google.com/maps/dir/?api=1&destination=-9.6512,-35.7250&travelmode=transit">Transporte público</a>
+          </div></div>
+          <div class="editform">
+            <div class="fld"><label>Identificação</label><input value="Prova objetiva"></div>
+            <div class="fldrow"><div class="fld"><label>CEP</label><input class="cep" placeholder="57000-000"></div><button class="minibtn" onclick="buscarCep(this)">Buscar</button></div>
+            <div class="fld"><label>Endereço</label><input class="logr" placeholder="preenchido pelo CEP"></div>
+            <div class="fldrow2"><div class="fld"><label>Número/compl.</label><input placeholder="nº"></div><div class="fld"><label>Sala de aplicação</label><input placeholder="Sala"></div></div>
+            <button class="savebtn" onclick="toggleForm(this)">Salvar local</button>
+          </div>
+        </div>
+      </div>
+      <button class="ghostbtn" onclick="addLocal()">+ Adicionar outro local</button>
+    </section>
+
+    <!-- CONTEÚDO -->
+    <section class="screen" data-screen="conteudo">
+      <div class="eyebrow">Conteúdo programático · item 17</div>
+      <h1 class="title">Suas matérias</h1>
+      <p class="sub">Marque à esquerda · expanda à direita pra ver os subtópicos do edital</p>
+      <div class="allprog"><div class="row"><b>34% concluído</b><span>objetiva: 10 matérias</span></div><div class="bar"><i style="width:34%"></i></div></div>
+
+      <div class="subj open" onclick="toggleSubj(this,event)">
+        <div class="head"><div class="name"><b>Direito Administrativo</b><small>P1 · P2 · P4 · 25 tópicos</small></div><div class="mini"><div class="bar"><i style="width:44%"></i></div></div><svg class="chev" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6"/></svg></div>
+        <div class="topics">
+          <div class="topic done"><div class="trow"><div class="check" onclick="markTopic(this,event)"><svg viewBox="0 0 24 24" fill="none" stroke-width="3"><path d="M5 12l5 5 9-9"/></svg></div><div class="tbody" onclick="toggleTopic(this,event)"><span>7. Atos administrativos</span><small>11 subtópicos</small></div><button class="exp" onclick="toggleTopic(this,event)"><svg viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6"/></svg></button></div>
+            <div class="subs">
+              <div class="sub" onclick="markSub(this,event)"><div class="check"><svg viewBox="0 0 24 24" fill="none" stroke-width="3"><path d="M5 12l5 5 9-9"/></svg></div><span>Elementos<span class="edital-tag">edital</span></span></div>
+              <div class="sub" onclick="markSub(this,event)"><div class="check"><svg viewBox="0 0 24 24" fill="none" stroke-width="3"><path d="M5 12l5 5 9-9"/></svg></div><span>Atributos</span></div>
+              <div class="sub" onclick="markSub(this,event)"><div class="check"><svg viewBox="0 0 24 24" fill="none" stroke-width="3"><path d="M5 12l5 5 9-9"/></svg></div><span>Vinculação e discricionariedade</span></div>
+              <div class="sub" onclick="markSub(this,event)"><div class="check"><svg viewBox="0 0 24 24" fill="none" stroke-width="3"><path d="M5 12l5 5 9-9"/></svg></div><span>Anulação, revogação e convalidação</span></div>
+            </div>
+          </div>
+          <div class="topic"><div class="trow"><div class="check" onclick="markTopic(this,event)"><svg viewBox="0 0 24 24" fill="none" stroke-width="3"><path d="M5 12l5 5 9-9"/></svg></div><div class="tbody" onclick="toggleTopic(this,event)"><span>17. Controle da administração pública</span><small>10 subtópicos</small></div><button class="exp" onclick="toggleTopic(this,event)"><svg viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6"/></svg></button></div>
+            <div class="subs">
+              <div class="sub" onclick="markSub(this,event)"><div class="check"><svg viewBox="0 0 24 24" fill="none" stroke-width="3"><path d="M5 12l5 5 9-9"/></svg></div><span>Controle interno e externo</span></div>
+              <div class="sub" onclick="markSub(this,event)"><div class="check"><svg viewBox="0 0 24 24" fill="none" stroke-width="3"><path d="M5 12l5 5 9-9"/></svg></div><span>Controle pelo tribunal de contas</span></div>
+              <div class="sub" onclick="markSub(this,event)"><div class="check"><svg viewBox="0 0 24 24" fill="none" stroke-width="3"><path d="M5 12l5 5 9-9"/></svg></div><span>LC federal nº 101/2000; Lei nº 12.846/2013</span></div>
+            </div>
+          </div>
+          <div class="topic"><div class="trow"><div class="check" onclick="markTopic(this,event)"><svg viewBox="0 0 24 24" fill="none" stroke-width="3"><path d="M5 12l5 5 9-9"/></svg></div><div class="tbody" onclick="toggleTopic(this,event)"><span>21. Responsabilidade civil do Estado</span><small>sem subtópicos no edital</small></div></div></div>
+          <div class="topic"><div class="trow"><div class="check" onclick="markTopic(this,event)"><svg viewBox="0 0 24 24" fill="none" stroke-width="3"><path d="M5 12l5 5 9-9"/></svg></div><div class="tbody" onclick="toggleTopic(this,event)"><span>12. Licitações e contratos — Lei 14.133/2021</span></div></div></div>
+        </div>
+      </div>
+
+      <div class="subj" onclick="toggleSubj(this,event)">
+        <div class="head"><div class="name"><b>Direito Tributário</b><small>P1 · P2 · P4 · 18 tópicos</small></div><div class="mini"><div class="bar"><i style="width:28%"></i></div></div><svg class="chev" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6"/></svg></div>
+        <div class="topics">
+          <div class="topic"><div class="trow"><div class="check" onclick="markTopic(this,event)"><svg viewBox="0 0 24 24" fill="none" stroke-width="3"><path d="M5 12l5 5 9-9"/></svg></div><div class="tbody" onclick="toggleTopic(this,event)"><span>16. Processo judicial tributário</span><small>10 subtópicos</small></div><button class="exp" onclick="toggleTopic(this,event)"><svg viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6"/></svg></button></div>
+            <div class="subs">
+              <div class="sub" onclick="markSub(this,event)"><div class="check"><svg viewBox="0 0 24 24" fill="none" stroke-width="3"><path d="M5 12l5 5 9-9"/></svg></div><span>Ação de execução fiscal — Lei 6.830/1980<span class="edital-tag">edital</span></span></div>
+              <div class="sub" onclick="markSub(this,event)"><div class="check"><svg viewBox="0 0 24 24" fill="none" stroke-width="3"><path d="M5 12l5 5 9-9"/></svg></div><span>Ação cautelar fiscal</span></div>
+              <div class="sub" onclick="markSub(this,event)"><div class="check"><svg viewBox="0 0 24 24" fill="none" stroke-width="3"><path d="M5 12l5 5 9-9"/></svg></div><span>Ação anulatória de débito fiscal</span></div>
+              <div class="sub" onclick="markSub(this,event)"><div class="check"><svg viewBox="0 0 24 24" fill="none" stroke-width="3"><path d="M5 12l5 5 9-9"/></svg></div><span>Ação de repetição de indébito</span></div>
+            </div>
+          </div>
+          <div class="topic"><div class="trow"><div class="check" onclick="markTopic(this,event)"><svg viewBox="0 0 24 24" fill="none" stroke-width="3"><path d="M5 12l5 5 9-9"/></svg></div><div class="tbody" onclick="toggleTopic(this,event)"><span>17. Reforma tributária</span><small>4 subtópicos</small></div><button class="exp" onclick="toggleTopic(this,event)"><svg viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6"/></svg></button></div>
+            <div class="subs">
+              <div class="sub" onclick="markSub(this,event)"><div class="check"><svg viewBox="0 0 24 24" fill="none" stroke-width="3"><path d="M5 12l5 5 9-9"/></svg></div><span>Emenda Constitucional nº 132/2023</span></div>
+              <div class="sub" onclick="markSub(this,event)"><div class="check"><svg viewBox="0 0 24 24" fill="none" stroke-width="3"><path d="M5 12l5 5 9-9"/></svg></div><span>IBS e seu regime jurídico</span></div>
+              <div class="sub" onclick="markSub(this,event)"><div class="check"><svg viewBox="0 0 24 24" fill="none" stroke-width="3"><path d="M5 12l5 5 9-9"/></svg></div><span>CBS e seu regime jurídico</span></div>
+              <div class="sub" onclick="markSub(this,event)"><div class="check"><svg viewBox="0 0 24 24" fill="none" stroke-width="3"><path d="M5 12l5 5 9-9"/></svg></div><span>Lei Complementar nº 214/2025</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="subj" onclick="toggleSubj(this,event)">
+        <div class="head"><div class="name"><b>Direito Constitucional</b><small>P1 · P2 · P4 · 21 tópicos</small></div><div class="mini"><div class="bar"><i style="width:38%"></i></div></div><svg class="chev" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6"/></svg></div>
+        <div class="topics">
+          <div class="topic"><div class="trow"><div class="check" onclick="markTopic(this,event)"><svg viewBox="0 0 24 24" fill="none" stroke-width="3"><path d="M5 12l5 5 9-9"/></svg></div><div class="tbody" onclick="toggleTopic(this,event)"><span>8. Organização dos poderes</span><small>3 subtópicos</small></div><button class="exp" onclick="toggleTopic(this,event)"><svg viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6"/></svg></button></div>
+            <div class="subs">
+              <div class="sub" onclick="markSub(this,event)"><div class="check"><svg viewBox="0 0 24 24" fill="none" stroke-width="3"><path d="M5 12l5 5 9-9"/></svg></div><span>Separação dos poderes: projeções constitucionais</span></div>
+              <div class="sub" onclick="markSub(this,event)"><div class="check"><svg viewBox="0 0 24 24" fill="none" stroke-width="3"><path d="M5 12l5 5 9-9"/></svg></div><span>Poderes Legislativo, Executivo e Judiciário</span></div>
+              <div class="sub" onclick="markSub(this,event)"><div class="check"><svg viewBox="0 0 24 24" fill="none" stroke-width="3"><path d="M5 12l5 5 9-9"/></svg></div><span>Tribunais de Contas</span></div>
+            </div>
+          </div>
+          <div class="topic"><div class="trow"><div class="check" onclick="markTopic(this,event)"><svg viewBox="0 0 24 24" fill="none" stroke-width="3"><path d="M5 12l5 5 9-9"/></svg></div><div class="tbody" onclick="toggleTopic(this,event)"><span>21. Constituição do Estado de Alagoas</span><small>específico estadual</small></div></div></div>
+        </div>
+      </div>
+
+      <div class="subj" onclick="toggleSubj(this,event)">
+        <div class="head"><div class="name"><b>Direito Ambiental</b><small>só P1 · 12 tópicos</small></div><div class="mini"><div class="bar"><i style="width:0%"></i></div></div><svg class="chev" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6"/></svg></div>
+        <div class="topics">
+          <div class="topic"><div class="trow"><div class="check" onclick="markTopic(this,event)"><svg viewBox="0 0 24 24" fill="none" stroke-width="3"><path d="M5 12l5 5 9-9"/></svg></div><div class="tbody" onclick="toggleTopic(this,event)"><span>4. Política Nacional de Meio Ambiente</span><small>Lei 6.938/1981 · retificado (Ed. nº 3)</small></div></div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- DATAS -->
+    <section class="screen" data-screen="datas">
+      <div class="eyebrow">Cronograma</div>
+      <h1 class="title">Datas &amp; prazos</h1>
+      <p class="sub">Atualizado pelo Edital nº 5 · leve pra sua agenda</p>
+      <div class="cal">
+        <div class="m"><b>Setembro 2026</b><div class="nav"><button>‹</button><button>›</button></div></div>
+        <div class="week">
+          <span class="dow">D</span><span class="dow">S</span><span class="dow">T</span><span class="dow">Q</span><span class="dow">Q</span><span class="dow">S</span><span class="dow">S</span>
+          <span class="d mut">30</span><span class="d">1</span><span class="d">2</span><span class="d">3</span><span class="d">4</span><span class="d ev">5</span><span class="d ev2">6</span>
+          <span class="d">7</span><span class="d">8</span><span class="d">9</span><span class="d">10</span><span class="d">11</span><span class="d">12</span><span class="d">13</span>
+          <span class="d">14</span><span class="d">15</span><span class="d">16</span><span class="d">17</span><span class="d">18</span><span class="d">19</span><span class="d">20</span>
+          <span class="d">21</span><span class="d">22</span><span class="d">23</span><span class="d">24</span><span class="d">25</span><span class="d">26</span><span class="d">27</span>
+          <span class="d">28</span><span class="d">29</span><span class="d">30</span><span class="d mut">1</span><span class="d mut">2</span><span class="d mut">3</span><span class="d mut">4</span>
+        </div>
+      </div>
+      <div class="datelist">
+        <div class="di"><span class="dot" style="background:var(--muted)"></span><div class="txt"><b>Inscrições</b><small>13/04–18/05/2026</small></div><span class="chip ok">Encerrado</span></div>
+        <div class="di"><span class="dot" style="background:var(--gold)"></span><div class="txt"><b>Corte de lei/jurisprudência</b><small>31/03/2026</small></div><span class="chip soon">Referência</span></div>
+        <div class="di"><span class="dot" style="background:var(--green)"></span><div class="txt"><b>Prova objetiva (P1)</b><small>05/09/2026 · tarde · Maceió</small></div><span class="chip soon">Em 57 dias</span></div>
+        <div class="di"><span class="dot" style="background:var(--green)"></span><div class="txt"><b>Provas discursivas (P2/P3)</b><small>06/09/2026</small></div><span class="chip soon">Em 58 dias</span></div>
+        <div class="di"><span class="dot" style="background:var(--green)"></span><div class="txt"><b>Prova oral (P4)</b><small>edital de convocação posterior</small></div><span class="chip soon">A definir</span></div>
+      </div>
+      <button class="addbtn" onclick="alert('Gera um .ics com todas as datas.\nAbre direto no Google Agenda, Apple ou Outlook.')"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 9h18M8 3v4M16 3v4M12 13v4M10 15h4"/></svg>Adicionar à minha agenda</button>
+    </section>
+
+    <!-- PROVAS -->
+    <section class="screen" data-screen="provas">
+      <div class="eyebrow">Provas anteriores</div>
+      <h1 class="title">Baixe e treine</h1>
+      <p class="sub">PGE/AL Procurador · de 2020 pra cá</p>
+      <div class="seg">
+        <button class="on" onclick="segSwitch(this,'obj')">Objetivas</button>
+        <button onclick="segSwitch(this,'subj')">Subjetivas</button>
+        <button onclick="segSwitch(this,'oral')">Orais</button>
+      </div>
+      <div id="obj">
+        <div class="prova"><div class="yr">2021</div><div class="info"><b>PGE/AL · Procurador</b><small>Objetiva · gabarito incluído</small></div><div class="dls"><button class="dlbtn" onclick="alert('Baixando prova objetiva 2021…')"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8"><path d="M12 4v11m0 0l-4-4m4 4l4-4M5 19h14"/></svg>Prova</button><button class="dlbtn alt" onclick="alert('Baixando gabarito oficial 2021…')"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8"><path d="M12 4v11m0 0l-4-4m4 4l4-4M5 19h14"/></svg>Gabarito</button></div></div>
+        <p class="note">Único concurso de procurador da PGE/AL na janela (o anterior foi em 2021).</p>
+      </div>
+      <div id="subj" style="display:none">
+        <div class="prova"><div class="yr">2021</div><div class="info"><b>PGE/AL · Procurador</b><small>Subjetiva · dissertativas e peça</small></div><div class="dls"><button class="dlbtn" onclick="alert('Baixando prova subjetiva 2021…')"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8"><path d="M12 4v11m0 0l-4-4m4 4l4-4M5 19h14"/></svg>Prova</button><button class="dlbtn alt" onclick="alert('Baixando padrão de resposta 2021…')"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8"><path d="M12 4v11m0 0l-4-4m4 4l4-4M5 19h14"/></svg>Padrão</button></div></div>
+      </div>
+      <div id="oral" style="display:none">
+        <div class="prova"><div class="yr">2021</div><div class="info"><b>PGE/AL · Procurador</b><small>Oral · pontos e critérios</small></div><div class="dls"><button class="dlbtn" onclick="alert('Baixando pontos da oral 2021…')"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8"><path d="M12 4v11m0 0l-4-4m4 4l4-4M5 19h14"/></svg>Pontos</button><button class="dlbtn alt" onclick="alert('Baixando espelho/critérios 2021…')"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8"><path d="M12 4v11m0 0l-4-4m4 4l4-4M5 19h14"/></svg>Espelho</button></div></div>
+        <p class="note">A gravação da oral não pode ser hospedada (item 10.12.2) — só pontos e critérios.</p>
+      </div>
+    </section>
+
+  </div>
+
+  <nav class="tabs">
+    <button class="tab on" data-t="edital" onclick="go('edital')"><svg viewBox="0 0 24 24"><path d="M6 3h9l3 3v15H6z"/><path d="M14 3v4h4"/></svg>Edital</button>
+    <button class="tab" data-t="conteudo" onclick="go('conteudo')"><svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h11"/></svg>Conteúdo</button>
+    <button class="tab" data-t="datas" onclick="go('datas')"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 9h18M8 3v4M16 3v4"/></svg>Datas</button>
+    <button class="tab" data-t="provas" onclick="go('provas')"><svg viewBox="0 0 24 24"><path d="M12 4v11m0 0l-4-4m4 4l4-4M5 19h14"/></svg>Provas</button>
+  </nav>
+</div>
+
+<script>
+  function go(name){
+    document.querySelectorAll('.screen').forEach(s=>s.classList.toggle('active',s.dataset.screen===name));
+    var tabName=(name==='dados')?'edital':name;
+    document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('on',t.dataset.t===tabName));
+    document.getElementById('vp').scrollTop=0;
+  }
+  function toggleSubj(el,e){ if(e.target.closest('.topic'))return; el.classList.toggle('open'); }
+  function toggleTopic(el,e){ e.stopPropagation(); var t=el.closest('.topic'); if(!t.querySelector('.subs'))return; t.classList.toggle('expanded'); }
+  function markTopic(el,e){ e.stopPropagation(); var t=el.closest('.topic'); var d=!t.classList.contains('done'); t.classList.toggle('done',d); t.querySelectorAll('.sub').forEach(function(s){s.classList.toggle('done',d);}); }
+  function markSub(el,e){ e.stopPropagation(); el.classList.toggle('done'); var t=el.closest('.topic'); var subs=[].slice.call(t.querySelectorAll('.sub')); var all=subs.length>0&&subs.every(function(s){return s.classList.contains('done');}); t.classList.toggle('done',all); }
+  function segSwitch(btn,which){ btn.parentElement.querySelectorAll('button').forEach(function(b){b.classList.remove('on');}); btn.classList.add('on'); ['obj','subj','oral'].forEach(function(id){document.getElementById(id).style.display=(id===which)?'block':'none';}); }
+  function toggleForm(btn){ var f=btn.closest('.localblk').querySelector('.editform'); f.style.display=(f.style.display==='block')?'none':'block'; }
+  function buscarCep(btn){
+    var form=btn.closest('.editform'); var cep=(form.querySelector('.cep').value||'').replace(/\D/g,''); var out=form.querySelector('.logr');
+    if(cep.length!==8){ out.value='Digite um CEP com 8 dígitos'; return; }
+    out.value='Buscando…';
+    fetch('https://viacep.com.br/ws/'+cep+'/json/').then(function(r){return r.json();}).then(function(d){ if(d.erro)throw 0; out.value=(d.logradouro||'')+' — '+(d.bairro||'')+', '+(d.localidade||'')+'/'+(d.uf||''); }).catch(function(){ out.value='Maceió/AL (exemplo)'; });
+  }
+  function addLocal(){
+    var div=document.createElement('div'); div.className='localblk';
+    div.innerHTML='<div class="localhead"><div><b>Novo local</b><small>preencha abaixo</small></div><button class="linkbtn" onclick="this.closest(\'.localblk\').remove()">Remover</button></div>'+
+      '<div class="editform" style="display:block;border-top:none;margin-top:0;padding-top:0">'+
+      '<div class="fld"><label>Identificação</label><input placeholder="Ex.: Prova oral"></div>'+
+      '<div class="fldrow"><div class="fld"><label>CEP</label><input class="cep" placeholder="57000-000"></div><button class="minibtn" onclick="buscarCep(this)">Buscar</button></div>'+
+      '<div class="fld"><label>Endereço</label><input class="logr" placeholder="preenchido pelo CEP"></div>'+
+      '<div class="fldrow2"><div class="fld"><label>Número/compl.</label><input placeholder="nº"></div><div class="fld"><label>Sala</label><input placeholder="Sala"></div></div>'+
+      '<button class="savebtn" onclick="alert(\'Local salvo. Uber, 99 e trajeto são gerados a partir do endereço.\')">Salvar local</button></div>';
+    document.getElementById('locais').appendChild(div);
+  }
+</script>

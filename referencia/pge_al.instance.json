@@ -1,0 +1,81 @@
+{
+  "edital": {
+    "orgao": "PGE/AL",
+    "cargo": "Procurador do Estado de Alagoas - 1a Classe",
+    "banca": "Cebraspe",
+    "numero": "1/2026",
+    "publicacao": "2026-03-31",
+    "base_legal": ["Lei Estadual 5.247/1991", "LC 7/1991", "Lei Estadual 7.858/2016", "Resolucao CSPGE 6/2025"],
+    "vagas": { "imediatas": 10, "cadastro_reserva": 10 },
+    "remuneracao": 35877.28,
+    "taxa": 450.00,
+    "local_fases": "Maceio/AL",
+    "validade_anos": 2,
+    "versao_arquivo": "consolidado ate Edital no 3 (2026-05-06)",
+    "retificacoes_incorporadas": ["no 2", "no 3"],
+    "ultima_retificacao_publicada": "no 5 (2026-06-08)",
+    "radar_desatualizado": true,
+    "conteudo_revisado": false,
+    "corte_conteudo": {
+      "informado": true,
+      "fonte": "16.32 / 16.32.1",
+      "forma": "relativa",
+      "referencia": "data da primeira publicacao do edital",
+      "legislacao_ate": "2026-03-31",
+      "jurisprudencia_ate": "2026-03-31",
+      "afetado_por_retificacao": false,
+      "trecho": "A legislacao de referencia a ser considerada sera a vigente na data da primeira publicacao deste edital."
+    }
+  },
+  "cronograma": [
+    { "tipo": "inscricoes", "titulo": "Inscricoes", "inicio": "2026-04-13", "fim": "2026-05-18" },
+    { "tipo": "isencao", "titulo": "Pedido de isencao", "inicio": "2026-04-13", "fim": "2026-04-22" },
+    { "tipo": "prova_objetiva", "titulo": "Prova objetiva", "inicio": "2026-09-05", "turno": "tarde", "duracao": "5h", "fonte": "Edital no 5", "observacao": "remarcada de 11/07 para 05/09 pelo Edital no 5" },
+    { "tipo": "provas_discursivas", "titulo": "Provas discursivas", "inicio": "2026-09-06", "fonte": "Edital no 5" }
+  ],
+  "dados_prova": {
+    "fases": [
+      { "fase": "P1", "tipo": "objetiva", "duracao": "5h", "turno": "tarde", "formato": "multipla escolha, 5 alternativas", "questoes": 100 },
+      { "fase": "P2", "tipo": "discursiva", "duracao": "4h", "turno": "manha", "formato": "5 questoes ate 20 linhas", "questoes": 5 },
+      { "fase": "P3", "tipo": "discursiva", "duracao": "4h", "turno": "tarde", "formato": "peca ou parecer ate 120 linhas", "questoes": 1 },
+      { "fase": "P4", "tipo": "oral", "duracao": "ate 20 min", "formato": "4 questoes, ponto sorteado 24h antes", "questoes": 4 },
+      { "fase": "P5", "tipo": "titulos", "formato": "max 10 pontos" }
+    ],
+    "locais": [
+      { "identificacao": "Prova objetiva", "cep": "57000-000", "endereco": "a definir por busca individual no site", "numero": null, "sala": null, "lat": null, "lng": null }
+    ]
+  },
+  "conteudo": [
+    { "id": "adm", "parent_id": null, "nivel": "materia", "titulo": "Direito Administrativo", "ordem": 1, "fases": ["P1", "P2", "P4"] },
+    { "id": "adm-7", "parent_id": "adm", "nivel": "topico", "titulo": "Atos administrativos", "ordem": 7, "fases": ["P1", "P2", "P4"] },
+    { "id": "adm-7-5", "parent_id": "adm-7", "nivel": "subtopico", "titulo": "Vinculacao e discricionariedade", "ordem": 5 },
+    { "id": "adm-21", "parent_id": "adm", "nivel": "topico", "titulo": "Responsabilidade civil do Estado", "ordem": 21 },
+    { "id": "trib", "parent_id": null, "nivel": "materia", "titulo": "Direito Tributario", "ordem": 10, "fases": ["P1", "P2", "P4"] },
+    { "id": "amb", "parent_id": null, "nivel": "materia", "titulo": "Direito Ambiental", "ordem": 2, "fases": ["P1"] }
+  ],
+  "provas_anteriores": [
+    { "orgao": "PGE/AL", "banca": "Cebraspe", "cargo": "Procurador", "ano": 2021, "tipo": "objetiva",
+      "arquivo_prova": "provas/pge-al-2021-obj.pdf",
+      "arquivo_resposta": { "tipo": "gabarito", "url": "provas/pge-al-2021-gabarito.pdf" },
+      "fonte": "https://www.cebraspe.org.br" }
+  ],
+  "isencoes": {
+    "tem_isencao": true,
+    "inicio": "2026-04-13",
+    "fim": "2026-04-22",
+    "hipoteses": [
+      "Desempregado (Lei est. 6.873/2007)",
+      "Programa de assistencia social, renda per capita <= 1/2 salario minimo",
+      "Doador voluntario de sangue",
+      "Trabalhador que ganha ate 1 salario minimo",
+      "Doador de medula ossea (REDOME)",
+      "Mesario da Justica Eleitoral de AL (>= 2 eleicoes)"
+    ],
+    "link": null
+  },
+  "links": {
+    "site_curso": "https://eduardoaragao.com",
+    "edital_oficial": "https://www.cebraspe.org.br/concursos/pge_al_26",
+    "pagina_banca": "https://www.cebraspe.org.br/concursos/pge_al_26"
+  }
+}

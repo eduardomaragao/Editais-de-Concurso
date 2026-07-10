@@ -1,0 +1,224 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://eduardoaragao.com/schemas/edital.schema.json",
+  "title": "Edital de concurso — contrato de saída do parser",
+  "description": "Estrutura que o parser deve produzir e que o app consome. Cada campo indica a origem: AUTO (parser), REVISAO (voce confirma), CURADORIA (voce insere), USUARIO (candidato preenche).",
+  "type": "object",
+  "required": ["edital", "cronograma", "conteudo"],
+  "additionalProperties": false,
+
+  "properties": {
+    "edital":            { "$ref": "#/$defs/edital" },
+    "cronograma":        { "type": "array", "items": { "$ref": "#/$defs/eventoCronograma" } },
+    "dados_prova":       { "$ref": "#/$defs/dadosProva" },
+    "conteudo":          { "type": "array", "items": { "$ref": "#/$defs/noConteudo" },
+                           "description": "Arvore achatada (materia > topico > subtopico). AUTO na extracao, REVISAO na estrutura e nos titulos." },
+    "provas_anteriores": { "type": "array", "items": { "$ref": "#/$defs/provaAnterior" } },
+    "isencoes":          { "$ref": "#/$defs/isencoes" },
+    "links":             { "$ref": "#/$defs/links" }
+  },
+
+  "$defs": {
+
+    "dataOuNull": {
+      "type": ["string", "null"],
+      "format": "date",
+      "description": "Data ISO (AAAA-MM-DD) ou null quando nao informado."
+    },
+
+    "edital": {
+      "type": "object",
+      "required": ["orgao", "cargo", "banca", "numero"],
+      "additionalProperties": false,
+      "properties": {
+        "orgao":       { "type": "string", "description": "AUTO" },
+        "cargo":       { "type": "string", "description": "AUTO" },
+        "banca":       { "type": "string", "description": "AUTO" },
+        "numero":      { "type": "string", "description": "AUTO. Ex.: '1/2026'." },
+        "publicacao":  { "$ref": "#/$defs/dataOuNull", "description": "AUTO. Primeira publicacao (ancora do corte)." },
+        "base_legal":  { "type": "array", "items": { "type": "string" }, "description": "AUTO" },
+        "vagas": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "imediatas":       { "type": "integer", "minimum": 0 },
+            "cadastro_reserva":{ "type": "integer", "minimum": 0 }
+          },
+          "description": "AUTO"
+        },
+        "remuneracao": { "type": ["number", "null"], "description": "AUTO" },
+        "taxa":        { "type": ["number", "null"], "description": "AUTO" },
+        "local_fases": { "type": ["string", "null"], "description": "AUTO. Cidade das fases (nao o local individual do candidato)." },
+        "validade_anos": { "type": ["integer", "null"], "description": "AUTO" },
+
+        "versao_arquivo":            { "type": "string", "description": "AUTO. Ex.: 'consolidado ate Edital no 3'." },
+        "retificacoes_incorporadas": { "type": "array", "items": { "type": "string" }, "description": "AUTO. Retificacoes ja refletidas no arquivo." },
+        "ultima_retificacao_publicada": { "type": ["string", "null"], "description": "RADAR. Ultima retificacao vista no site da banca." },
+        "radar_desatualizado":       { "type": "boolean", "description": "RADAR. true quando ha retificacao publicada nao incorporada." },
+
+        "conteudo_revisado": { "type": "boolean", "description": "REVISAO. Trava: false ate voce confirmar a arvore." },
+        "corte_conteudo":    { "$ref": "#/$defs/corteConteudo" }
+      }
+    },
+
+    "corteConteudo": {
+      "type": "object",
+      "required": ["informado"],
+      "additionalProperties": false,
+      "description": "REVISAO. Data-limite de lei/jurisprudencia cobravel.",
+      "properties": {
+        "informado":         { "type": "boolean" },
+        "fonte":             { "type": ["string", "null"], "description": "Ex.: '16.32 / 16.32.1'." },
+        "forma":             { "type": ["string", "null"], "enum": ["explicita", "relativa", null] },
+        "referencia":        { "type": ["string", "null"], "description": "Se relativa. Ex.: 'data da primeira publicacao do edital'." },
+        "legislacao_ate":    { "$ref": "#/$defs/dataOuNull" },
+        "jurisprudencia_ate":{ "$ref": "#/$defs/dataOuNull" },
+        "afetado_por_retificacao": { "type": ["boolean", "null"] },
+        "trecho":            { "type": ["string", "null"], "description": "Citacao literal do edital." }
+      },
+      "allOf": [
+        {
+          "if":   { "properties": { "informado": { "const": true }, "forma": { "const": "relativa" } }, "required": ["informado"] },
+          "then": { "required": ["referencia"] }
+        }
+      ]
+    },
+
+    "eventoCronograma": {
+      "type": "object",
+      "required": ["tipo", "inicio"],
+      "additionalProperties": false,
+      "description": "AUTO. Alimenta a tabela de status, o calendario e o .ics.",
+      "properties": {
+        "tipo":  { "type": "string", "enum": [
+          "impugnacao", "isencao", "inscricoes", "pagamento", "resultado_isencao",
+          "atendimento_especializado", "locais_prova",
+          "prova_objetiva", "provas_discursivas", "prova_oral",
+          "titulos", "resultado_provisorio", "resultado_final", "recurso", "convocacao", "outro"
+        ] },
+        "titulo":      { "type": ["string", "null"] },
+        "inicio":      { "type": "string", "format": "date" },
+        "fim":         { "$ref": "#/$defs/dataOuNull" },
+        "turno":       { "type": ["string", "null"], "enum": ["manha", "tarde", "noite", null] },
+        "duracao":     { "type": ["string", "null"] },
+        "hora_portoes":{ "type": ["string", "null"] },
+        "fonte":       { "type": ["string", "null"], "description": "Edital ou retificacao de origem." },
+        "observacao":  { "type": ["string", "null"], "description": "Ex.: 'remarcada pelo Edital no 5'." }
+      }
+    },
+
+    "dadosProva": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "fases": {
+          "type": "array",
+          "description": "AUTO. Dados de cada prova (sem o local individual).",
+          "items": {
+            "type": "object",
+            "required": ["fase"],
+            "additionalProperties": false,
+            "properties": {
+              "fase":     { "type": "string", "enum": ["P1", "P2", "P3", "P4", "P5"] },
+              "tipo":     { "type": ["string", "null"], "enum": ["objetiva", "discursiva", "oral", "titulos", null] },
+              "duracao":  { "type": ["string", "null"] },
+              "turno":    { "type": ["string", "null"], "enum": ["manha", "tarde", "noite", null] },
+              "formato":  { "type": ["string", "null"] },
+              "questoes": { "type": ["integer", "null"], "minimum": 0 }
+            }
+          }
+        },
+        "locais": {
+          "type": "array",
+          "description": "USUARIO. Preenchido pelo candidato (pode haver mais de um).",
+          "items": {
+            "type": "object",
+            "required": ["identificacao"],
+            "additionalProperties": false,
+            "properties": {
+              "identificacao": { "type": "string" },
+              "cep":       { "type": ["string", "null"] },
+              "endereco":  { "type": ["string", "null"] },
+              "numero":    { "type": ["string", "null"] },
+              "sala":      { "type": ["string", "null"] },
+              "lat":       { "type": ["number", "null"] },
+              "lng":       { "type": ["number", "null"] }
+            }
+          }
+        }
+      }
+    },
+
+    "noConteudo": {
+      "type": "object",
+      "required": ["id", "nivel", "titulo"],
+      "additionalProperties": false,
+      "properties": {
+        "id":        { "type": "string" },
+        "parent_id": { "type": ["string", "null"], "description": "null para materia; obrigatorio para topico/subtopico." },
+        "nivel":     { "type": "string", "enum": ["materia", "topico", "subtopico"] },
+        "titulo":    { "type": "string", "description": "REVISAO. Texto literal do edital." },
+        "ordem":     { "type": ["integer", "null"] },
+        "fases":     { "type": "array", "items": { "type": "string", "enum": ["P1", "P2", "P3", "P4", "P5"] } }
+      },
+      "allOf": [
+        {
+          "if":   { "properties": { "nivel": { "const": "materia" } }, "required": ["nivel"] },
+          "then": { "properties": { "parent_id": { "type": "null" } } }
+        },
+        {
+          "if":   { "properties": { "nivel": { "enum": ["topico", "subtopico"] } }, "required": ["nivel"] },
+          "then": { "required": ["parent_id"], "properties": { "parent_id": { "type": "string" } } }
+        }
+      ]
+    },
+
+    "provaAnterior": {
+      "type": "object",
+      "required": ["ano", "tipo"],
+      "additionalProperties": false,
+      "description": "CURADORIA. Upload seu.",
+      "properties": {
+        "orgao":  { "type": ["string", "null"] },
+        "banca":  { "type": ["string", "null"] },
+        "cargo":  { "type": ["string", "null"] },
+        "ano":    { "type": "integer", "minimum": 2020 },
+        "tipo":   { "type": "string", "enum": ["objetiva", "subjetiva", "oral"] },
+        "arquivo_prova": { "type": ["string", "null"] },
+        "arquivo_resposta": {
+          "type": ["object", "null"],
+          "additionalProperties": false,
+          "properties": {
+            "tipo": { "type": "string", "enum": ["gabarito", "padrao_resposta", "espelho"] },
+            "url":  { "type": "string" }
+          },
+          "required": ["tipo", "url"]
+        },
+        "fonte":  { "type": ["string", "null"] }
+      }
+    },
+
+    "isencoes": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "AUTO.",
+      "properties": {
+        "tem_isencao": { "type": "boolean" },
+        "inicio":      { "$ref": "#/$defs/dataOuNull" },
+        "fim":         { "$ref": "#/$defs/dataOuNull" },
+        "hipoteses":   { "type": "array", "items": { "type": "string" } },
+        "link":        { "type": ["string", "null"] }
+      }
+    },
+
+    "links": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "site_curso":     { "type": ["string", "null"], "description": "CURADORIA" },
+        "edital_oficial": { "type": ["string", "null"], "description": "AUTO" },
+        "pagina_banca":   { "type": ["string", "null"], "description": "AUTO" }
+      }
+    }
+  }
+}
