@@ -26,7 +26,7 @@ class FasesResultado:
 
 def extrair_areas_por_fase(texto_item7: str) -> dict[str, list[str]]:
     """Le o quadro do 7.1 e devolve {fase: [area literal, ...]}."""
-    linhas = _recortar_quadro(texto_item7)
+    linhas = recortar_quadro(texto_item7)
     areas: dict[str, list[str]] = {}
     fase_atual: str | None = None
     anterior_foi_area = False
@@ -98,7 +98,9 @@ def _casar_agrupamento(norma: str, por_norma: dict[str, str]) -> list[str]:
     return casadas
 
 
-def _recortar_quadro(texto_item7: str) -> list[str]:
+def recortar_quadro(texto_item7: str) -> list[str]:
+    """Isola as linhas do quadro 7.1 (do "7.1" ate o "7.2"). Tambem usado
+    por dados_prova.py."""
     linhas = texto_item7.splitlines()
     inicio = fim = None
     for i, linha in enumerate(linhas):

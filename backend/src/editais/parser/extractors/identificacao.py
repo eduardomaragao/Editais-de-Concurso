@@ -8,10 +8,10 @@ conhecidas), base legal (intro), vagas (quadro do item 4), remuneracao
 """
 
 import re
-import unicodedata
 from dataclasses import dataclass, field
 
 from editais.parser.sectioner import Secoes
+from editais.parser.util import MESES, NUMEROS_POR_EXTENSO, norm_ascii
 
 RE_EDITAL = re.compile(
     r"EDITAL\s+N[ºo°]\s*(\d+)\s*[–—-]\s*([A-ZÀ-Ü]+(?:/[A-Z]{2})?)\s*,\s*"
@@ -30,12 +30,6 @@ RE_VALIDADE = re.compile(
 )
 RE_NUMERO_SOLTO = re.compile(r"^\d{1,4}$")
 
-MESES = {
-    "janeiro": 1, "fevereiro": 2, "marco": 3, "abril": 4, "maio": 5, "junho": 6,
-    "julho": 7, "agosto": 8, "setembro": 9, "outubro": 10, "novembro": 11,
-    "dezembro": 12,
-}
-NUMEROS_POR_EXTENSO = {"um": 1, "dois": 2, "tres": 3, "quatro": 4, "cinco": 5}
 BANCAS_CONHECIDAS = ["Cebraspe", "FCC", "FGV", "Vunesp", "IBFC", "Cesgranrio", "IADES"]
 
 
@@ -55,7 +49,7 @@ def extrair_identificacao(secoes: Secoes) -> IdentificacaoExtraida:
         numero, orgao, dia, mes_nome, ano = m.groups()
         edital["orgao"] = orgao
         edital["numero"] = f"{int(numero)}/{ano}"
-        mes = MESES.get(_norm(mes_nome))
+        mes = MESES.get(norm_ascii(mes_nome))
         if mes:
             edital["publicacao"] = f"{int(ano):04d}-{mes:02d}-{int(dia):02d}"
         else:
@@ -135,11 +129,7 @@ def _validade(texto_item16: str) -> int | None:
     m = RE_VALIDADE.search(" ".join(texto_item16.split()))
     if m is None:
         return None
-    palavra = _norm(m.group(1))
+    palavra = norm_ascii(m.group(1))
     if palavra.isdigit():
         return int(palavra)
     return NUMEROS_POR_EXTENSO.get(palavra)
-
-
-def _norm(s: str) -> str:
-    return unicodedata.normalize("NFKD", s).encode("ascii", "ignore").decode().lower()
