@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 
 import '../api.dart';
 import '../modelos.dart';
+import '../social_api.dart';
 import '../tema.dart';
+import 'amigos.dart';
+import 'conquistas.dart';
 import 'conteudo.dart';
 import 'dados_prova.dart';
 import 'datas.dart';
@@ -23,6 +26,24 @@ class _EditalHubPageState extends State<EditalHubPage> {
   void initState() {
     super.initState();
     _edital = Api().obterEdital(widget.slug);
+    _mostrarIncentivos();
+  }
+
+  Future<void> _mostrarIncentivos() async {
+    try {
+      final incentivos = await SocialApi.buscarIncentivos();
+      if (incentivos.isEmpty || !mounted) return;
+      final primeiro = incentivos.first;
+      final extra =
+          incentivos.length > 1 ? ' (+${incentivos.length - 1} em Amigos)' : '';
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        duration: const Duration(seconds: 6),
+        content:
+            Text('💌 ${primeiro['de']}: "${primeiro['mensagem']}"$extra'),
+      ));
+    } catch (_) {
+      // sem perfil ou sem rede — segue o jogo
+    }
   }
 
   @override
@@ -64,6 +85,12 @@ class _EditalHubPageState extends State<EditalHubPage> {
               _cardNavegacao(context, Icons.history_edu, 'Provas anteriores',
                   'Objetivas · Subjetivas · Orais (2020+)',
                   ProvasPage(edital: edital)),
+              _cardNavegacao(context, Icons.emoji_events, 'Conquistas',
+                  'Pontos, insígnias e postar nos Stories',
+                  ConquistasPage(slug: widget.slug, edital: edital)),
+              _cardNavegacao(context, Icons.group, 'Amigos',
+                  'Ranking, incentivos e competição saudável',
+                  AmigosPage(slug: widget.slug)),
             ],
           ),
         );

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
 import '../armazenamento.dart';
+import '../gamificacao.dart' as g;
 import '../modelos.dart';
+import '../social_api.dart';
 import '../tema.dart';
 
 /// Arvore de conteudo: checkbox a ESQUERDA marca o topico inteiro (com os
@@ -45,6 +47,17 @@ class _ConteudoPageState extends State<ConteudoPage> {
       }
     });
     _armazenamento.salvarProgresso(_concluidos);
+    _armazenamento.registrarNoDiario(
+      marcados: tudoMarcado ? const [] : ids,
+      desmarcados: tudoMarcado ? ids : const [],
+    );
+    // resumo para o ranking dos amigos (silencioso se nao tem perfil/rede)
+    SocialApi.sincronizarProgresso(
+      widget.slug,
+      pontos: g.pontos(_materias, _concluidos),
+      percentual: g.percentual(_materias, _concluidos),
+      concluidos: _concluidos.length,
+    );
   }
 
   bool? _estado(No no) {

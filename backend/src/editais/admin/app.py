@@ -18,6 +18,7 @@ from fastapi.responses import RedirectResponse
 from fastapi.templating import Jinja2Templates
 
 from editais.admin import servico
+from editais.api import social
 from editais.db import DATA_DIR, Base, criar_engine, criar_sessionmaker
 from editais.radar.cebraspe import CebraspeFetcher
 
@@ -34,7 +35,7 @@ def criar_app(engine=None) -> FastAPI:
     app.add_middleware(
         CORSMiddleware,
         allow_origins=["*"],
-        allow_methods=["GET"],
+        allow_methods=["*"],
         allow_headers=["*"],
     )
     templates = Jinja2Templates(directory=str(TEMPLATES_DIR))
@@ -225,6 +226,8 @@ def criar_app(engine=None) -> FastAPI:
         if row is None or not row.publicado:
             raise HTTPException(status_code=404, detail="Edital não publicado.")
         return row.documento
+
+    app.include_router(social.criar_router(SessaoLocal))
 
     return app
 
