@@ -46,34 +46,48 @@ class _ConteudoPageState extends State<ConteudoPage> {
     return Scaffold(
       appBar: AppBar(title: const Text('Conteúdo programático')),
       body: Column(children: [
-        Padding(
-          padding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
-          child: Row(children: [
-            Expanded(
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(5),
-                child: LinearProgressIndicator(
-                  value: pctGeral,
-                  minHeight: 10,
-                  backgroundColor: const Color(0xFFEEE8DA),
-                  color: pctGeral >= 1 ? dourado : verde,
+        Center(
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 900),
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
+              child: Row(children: [
+                Expanded(
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(5),
+                    child: LinearProgressIndicator(
+                      value: pctGeral,
+                      minHeight: 10,
+                      backgroundColor: const Color(0xFFEEE8DA),
+                      color: pctGeral >= 1 ? dourado : verde,
+                    ),
+                  ),
                 ),
-              ),
+                const SizedBox(width: 10),
+                Text('${(pctGeral * 100).round()}%',
+                    style: const TextStyle(
+                        fontWeight: FontWeight.w800, color: verde)),
+              ]),
             ),
-            const SizedBox(width: 10),
-            Text('${(pctGeral * 100).round()}%',
-                style: const TextStyle(
-                    fontWeight: FontWeight.w800, color: verde)),
-          ]),
+          ),
         ),
         Expanded(
-          child: GridView.count(
-            padding: const EdgeInsets.all(12),
-            crossAxisCount: 2,
-            mainAxisSpacing: 10,
-            crossAxisSpacing: 10,
-            childAspectRatio: 1.0,
-            children: [for (final materia in _materias) _quadroMateria(materia)],
+          child: Center(
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 900),
+              // Quadros com tamanho fixo (~180px): 2 colunas no celular,
+              // 4-5 no desktop — nunca gigantes.
+              child: GridView.extent(
+                padding: const EdgeInsets.all(12),
+                maxCrossAxisExtent: 190,
+                mainAxisSpacing: 10,
+                crossAxisSpacing: 10,
+                childAspectRatio: 0.92,
+                children: [
+                  for (final materia in _materias) _quadroMateria(materia)
+                ],
+              ),
+            ),
           ),
         ),
       ]),
@@ -105,13 +119,13 @@ class _ConteudoPageState extends State<ConteudoPage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               CircleAvatar(
-                radius: 23,
+                radius: 20,
                 backgroundColor: cor.withValues(alpha: 0.12),
                 child: completa
-                    ? const Text('🏆', style: TextStyle(fontSize: 20))
-                    : Icon(iconeMateria(materia.titulo), color: cor, size: 24),
+                    ? const Text('🏆', style: TextStyle(fontSize: 18))
+                    : Icon(iconeMateria(materia.titulo), color: cor, size: 21),
               ),
-              const SizedBox(height: 8),
+              const SizedBox(height: 7),
               Text(nomeCurtoMateria(materia.titulo),
                   textAlign: TextAlign.center,
                   maxLines: 2,
@@ -119,7 +133,7 @@ class _ConteudoPageState extends State<ConteudoPage> {
                   style: Theme.of(context)
                       .textTheme
                       .titleMedium
-                      ?.copyWith(fontSize: 15, height: 1.15)),
+                      ?.copyWith(fontSize: 13.5, height: 1.15)),
               const SizedBox(height: 3),
               Text(
                   materia.fases.isNotEmpty ? materia.fases.join(' · ') : ' ',
@@ -263,7 +277,10 @@ class _MateriaPageState extends State<MateriaPage> {
     final pct = g.percentualMateria(widget.materia, widget.concluidos);
     return Scaffold(
       appBar: AppBar(title: Text(nomeCurtoMateria(widget.materia.titulo))),
-      body: ListView(padding: const EdgeInsets.all(12), children: [
+      body: Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 760),
+          child: ListView(padding: const EdgeInsets.all(12), children: [
         Row(children: [
           Expanded(
             child: ClipRRect(
@@ -291,6 +308,8 @@ class _MateriaPageState extends State<MateriaPage> {
           ),
         ),
       ]),
+        ),
+      ),
     );
   }
 
