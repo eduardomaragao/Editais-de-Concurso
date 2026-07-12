@@ -16,7 +16,9 @@ class Insignia {
   final String titulo;
   final String descricao;
   final bool conquistada;
-  const Insignia(this.id, this.emoji, this.titulo, this.descricao, this.conquistada);
+  final String categoria;
+  const Insignia(this.id, this.emoji, this.titulo, this.descricao,
+      this.conquistada, {this.categoria = 'Geral'});
 }
 
 int pontos(List<No> materias, Set<String> concluidos) {
@@ -89,49 +91,113 @@ int sequenciaDias(Map<String, List<String>> diario, DateTime hoje,
   return sequencia;
 }
 
+// Escadas de conquista: (marco, emoji, apelido opcional).
+const _escadaConstancia = [
+  (3, '⚡', 'Faísca'),
+  (7, '💪', 'Uma semana'),
+  (14, '🚀', 'Duas semanas'),
+  (21, '🎯', 'Três semanas'),
+  (30, '🛡️', 'Um mês'),
+  (45, '🏹', 'Mês e meio'),
+  (75, '🧗', 'Escalando'),
+  (90, '🏔️', 'Um trimestre'),
+  (120, '🦅', 'Quatro meses'),
+  (150, '🗿', 'Inabalável'),
+  (180, '🌗', 'Meio ano'),
+  (210, '🌔', 'Sete meses'),
+  (240, '🌕', 'Oito meses'),
+  (270, '☀️', 'Nove meses'),
+  (300, '🌠', 'Trezentos'),
+  (330, '🌌', 'Onze meses'),
+  (365, '🌟', 'Um ano inteiro'),
+];
+
+const _escadaHoras = [
+  (5, '⏱️', null),
+  (10, '⏲️', null),
+  (25, '⌛', null),
+  (50, '⏳', null),
+  (100, '🕰️', null),
+  (200, '📚', null),
+  (300, '🧠', null),
+  (500, '🎖️', null),
+  (750, '🏅', null),
+  (1000, '🏛️', 'Mil horas!'),
+];
+
+const _escadaPontos = [
+  (500, '🔸', null),
+  (1000, '🔶', null),
+  (2500, '💠', null),
+  (5000, '🏵️', null),
+  (10000, '🎇', null),
+  (15000, '👑', 'Placar de rei'),
+];
+
 List<Insignia> insignias(List<No> materias, Set<String> concluidos,
     int sequencia, {double horas = 0}) {
   final pct = percentual(materias, concluidos);
   final completas = materiasCompletas(materias, concluidos);
+  final totalMaterias = materias.length;
+  final pontuacao = pontos(materias, concluidos);
+
   return [
     // --- progresso no edital ---
     Insignia('primeiro-passo', '🌱', 'Primeiro passo',
-        'Concluiu o primeiro item do edital', concluidos.isNotEmpty),
-    Insignia('ritmo', '🔥', 'Pegando ritmo', '10% do edital', pct >= 0.10),
-    Insignia('um-quarto', '🥉', 'Um quarto vencido', '25% do edital', pct >= 0.25),
-    Insignia('metade', '🥈', 'Metade do caminho', '50% do edital', pct >= 0.50),
-    Insignia('reta-final', '🥇', 'Reta final', '75% do edital', pct >= 0.75),
-    Insignia('edital-domado', '🏆', 'Edital domado', '100% do edital', pct >= 1.0),
+        'Concluiu o primeiro item do edital', concluidos.isNotEmpty,
+        categoria: 'Progresso'),
+    Insignia('ritmo', '🔥', 'Pegando ritmo', '10% do edital', pct >= 0.10,
+        categoria: 'Progresso'),
+    Insignia('um-quarto', '🥉', 'Um quarto vencido', '25% do edital',
+        pct >= 0.25, categoria: 'Progresso'),
+    Insignia('metade', '🥈', 'Metade do caminho', '50% do edital', pct >= 0.50,
+        categoria: 'Progresso'),
+    Insignia('reta-final', '🥇', 'Reta final', '75% do edital', pct >= 0.75,
+        categoria: 'Progresso'),
+    Insignia('edital-domado', '🏆', 'Edital domado', '100% do edital',
+        pct >= 1.0, categoria: 'Progresso'),
+
+    // --- materias fechadas ---
     Insignia('materia-completa', '📗', 'Matéria completa',
-        'Fechou uma matéria inteira ($completas até agora)', completas >= 1),
+        'Fechou uma matéria inteira ($completas até agora)', completas >= 1,
+        categoria: 'Matérias'),
+    Insignia('materias-3', '📚', 'Trio fechado', '3 matérias completas',
+        completas >= 3, categoria: 'Matérias'),
+    Insignia('materias-5', '🎓', 'Meia banca', '5 matérias completas',
+        completas >= 5, categoria: 'Matérias'),
+    Insignia('materias-todas', '🧑‍⚖️', 'Todas as matérias',
+        'Fechou as $totalMaterias matérias do edital',
+        totalMaterias > 0 && completas >= totalMaterias,
+        categoria: 'Matérias'),
+
     // --- constancia (dias seguidos) ---
-    Insignia('constancia-3', '⚡', 'Constância 3', '3 dias seguidos de estudo',
-        sequencia >= 3),
-    Insignia('constancia-7', '💪', 'Constância 7', '7 dias seguidos de estudo',
-        sequencia >= 7),
-    Insignia('constancia-14', '🚀', 'Constância 14',
-        '14 dias seguidos de estudo', sequencia >= 14),
-    Insignia('constancia-30', '🛡️', 'Constância 30',
-        '30 dias seguidos de estudo', sequencia >= 30),
-    Insignia('constancia-90', '🏔️', 'Constância 90',
-        '90 dias seguidos de estudo', sequencia >= 90),
-    Insignia('constancia-180', '🌗', 'Constância 180',
-        'Meio ano de estudo sem falhar um dia', sequencia >= 180),
-    Insignia('constancia-365', '🌟', 'Constância 365',
-        'Um ano inteiro, todos os dias', sequencia >= 365),
+    for (final (dias, emoji, apelido) in _escadaConstancia)
+      Insignia('constancia-$dias', emoji, 'Constância $dias — $apelido',
+          '$dias dias seguidos de estudo', sequencia >= dias,
+          categoria: 'Constância'),
+
     // --- criacao do habito (20 -> 40 -> 60 dias) ---
     Insignia('habito-20', '🌿', 'Criando o hábito',
-        '20 dias seguidos — a criação do hábito começou', sequencia >= 20),
+        '20 dias seguidos — a criação do hábito começou', sequencia >= 20,
+        categoria: 'Hábito'),
     Insignia('habito-40', '🌳', 'Hábito em consolidação',
-        '40 dias seguidos — está virando parte de você', sequencia >= 40),
+        '40 dias seguidos — está virando parte de você', sequencia >= 40,
+        categoria: 'Hábito'),
     Insignia('habito-60', '💎', 'Hábito criado',
-        '60 dias seguidos — estudar agora é rotina', sequencia >= 60),
+        '60 dias seguidos — estudar agora é rotina', sequencia >= 60,
+        categoria: 'Hábito'),
+
     // --- horas no relogio de estudo ---
-    Insignia('horas-10', '⏱️', '10 horas no relógio',
-        '10 horas de estudo cronometradas', horas >= 10),
-    Insignia('horas-100', '⏳', '100 horas no relógio',
-        '100 horas de estudo cronometradas', horas >= 100),
-    Insignia('horas-500', '🕰️', '500 horas no relógio',
-        'Meio milhar de horas de estudo', horas >= 500),
+    for (final (h, emoji, apelido) in _escadaHoras)
+      Insignia('horas-$h', emoji,
+          apelido ?? '$h horas no relógio',
+          '$h horas de estudo cronometradas', horas >= h,
+          categoria: 'Horas de estudo'),
+
+    // --- pontos ---
+    for (final (p, emoji, apelido) in _escadaPontos)
+      Insignia('pontos-$p', emoji, apelido ?? '$p pontos',
+          'Alcançou $p pontos', pontuacao >= p,
+          categoria: 'Pontos'),
   ];
 }

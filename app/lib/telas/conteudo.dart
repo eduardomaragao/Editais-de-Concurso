@@ -72,7 +72,7 @@ class _ConteudoPageState extends State<ConteudoPage> {
             crossAxisCount: 2,
             mainAxisSpacing: 10,
             crossAxisSpacing: 10,
-            childAspectRatio: 1.25,
+            childAspectRatio: 1.0,
             children: [for (final materia in _materias) _quadroMateria(materia)],
           ),
         ),
@@ -83,6 +83,7 @@ class _ConteudoPageState extends State<ConteudoPage> {
   Widget _quadroMateria(No materia) {
     final pct = g.percentualMateria(materia, _concluidos);
     final completa = pct >= 1;
+    final cor = completa ? dourado : verde;
     return Card(
       color: completa ? const Color(0xFFF9F3E3) : Colors.white,
       child: InkWell(
@@ -99,49 +100,90 @@ class _ConteudoPageState extends State<ConteudoPage> {
           setState(() {}); // volta com o progresso novo
         },
         child: Padding(
-          padding: const EdgeInsets.all(12),
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 12),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Row(children: [
-                Expanded(
-                  child: Text(nomeCurtoMateria(materia.titulo),
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                      style: Theme.of(context).textTheme.titleMedium),
-                ),
-                if (completa) const Text('🏆', style: TextStyle(fontSize: 18)),
-              ]),
-              const Spacer(),
-              if (materia.fases.isNotEmpty)
-                Text(materia.fases.join(' · '),
-                    style: const TextStyle(
-                        fontSize: 11,
-                        color: dourado,
-                        fontWeight: FontWeight.w700)),
-              const SizedBox(height: 6),
-              ClipRRect(
-                borderRadius: BorderRadius.circular(4),
-                child: LinearProgressIndicator(
-                  value: pct,
-                  minHeight: 8,
-                  backgroundColor: const Color(0xFFEEE8DA),
-                  color: completa ? dourado : verde,
+              CircleAvatar(
+                radius: 23,
+                backgroundColor: cor.withValues(alpha: 0.12),
+                child: completa
+                    ? const Text('🏆', style: TextStyle(fontSize: 20))
+                    : Icon(iconeMateria(materia.titulo), color: cor, size: 24),
+              ),
+              const SizedBox(height: 8),
+              Text(nomeCurtoMateria(materia.titulo),
+                  textAlign: TextAlign.center,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: Theme.of(context)
+                      .textTheme
+                      .titleMedium
+                      ?.copyWith(fontSize: 15, height: 1.15)),
+              const SizedBox(height: 3),
+              Text(
+                  materia.fases.isNotEmpty ? materia.fases.join(' · ') : ' ',
+                  style: const TextStyle(
+                      fontSize: 10.5,
+                      color: dourado,
+                      fontWeight: FontWeight.w700)),
+              const SizedBox(height: 7),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 6),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(4),
+                  child: LinearProgressIndicator(
+                    value: pct,
+                    minHeight: 7,
+                    backgroundColor: const Color(0xFFEEE8DA),
+                    color: cor,
+                  ),
                 ),
               ),
               const SizedBox(height: 4),
               Text(
                   '${(pct * 100).round()}% · '
                   '${materia.idsSubarvore.skip(1).where(_concluidos.contains).length}'
-                  '/${materia.idsSubarvore.length - 1} itens',
+                  '/${materia.idsSubarvore.length - 1}',
                   style:
-                      const TextStyle(fontSize: 11, color: Color(0xFF8A8574))),
+                      const TextStyle(fontSize: 10.5, color: Color(0xFF8A8574))),
             ],
           ),
         ),
       ),
     );
   }
+}
+
+/// Icone minimalista por materia (casamento por palavra-chave; os mais
+/// especificos primeiro para "processual civil" nao cair em "civil").
+IconData iconeMateria(String titulo) {
+  final norma = titulo.toLowerCase();
+  const mapa = <String, IconData>{
+    'processual civil': Icons.gavel,
+    'processual do trabalho': Icons.balance,
+    'processual penal': Icons.gavel,
+    'administrativo': Icons.account_balance,
+    'ambiental': Icons.forest,
+    'constitucional': Icons.auto_stories,
+    'previdenciário': Icons.elderly,
+    'previdenciario': Icons.elderly,
+    'trabalho': Icons.engineering,
+    'empresarial': Icons.storefront,
+    'financeiro': Icons.account_balance_wallet,
+    'tributário': Icons.receipt_long,
+    'tributario': Icons.receipt_long,
+    'penal': Icons.local_police,
+    'eleitoral': Icons.how_to_vote,
+    'consumidor': Icons.shopping_bag,
+    'econômico': Icons.trending_up,
+    'humanos': Icons.diversity_3,
+    'civil': Icons.handshake,
+  };
+  for (final entrada in mapa.entries) {
+    if (norma.contains(entrada.key)) return entrada.value;
+  }
+  return Icons.school;
 }
 
 /// "DIREITO PROCESSUAL DO TRABALHO" -> "Processual do Trabalho"

@@ -91,44 +91,23 @@ class _ConquistasPageState extends State<ConquistasPage> {
         const SizedBox(height: 8),
         Text('Insígnias ($conquistadas/${insignias.length})',
             style: Theme.of(context).textTheme.titleMedium),
-        const SizedBox(height: 6),
-        GridView.count(
-          crossAxisCount: 2,
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          childAspectRatio: 2.6,
-          mainAxisSpacing: 8,
-          crossAxisSpacing: 8,
-          children: [
-            for (final insignia in insignias)
-              Opacity(
-                opacity: insignia.conquistada ? 1 : 0.35,
-                child: Card(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 10),
-                    child: Row(children: [
-                      Text(insignia.emoji, style: const TextStyle(fontSize: 24)),
-                      const SizedBox(width: 8),
-                      Expanded(
-                        child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(insignia.titulo,
-                                  style: const TextStyle(
-                                      fontWeight: FontWeight.w700, fontSize: 13)),
-                              Text(insignia.descricao,
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: const TextStyle(fontSize: 10)),
-                            ]),
-                      ),
-                    ]),
-                  ),
-                ),
-              ),
-          ],
-        ),
+        for (final categoria in _categorias(insignias)) ...[
+          const SizedBox(height: 8),
+          _cabecalhoCategoria(categoria, insignias),
+          const SizedBox(height: 4),
+          GridView.count(
+            crossAxisCount: 2,
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            childAspectRatio: 2.6,
+            mainAxisSpacing: 8,
+            crossAxisSpacing: 8,
+            children: [
+              for (final insignia in insignias)
+                if (insignia.categoria == categoria) _quadroInsignia(insignia),
+            ],
+          ),
+        ],
         const SizedBox(height: 16),
         Text('Postar nos Stories', style: Theme.of(context).textTheme.titleMedium),
         const SizedBox(height: 6),
@@ -151,6 +130,62 @@ class _ConquistasPageState extends State<ConquistasPage> {
           onTap: _escolherMateria,
         )),
       ]),
+    );
+  }
+
+  List<String> _categorias(List<g.Insignia> insignias) {
+    final vistas = <String>[];
+    for (final insignia in insignias) {
+      if (!vistas.contains(insignia.categoria)) vistas.add(insignia.categoria);
+    }
+    return vistas;
+  }
+
+  Widget _cabecalhoCategoria(String categoria, List<g.Insignia> insignias) {
+    final do0 = insignias.where((i) => i.categoria == categoria);
+    final feitas = do0.where((i) => i.conquistada).length;
+    return Row(children: [
+      Expanded(
+          child: Text(categoria,
+              style: const TextStyle(
+                  fontWeight: FontWeight.w700,
+                  fontSize: 13,
+                  color: Color(0xFF8A8574),
+                  letterSpacing: 0.5))),
+      Text('$feitas/${do0.length}',
+          style: const TextStyle(
+              fontSize: 12, color: dourado, fontWeight: FontWeight.w700)),
+    ]);
+  }
+
+  Widget _quadroInsignia(g.Insignia insignia) {
+    return Opacity(
+      opacity: insignia.conquistada ? 1 : 0.35,
+      child: Card(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 10),
+          child: Row(children: [
+            Text(insignia.emoji, style: const TextStyle(fontSize: 24)),
+            const SizedBox(width: 8),
+            Expanded(
+              child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(insignia.titulo,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(
+                            fontWeight: FontWeight.w700, fontSize: 13)),
+                    Text(insignia.descricao,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(fontSize: 10)),
+                  ]),
+            ),
+          ]),
+        ),
+      ),
     );
   }
 

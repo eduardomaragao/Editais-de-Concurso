@@ -99,8 +99,51 @@ void main() {
         .map((i) => i.id)
         .toSet();
     expect(com(9.9), isNot(contains('horas-10')));
-    expect(com(120), containsAll({'horas-10', 'horas-100'}));
+    expect(com(120), containsAll({'horas-5', 'horas-10', 'horas-50', 'horas-100'}));
     expect(com(120), isNot(contains('horas-500')));
+  });
+
+  test('a escada da constancia nao tem buraco grande entre 180 e 365', () {
+    final ids = g
+        .insignias(_arvore(), {}, 0)
+        .where((i) => i.categoria == 'Constância')
+        .map((i) => i.id)
+        .toSet();
+    expect(
+        ids,
+        containsAll({
+          'constancia-21', 'constancia-45', 'constancia-120',
+          'constancia-210', 'constancia-240', 'constancia-270',
+          'constancia-300', 'constancia-330', 'constancia-365',
+        }));
+    // aos 240 dias, tudo ate 240 conquistado; 270 ainda nao
+    final aos240 = g
+        .insignias(_arvore(), {}, 240)
+        .where((i) => i.conquistada && i.categoria == 'Constância')
+        .map((i) => i.id)
+        .toSet();
+    expect(aos240, contains('constancia-240'));
+    expect(aos240, isNot(contains('constancia-270')));
+  });
+
+  test('pontos e materias tem escadas proprias', () {
+    // edital sintetico completo = 1515 pontos, 2 materias
+    final tudo = {'adm-1', 'adm-1-1', 'adm-2', 'amb-1'};
+    final conquistadas = g
+        .insignias(_arvore(), tudo, 0)
+        .where((i) => i.conquistada)
+        .map((i) => i.id)
+        .toSet();
+    expect(conquistadas, containsAll({'pontos-500', 'pontos-1000'}));
+    expect(conquistadas, isNot(contains('pontos-2500')));
+    expect(conquistadas, contains('materias-todas')); // as 2 de 2
+    expect(conquistadas, isNot(contains('materias-3')));
+  });
+
+  test('toda insignia tem categoria', () {
+    for (final insignia in g.insignias(_arvore(), {}, 0)) {
+      expect(insignia.categoria, isNot('Geral'), reason: insignia.id);
+    }
   });
 
   test('sessao no relogio mantem a sequencia sem marcar itens', () {
