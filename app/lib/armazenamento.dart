@@ -54,10 +54,7 @@ class Armazenamento {
       {required Iterable<String> marcados,
       required Iterable<String> desmarcados}) async {
     final diario = await carregarDiario();
-    final hoje = DateTime.now();
-    final chave = '${hoje.year.toString().padLeft(4, '0')}-'
-        '${hoje.month.toString().padLeft(2, '0')}-'
-        '${hoje.day.toString().padLeft(2, '0')}';
+    final chave = chaveDoDia(DateTime.now());
     final deHoje = {...(diario[chave] ?? const <String>[])};
     deHoje.addAll(marcados);
     deHoje.removeAll(desmarcados.toSet());
@@ -66,7 +63,51 @@ class Armazenamento {
     await prefs.setString(_chaveDiario, jsonEncode(diario));
     return diario;
   }
+
+  // --- sessoes do relogio de estudo: {"2026-07-12": {"adm": 3600}} ---------
+
+  String get _chaveSessoes => 'sessoes:$slug';
+
+  Future<Map<String, Map<String, int>>> carregarSessoes() async {
+    final prefs = await SharedPreferences.getInstance();
+    final bruto = prefs.getString(_chaveSessoes);
+    if (bruto == null) return {};
+    return (jsonDecode(bruto) as Map<String, dynamic>).map((dia, materias) =>
+        MapEntry(dia, Map<String, int>.from(materias as Map)));
+  }
+
+  /// Soma `segundos` de estudo da `materia` no dia de hoje.
+  Future<Map<String, Map<String, int>>> registrarSessao(
+      String materia, int segundos) async {
+    final sessoes = await carregarSessoes();
+    final chave = chaveDoDia(DateTime.now());
+    final doDia = sessoes.putIfAbsent(chave, () => {});
+    doDia[materia] = (doDia[materia] ?? 0) + segundos;
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString(_chaveSessoes, jsonEncode(sessoes));
+    return sessoes;
+  }
+
+  // --- datas do candidato (alem do cronograma do edital) -------------------
+
+  String get _chaveEventos => 'eventos:$slug';
+
+  Future<List<Map<String, dynamic>>> carregarEventos() async {
+    final prefs = await SharedPreferences.getInstance();
+    final bruto = prefs.getString(_chaveEventos);
+    if (bruto == null) return [];
+    return List<Map<String, dynamic>>.from(jsonDecode(bruto) as List);
+  }
+
+  Future<void> salvarEventos(List<Map<String, dynamic>> eventos) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString(_chaveEventos, jsonEncode(eventos));
+  }
 }
+
+String chaveDoDia(DateTime dia) => '${dia.year.toString().padLeft(4, '0')}-'
+    '${dia.month.toString().padLeft(2, '0')}-'
+    '${dia.day.toString().padLeft(2, '0')}';
 
 /// Credenciais da rede de amigos (globais, nao por edital).
 class CredenciaisSociais {

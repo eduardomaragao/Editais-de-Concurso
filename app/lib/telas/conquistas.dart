@@ -5,6 +5,7 @@ import '../compartilhar.dart';
 import '../gamificacao.dart' as g;
 import '../modelos.dart';
 import '../tema.dart';
+import '../tempo.dart' as tempo;
 
 /// Pontos, insignias e os cards de compartilhar nos Stories.
 class ConquistasPage extends StatefulWidget {
@@ -20,6 +21,7 @@ class _ConquistasPageState extends State<ConquistasPage> {
   late final List<No> _materias = montarArvore(widget.edital.conteudo);
   Set<String> _concluidos = {};
   Map<String, List<String>> _diario = {};
+  tempo.Sessoes _sessoes = {};
   bool _carregado = false;
 
   @override
@@ -29,9 +31,11 @@ class _ConquistasPageState extends State<ConquistasPage> {
     Future.wait([
       armazenamento.carregarProgresso(),
       armazenamento.carregarDiario(),
+      armazenamento.carregarSessoes(),
     ]).then((resultados) => setState(() {
           _concluidos = resultados[0] as Set<String>;
           _diario = resultados[1] as Map<String, List<String>>;
+          _sessoes = resultados[2] as tempo.Sessoes;
           _carregado = true;
         }));
   }
@@ -45,8 +49,11 @@ class _ConquistasPageState extends State<ConquistasPage> {
     }
     final pontos = g.pontos(_materias, _concluidos);
     final pct = g.percentual(_materias, _concluidos);
-    final sequencia = g.sequenciaDias(_diario, DateTime.now());
-    final insignias = g.insignias(_materias, _concluidos, sequencia);
+    // sessao no relogio tambem mantem a sequencia viva
+    final sequencia = g.sequenciaDias(_diario, DateTime.now(),
+        diasExtras: tempo.diasComSessao(_sessoes));
+    final insignias = g.insignias(_materias, _concluidos, sequencia,
+        horas: tempo.horasTotais(_sessoes));
     final conquistadas = insignias.where((i) => i.conquistada).length;
 
     return Scaffold(

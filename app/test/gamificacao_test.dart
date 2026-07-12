@@ -78,4 +78,36 @@ void main() {
         }));
     expect(conquistadas, isNot(contains('constancia-30')));
   });
+
+  test('marcos do habito: comeca aos 20, consolida aos 40, fecha aos 60', () {
+    Set<String> aos(int dias) => g
+        .insignias(_arvore(), {}, dias)
+        .where((i) => i.conquistada)
+        .map((i) => i.id)
+        .toSet();
+    expect(aos(19), isNot(contains('habito-20')));
+    expect(aos(20), contains('habito-20'));
+    expect(aos(40), containsAll({'habito-20', 'habito-40'}));
+    expect(aos(60), containsAll({'habito-20', 'habito-40', 'habito-60'}));
+    expect(aos(365), containsAll({'constancia-180', 'constancia-365'}));
+  });
+
+  test('horas no relogio destravam as insignias de tempo', () {
+    Set<String> com(double horas) => g
+        .insignias(_arvore(), {}, 0, horas: horas)
+        .where((i) => i.conquistada)
+        .map((i) => i.id)
+        .toSet();
+    expect(com(9.9), isNot(contains('horas-10')));
+    expect(com(120), containsAll({'horas-10', 'horas-100'}));
+    expect(com(120), isNot(contains('horas-500')));
+  });
+
+  test('sessao no relogio mantem a sequencia sem marcar itens', () {
+    final diario = {'2026-07-10': ['a']};
+    expect(
+        g.sequenciaDias(diario, DateTime(2026, 7, 11),
+            diasExtras: {'2026-07-11'}),
+        2);
+  });
 }

@@ -68,13 +68,15 @@ int materiasCompletas(List<No> materias, Set<String> concluidos) => materias
         m.filhos.isNotEmpty && percentualMateria(m, concluidos) >= 1.0)
     .length;
 
-/// Sequencia de dias consecutivos com estudo, terminando hoje ou ontem
-/// (estudou ontem e ainda nao hoje = sequencia viva).
-int sequenciaDias(Map<String, List<String>> diario, DateTime hoje) {
-  final diasComEstudo = diario.entries
-      .where((e) => e.value.isNotEmpty)
-      .map((e) => DateTime.parse(e.key))
-      .toSet();
+/// Sequencia de dias consecutivos com estudo (itens marcados OU sessao no
+/// relogio — `diasExtras`), terminando hoje ou ontem (estudou ontem e ainda
+/// nao hoje = sequencia viva).
+int sequenciaDias(Map<String, List<String>> diario, DateTime hoje,
+    {Set<String> diasExtras = const {}}) {
+  final diasComEstudo = {
+    ...diario.entries.where((e) => e.value.isNotEmpty).map((e) => e.key),
+    ...diasExtras,
+  }.map(DateTime.parse).toSet();
   var dia = DateTime(hoje.year, hoje.month, hoje.day);
   if (!diasComEstudo.contains(dia)) {
     dia = dia.subtract(const Duration(days: 1)); // sequencia viva de ontem
@@ -87,11 +89,12 @@ int sequenciaDias(Map<String, List<String>> diario, DateTime hoje) {
   return sequencia;
 }
 
-List<Insignia> insignias(
-    List<No> materias, Set<String> concluidos, int sequencia) {
+List<Insignia> insignias(List<No> materias, Set<String> concluidos,
+    int sequencia, {double horas = 0}) {
   final pct = percentual(materias, concluidos);
   final completas = materiasCompletas(materias, concluidos);
   return [
+    // --- progresso no edital ---
     Insignia('primeiro-passo', '🌱', 'Primeiro passo',
         'Concluiu o primeiro item do edital', concluidos.isNotEmpty),
     Insignia('ritmo', '🔥', 'Pegando ritmo', '10% do edital', pct >= 0.10),
@@ -101,11 +104,34 @@ List<Insignia> insignias(
     Insignia('edital-domado', '🏆', 'Edital domado', '100% do edital', pct >= 1.0),
     Insignia('materia-completa', '📗', 'Matéria completa',
         'Fechou uma matéria inteira ($completas até agora)', completas >= 1),
+    // --- constancia (dias seguidos) ---
     Insignia('constancia-3', '⚡', 'Constância 3', '3 dias seguidos de estudo',
         sequencia >= 3),
     Insignia('constancia-7', '💪', 'Constância 7', '7 dias seguidos de estudo',
         sequencia >= 7),
-    Insignia('constancia-30', '🧠', 'Constância 30',
+    Insignia('constancia-14', '🚀', 'Constância 14',
+        '14 dias seguidos de estudo', sequencia >= 14),
+    Insignia('constancia-30', '🛡️', 'Constância 30',
         '30 dias seguidos de estudo', sequencia >= 30),
+    Insignia('constancia-90', '🏔️', 'Constância 90',
+        '90 dias seguidos de estudo', sequencia >= 90),
+    Insignia('constancia-180', '🌗', 'Constância 180',
+        'Meio ano de estudo sem falhar um dia', sequencia >= 180),
+    Insignia('constancia-365', '🌟', 'Constância 365',
+        'Um ano inteiro, todos os dias', sequencia >= 365),
+    // --- criacao do habito (20 -> 40 -> 60 dias) ---
+    Insignia('habito-20', '🌿', 'Criando o hábito',
+        '20 dias seguidos — a criação do hábito começou', sequencia >= 20),
+    Insignia('habito-40', '🌳', 'Hábito em consolidação',
+        '40 dias seguidos — está virando parte de você', sequencia >= 40),
+    Insignia('habito-60', '💎', 'Hábito criado',
+        '60 dias seguidos — estudar agora é rotina', sequencia >= 60),
+    // --- horas no relogio de estudo ---
+    Insignia('horas-10', '⏱️', '10 horas no relógio',
+        '10 horas de estudo cronometradas', horas >= 10),
+    Insignia('horas-100', '⏳', '100 horas no relógio',
+        '100 horas de estudo cronometradas', horas >= 100),
+    Insignia('horas-500', '🕰️', '500 horas no relógio',
+        'Meio milhar de horas de estudo', horas >= 500),
   ];
 }

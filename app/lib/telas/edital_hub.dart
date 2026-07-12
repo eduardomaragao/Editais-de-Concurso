@@ -7,6 +7,7 @@ import '../tema.dart';
 import 'amigos.dart';
 import 'conquistas.dart';
 import 'conteudo.dart';
+import 'cronometro.dart';
 import 'dados_prova.dart';
 import 'datas.dart';
 import 'provas.dart';
@@ -74,11 +75,14 @@ class _EditalHubPageState extends State<EditalHubPage> {
               _cardCorte(context, edital),
               const SizedBox(height: 4),
               _cardNavegacao(context, Icons.menu_book, 'Conteúdo programático',
-                  'Árvore de estudo com progresso',
+                  'Matérias, tópicos e progresso',
                   ConteudoPage(slug: widget.slug, edital: edital)),
+              _cardNavegacao(context, Icons.timer, 'Relógio de estudo',
+                  'Cronometre, foque e acompanhe suas horas',
+                  CronometroPage(slug: widget.slug, edital: edital)),
               _cardNavegacao(context, Icons.event, 'Datas',
-                  'Cronograma, status e agenda (.ics)',
-                  DatasPage(edital: edital)),
+                  'Calendário, cronograma e suas datas',
+                  DatasPage(slug: widget.slug, edital: edital)),
               _cardNavegacao(context, Icons.place, 'Dados da prova',
                   'Dia, horário e o seu local de prova',
                   DadosProvaPage(slug: widget.slug, edital: edital)),
