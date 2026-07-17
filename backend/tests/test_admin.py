@@ -4,6 +4,7 @@ Usa o golden como documento (ele e valido por contrato) num SQLite em
 memoria — nada de PDF nem rede aqui.
 """
 
+import base64
 import copy
 
 import pytest
@@ -15,6 +16,9 @@ from editais.admin import servico
 from editais.admin.app import criar_app
 from editais.db import Base, criar_sessionmaker
 from editais.radar.core import EditalPublicado
+
+# Em dev (sem EDITAIS_DATABASE_URL) o painel usa admin/dev.
+AUTH_ADMIN = {"Authorization": "Basic " + base64.b64encode(b"admin:dev").decode()}
 
 
 class FetcherFake:
@@ -171,7 +175,21 @@ def test_confirmar_corte_com_data_editada(row):
 def cliente(engine, sessao, golden):
     row = servico.importar_documento(sessao, copy.deepcopy(golden))
     sessao.commit()
-    return TestClient(criar_app(engine)), row
+    client = TestClient(criar_app(engine))
+    client.headers.update(AUTH_ADMIN)  # painel exige senha
+    return client, row
+
+
+def test_painel_exige_senha(cliente):
+    client, row = cliente
+    sem_auth = TestClient(client.app)  # mesmo app, sem o header de auth
+    assert sem_auth.get("/").status_code == 401
+    assert sem_auth.post(f"/editais/{row.id}/publicar").status_code == 401
+    # senha errada tambem barra
+    errada = {"Authorization": "Basic " + base64.b64encode(b"admin:x").decode()}
+    assert sem_auth.get("/", headers=errada).status_code == 401
+    # mas a API publica do app segue aberta
+    assert sem_auth.get("/api/editais").status_code == 200
 
 
 def test_paginas_do_painel(cliente):
