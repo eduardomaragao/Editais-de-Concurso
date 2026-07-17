@@ -180,6 +180,14 @@ def cliente(engine, sessao, golden):
     return client, row
 
 
+def test_normaliza_url_do_postgres_para_psycopg():
+    from editais.db import normalizar_url
+
+    assert normalizar_url("postgres://u:p@host/db") == "postgresql+psycopg://u:p@host/db"
+    assert normalizar_url("postgresql://u:p@host/db") == "postgresql+psycopg://u:p@host/db"
+    assert normalizar_url("sqlite:///x.db") == "sqlite:///x.db"
+
+
 def test_painel_exige_senha(cliente):
     client, row = cliente
     sem_auth = TestClient(client.app)  # mesmo app, sem o header de auth

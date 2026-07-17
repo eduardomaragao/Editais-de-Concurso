@@ -64,6 +64,9 @@ cd app
 %USERPROFILE%\flutter\bin\flutter run -d web-server --web-port 8124   # precisa do backend + edital publicado
 ```
 
+## Publicação (Play Store)
+Em andamento — guia completo em `docs/PUBLICAR.md`. Feito: painel admin trancado com Basic auth (`EDITAIS_ADMIN_USUARIO`/`EDITAIS_ADMIN_SENHA`; falha fechada em produção, dev usa admin/dev), normalização da URL do Postgres (`postgres://`→`postgresql+psycopg://`), `render.yaml` (backend + Postgres num blueprint). Falta: push no GitHub (Eduardo), deploy no Render, apontar app para a URL de produção, ícone, assinatura (.jks — Eduardo gera/guarda), build do .aab, ficha da loja + política de privacidade.
+
 ## Estado atual
 - Scaffold do monorepo pronto: `backend/` (pacote `editais` com stubs documentados de parser/radar/api/admin/db) + `app/` (placeholder até instalar o Flutter SDK). Admin será Jinja2+HTMX dentro do backend; radar é módulo do backend.
 - `backend/tests/test_contract.py` valida o golden `pge_al.instance.json` contra o schema — se quebrar, o contrato mudou; resolver antes de mexer no parser.

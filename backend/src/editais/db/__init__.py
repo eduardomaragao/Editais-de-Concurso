@@ -24,8 +24,17 @@ def url_padrao() -> str:
     return os.environ.get("EDITAIS_DATABASE_URL", f"sqlite:///{DATA_DIR / 'editais.db'}")
 
 
+def normalizar_url(url: str) -> str:
+    """Render/Heroku entregam 'postgres[ql]://'; usamos psycopg3, que pede o
+    driver explicito 'postgresql+psycopg://'."""
+    for prefixo in ("postgresql://", "postgres://"):
+        if url.startswith(prefixo):
+            return "postgresql+psycopg://" + url[len(prefixo):]
+    return url
+
+
 def criar_engine(url: str | None = None):
-    url = url or url_padrao()
+    url = normalizar_url(url or url_padrao())
     if url.startswith("sqlite:///"):
         Path(url.removeprefix("sqlite:///")).parent.mkdir(parents=True, exist_ok=True)
     return create_engine(
