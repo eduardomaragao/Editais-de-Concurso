@@ -151,6 +151,7 @@ class _CronometroPageState extends State<CronometroPage> {
         child: Column(children: [
           DropdownButtonFormField<String>(
             initialValue: _materiaSelecionada,
+            isExpanded: true, // sem isso, matéria com nome longo estoura a tela
             decoration: const InputDecoration(
                 labelText: 'O que você está estudando?',
                 border: OutlineInputBorder()),
