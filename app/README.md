@@ -29,6 +29,19 @@ flutter analyze
 flutter test
 ```
 
+## Build de release (Play Store)
+
+O app SEMPRE fala com `localhost:8123` por padrão — ótimo para dev, mas
+o build que vai para a loja precisa apontar para o backend de produção
+**explicitamente**, senão o app publicado fica quebrado para todo mundo:
+
+```powershell
+flutter build appbundle --dart-define=API_BASE=https://editais-backend-o6vu.onrender.com
+```
+
+Isso gera `build/app/outputs/bundle/release/app-release.aab`, já
+assinado (se `android/key.properties` existir — ver `docs/PUBLICAR.md`).
+
 ## Estrutura
 
 | Arquivo | O que é |

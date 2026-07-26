@@ -53,12 +53,29 @@ mais senha no push. Se aparecer erro de token, me avise que te explico.)
 
 Quando o backend estiver no ar e você me passar o **endereço**:
 
-- Aponto o app para `https://SEU-BACKEND.onrender.com`.
-- Gero o **ícone** do app.
-- Configuro a **assinatura**. Você roda um comando que cria a **chave**
-  (um arquivo `.jks` + senhas) e **guarda para sempre** — se perder,
-  nunca mais atualiza o app na loja. NUNCA suba essa chave no GitHub.
-- Gero o pacote **`.aab`** (Android App Bundle) para enviar à loja.
+✅ Backend em produção: **https://editais-backend-o6vu.onrender.com**
+(confirmado: painel exige senha, API pública responde).
+
+✅ Ícone gerado, assinatura configurada no `build.gradle.kts` — falta só
+você gerar a chave real (próximo passo):
+
+1. Rode, **dentro de `app/android/`**:
+   ```powershell
+   cd "C:\Users\eduar\Projects\Aplicativo Editais\app\android"
+   keytool -genkey -v -keystore upload-keystore.jks -keyalg RSA -keysize 2048 -validity 10000 -alias upload
+   ```
+   Ele vai pedir uma **senha** (duas vezes) e alguns dados (nome,
+   organização — pode ser genérico). **Guarde a senha e o arquivo
+   `upload-keystore.jks` para sempre**, num lugar seguro fora do
+   projeto (ex.: gerenciador de senhas + backup). Se perder, nunca mais
+   consegue atualizar o app publicado.
+2. Copie `app/android/key.properties.example` para
+   `app/android/key.properties` (mesma pasta) e preencha com a senha que
+   você escolheu. Esse arquivo já está no `.gitignore` — nunca vai para
+   o GitHub.
+3. Me avise quando terminar que eu gero o pacote **`.aab`** (Android App
+   Bundle) já apontado para o backend de produção, pronto para enviar à
+   loja.
 
 ## Parte 4 — Ficha da Play Store
 
