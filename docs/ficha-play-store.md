@@ -50,13 +50,14 @@ Console (App content → Store listing).
 Educação
 
 ## E-mail de contato (obrigatório, público)
-`[SEU E-MAIL]`
+`prof.eduardoaragao@gmail.com`
 
 ## Site (opcional, recomendado)
 `https://eduardoaragao.com`
 
 ## Política de privacidade (obrigatório)
-`[URL DE docs/politica-privacidade.md HOSPEDADO]`
+✅ Publicada — URL vai aparecer no painel do Render assim que o serviço
+`editais-legal` (site estático) subir (ver `docs/PUBLICAR.md`).
 
 ## Capturas de tela (obrigatório — mínimo 2, recomendado 4-8)
 Tire prints do app rodando (celular real ou emulador) nestas telas, nesta

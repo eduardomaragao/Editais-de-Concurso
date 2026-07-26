@@ -73,21 +73,25 @@ você gerar a chave real (próximo passo):
    `app/android/key.properties` (mesma pasta) e preencha com a senha que
    você escolheu. Esse arquivo já está no `.gitignore` — nunca vai para
    o GitHub.
-3. Me avise quando terminar que eu gero o pacote **`.aab`** (Android App
-   Bundle) já apontado para o backend de produção, pronto para enviar à
-   loja.
+✅ Feito: `upload-keystore.jks` gerado, `key.properties` preenchido,
+`app-release.aab` construído em
+`app\build\app\outputs\bundle\release\app-release.aab` — assinado e
+apontado para `https://editais-backend-o6vu.onrender.com`.
 
 ## Parte 4 — Ficha da Play Store
 
-✅ Rascunhos prontos, revise e preencha os `[COLCHETES]`:
-- **[docs/politica-privacidade.md](politica-privacidade.md)** — precisa
-  ficar hospedada numa URL pública estável (GitHub Pages é grátis e
-  simples; ou uma página no seu site eduardoaragao.com). Cole a URL no
-  Play Console em App content → Privacy policy.
-- **[docs/ficha-play-store.md](ficha-play-store.md)** — título,
-  descrições, categoria e o que preencher no formulário de segurança de
-  dados. Faltam só as **capturas de tela** (tiradas do app rodando) e os
-  campos de contato.
+✅ Rascunhos prontos em **[docs/ficha-play-store.md](ficha-play-store.md)**
+(título, descrições, categoria, resumo de segurança de dados — falta só
+revisar e tirar as capturas de tela do app rodando).
+
+✅ Política de privacidade **publicada** como site estático
+(`site-legal/index.html`), com o serviço `editais-legal` adicionado ao
+`render.yaml`. Como o Render já está com o Blueprint conectado a este
+repositório, ele deve detectar o novo serviço sozinho no próximo deploy —
+**confira o painel do Render**: se aparecer um novo serviço `editais-legal`
+(ou um pedido de aprovação de "Blueprint changes"), aprove. Quando ele
+subir, pegue a URL gerada (tipo `https://editais-legal-xxxx.onrender.com`)
+e cole no Play Console em **App content → Privacy policy**.
 
 Depois: enviar o `.aab`, escolher "produção", e aguardar a **revisão do
 Google** (de horas a alguns dias na primeira vez).

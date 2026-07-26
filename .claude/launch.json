@@ -13,6 +13,12 @@
       "runtimeArgs": ["run", "-d", "web-server", "--web-port", "8124"],
       "cwd": "app",
       "port": 8124
+    },
+    {
+      "name": "legal",
+      "runtimeExecutable": "backend/.venv/Scripts/python.exe",
+      "runtimeArgs": ["-m", "http.server", "8125", "--directory", "site-legal"],
+      "port": 8125
     }
   ]
 }

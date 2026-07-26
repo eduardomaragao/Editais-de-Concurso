@@ -27,3 +27,11 @@ services:
         value: admin
       - key: EDITAIS_ADMIN_SENHA
         generateValue: true # o Render gera uma senha forte; você a lê no painel
+
+  - type: web
+    name: editais-legal
+    runtime: static
+    plan: free
+    rootDir: site-legal
+    staticPublishPath: .
+    buildCommand: "" # sem build — e so HTML puro

@@ -1,9 +1,13 @@
 # Política de Privacidade — Editais
 
-**Última atualização: [PREENCHER NA PUBLICAÇÃO]**
+> ⚠️ **Este arquivo é histórico.** A versão publicada e hospedada (a que
+> vai na Play Store) é `site-legal/index.html`. Se for atualizar o texto,
+> edite lá — este `.md` só documenta o rascunho original.
 
-Este aplicativo ("Editais") é operado por [NOME COMPLETO OU RAZÃO SOCIAL DO
-EDUARDO], em conexão com o curso eduardoaragao.com. Esta política explica,
+**Última atualização: 26 de julho de 2026**
+
+Este aplicativo ("Editais") é operado por **Eduardo Aragão**, em conexão
+com o curso eduardoaragao.com. Esta política explica,
 de forma direta, quais dados o app coleta, para quê, e como você controla
 isso — em conformidade com a Lei Geral de Proteção de Dados (LGPD).
 
