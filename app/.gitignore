@@ -43,3 +43,9 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+# Chave de assinatura da Play Store — NUNCA versionar. Se perder o .jks e
+# as senhas, nunca mais e possivel atualizar o app publicado.
+/android/key.properties
+/android/*.jks
+/android/*.keystore

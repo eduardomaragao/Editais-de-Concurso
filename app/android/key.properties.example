@@ -1,0 +1,18 @@
+# Copie este arquivo para "key.properties" (mesma pasta, sem o .example) e
+# preencha com os dados da SUA chave de assinatura. O key.properties real
+# NUNCA deve ir para o Git (ja esta no .gitignore).
+#
+# Como gerar a chave (uma vez, guarde para sempre — se perder, nunca mais
+# consegue atualizar o app publicado na Play Store):
+#
+#   keytool -genkey -v -keystore upload-keystore.jks -keyalg RSA -keysize 2048 \
+#     -validity 10000 -alias upload
+#
+# Rode esse comando DENTRO desta pasta (app/android/) para o storeFile
+# abaixo bater certinho. Ele vai pedir uma senha (guarde) e alguns dados
+# (nome, organizacao etc. — pode ser generico).
+
+storePassword=SUA_SENHA_DA_KEYSTORE
+keyPassword=SUA_SENHA_DA_CHAVE
+keyAlias=upload
+storeFile=upload-keystore.jks

@@ -3,10 +3,9 @@
     <!-- usesCleartextTraffic: em dev o backend roda em http:// na rede local
          (ex.: http://192.168.0.x:8123). Quando a API tiver HTTPS, remover. -->
     <application
-        android:label="Editais"
+        android:label="Editais de Concurso"
         android:name="${applicationName}"
-        android:icon="@mipmap/ic_launcher"
-        android:usesCleartextTraffic="true">
+        android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"
             android:exported="true"
