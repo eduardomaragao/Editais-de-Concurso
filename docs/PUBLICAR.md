@@ -60,15 +60,20 @@ Quando o backend estiver no ar e você me passar o **endereço**:
   nunca mais atualiza o app na loja. NUNCA suba essa chave no GitHub.
 - Gero o pacote **`.aab`** (Android App Bundle) para enviar à loja.
 
-## Parte 4 — Ficha da Play Store (Claude rascunha, você revisa)
+## Parte 4 — Ficha da Play Store
 
-- **Política de privacidade** (obrigatória — o app tem contas e coleta
-  progresso). Precisa estar hospedada numa URL (dá para servir pelo
-  próprio backend).
-- Descrição, categoria, e **capturas de tela** (tiro do app rodando).
-- Questionário de classificação e de segurança de dados do Google.
-- Enviar o `.aab`, escolher "produção", e aguardar a **revisão do
-  Google** (de horas a alguns dias na primeira vez).
+✅ Rascunhos prontos, revise e preencha os `[COLCHETES]`:
+- **[docs/politica-privacidade.md](politica-privacidade.md)** — precisa
+  ficar hospedada numa URL pública estável (GitHub Pages é grátis e
+  simples; ou uma página no seu site eduardoaragao.com). Cole a URL no
+  Play Console em App content → Privacy policy.
+- **[docs/ficha-play-store.md](ficha-play-store.md)** — título,
+  descrições, categoria e o que preencher no formulário de segurança de
+  dados. Faltam só as **capturas de tela** (tiradas do app rodando) e os
+  campos de contato.
+
+Depois: enviar o `.aab`, escolher "produção", e aguardar a **revisão do
+Google** (de horas a alguns dias na primeira vez).
 
 ## Contas e custos (resumo)
 
