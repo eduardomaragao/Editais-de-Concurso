@@ -1,0 +1,101 @@
+name: Baixar informativos do STF
+
+# Roda nos servidores do GitHub, que alcançam o site do STF (o ambiente do
+# Claude Code na web é bloqueado por política de rede). Baixa as edições e
+# commita em informativos/stf/brutos/ na própria branch.
+
+on:
+  workflow_dispatch:
+    inputs:
+      minimo:
+        description: "Menor nº de informativo a baixar"
+        required: false
+        default: "1050"
+      maximo:
+        description: "Maior nº (vazio = sem limite no modo listagem)"
+        required: false
+        default: "1300"
+  push:
+    branches:
+      - claude/stf-decisions-database-xn24dd
+    paths:
+      - .github/workflows/baixar-informativos-stf.yml
+      - informativos/stf/baixar.py
+
+permissions:
+  contents: write
+
+jobs:
+  baixar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Sondar acesso ao portal do STF
+        run: |
+          echo "--- portal.stf.jus.br (listagem) ---"
+          curl -sS -o listagem.html -w "http=%{http_code} bytes=%{size_download}\n" \
+            -L --max-time 60 \
+            -H 'User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36' \
+            -H 'Accept-Language: pt-BR,pt;q=0.9' \
+            "https://portal.stf.jus.br/textos/verTexto.asp?servico=informativoSTF&pagina=Edicoes_Anteriores" \
+            || echo "curl falhou"
+          echo "--- primeiros links encontrados ---"
+          grep -oiE 'href="[^"]*"' listagem.html 2>/dev/null | head -40 || true
+
+      - name: Guardar a listagem para depuração
+        run: |
+          mkdir -p informativos/stf
+          if [ -s listagem.html ]; then
+            cp listagem.html informativos/stf/_listagem.html
+            echo "listagem salva ($(wc -c < listagem.html) bytes)"
+          else
+            echo "listagem vazia — o modo --padrao vai assumir"
+          fi
+
+      - name: Baixar pela listagem
+        continue-on-error: true
+        run: |
+          python3 informativos/stf/baixar.py \
+            --pagina informativos/stf/_listagem.html \
+            --min "${{ github.event.inputs.minimo || '1050' }}" \
+            --max "${{ github.event.inputs.maximo || '1300' }}" \
+            --pausa 0.8
+
+      - name: Baixar por padrão de URL (se a listagem não rendeu)
+        continue-on-error: true
+        run: |
+          quantos=$(ls informativos/stf/brutos/informativo-* 2>/dev/null | wc -l)
+          echo "arquivos já baixados: $quantos"
+          if [ "$quantos" -lt 20 ]; then
+            echo "poucos arquivos — tentando o modo --padrao"
+            python3 informativos/stf/baixar.py --padrao \
+              --min "${{ github.event.inputs.minimo || '1050' }}" \
+              --max "${{ github.event.inputs.maximo || '1300' }}" \
+              --pausa 0.3
+          fi
+
+      - name: Inventário
+        run: |
+          echo "=== informativos/stf/brutos ==="
+          ls -la informativos/stf/brutos/ 2>/dev/null | head -50 || echo "(vazio)"
+          echo "total: $(ls informativos/stf/brutos/informativo-* 2>/dev/null | wc -l) arquivos"
+          du -sh informativos/stf/brutos 2>/dev/null || true
+
+      - name: Commitar o que foi baixado
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A informativos/stf
+          if git diff --cached --quiet; then
+            echo "nada novo para commitar"
+          else
+            git commit -m "Download STF informativos via Actions runner
+
+          Fetched on a GitHub-hosted runner, which can reach stf.jus.br."
+            for espera in 0 2 4 8 16; do
+              [ "$espera" -gt 0 ] && sleep "$espera"
+              git pull --rebase origin "${GITHUB_REF_NAME}" && git push origin "HEAD:${GITHUB_REF_NAME}" && break
+            done
+          fi

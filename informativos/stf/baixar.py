@@ -53,6 +53,11 @@ PAUSA_SEGUNDOS = 1.5
 MAX_PAGINAS_INTERMEDIARIAS = 80
 
 
+def pausar():
+    if PAUSA_SEGUNDOS > 0:
+        time.sleep(PAUSA_SEGUNDOS)
+
+
 def buscar(url: str) -> bytes:
     ultimo_erro = None
     for espera in (0, 2, 4, 8):
@@ -153,7 +158,7 @@ def coletar(html_listagem: bytes, url_base: str, minimo: int, maximo):
             continue
         vistas.add(url)
         print(f"  .. abrindo pagina da edicao {n}: {url}")
-        time.sleep(PAUSA_SEGUNDOS)
+        pausar()
         try:
             html = buscar(url)
         except RuntimeError as erro:
@@ -217,7 +222,7 @@ def baixar_por_padrao(destino: Path, minimo: int, maximo: int, apenas_listar: bo
         for modelo in PADROES_URL:
             url = modelo.format(n=n)
             try:
-                time.sleep(PAUSA_SEGUNDOS)
+                pausar()
                 dados = tentar_uma_vez(url)
             except (urllib.error.URLError, OSError):
                 continue
@@ -243,6 +248,7 @@ def baixar_por_padrao(destino: Path, minimo: int, maximo: int, apenas_listar: bo
 
 
 def principal():
+    global PAUSA_SEGUNDOS
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--listar", action="store_true", help="so mostra, nao baixa")
     parser.add_argument("--min", type=int, default=1050, help="menor nº (padrao 1050)")
@@ -253,11 +259,18 @@ def principal():
         action="store_true",
         help="ignora a listagem e monta a URL de cada edicao pelo numero",
     )
+    parser.add_argument(
+        "--pausa",
+        type=float,
+        default=PAUSA_SEGUNDOS,
+        help=f"segundos entre requisicoes (padrao {PAUSA_SEGUNDOS})",
+    )
     parser.add_argument("--url", default=URL_LISTAGEM, help="URL da listagem")
     parser.add_argument(
         "--destino", default=str(Path(__file__).parent / "brutos"), help="pasta de saida"
     )
     args = parser.parse_args()
+    PAUSA_SEGUNDOS = args.pausa
 
     if args.padrao:
         if args.max is None:
@@ -308,7 +321,7 @@ def principal():
             pulados += 1
             continue
         print(f"Baixando informativo {n} -> {arquivo.name}")
-        time.sleep(PAUSA_SEGUNDOS)
+        pausar()
         try:
             arquivo.write_bytes(buscar(url))
             baixados += 1
