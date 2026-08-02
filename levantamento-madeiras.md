@@ -24,16 +24,21 @@ Anotações do levantamento feito em casa (medidas em centímetros, espessura em
 | 18 | 49,0 | 59,3 | 15 | Branco |
 | 19 | 57,0 | 33,1 | 15 | Café |
 | 20 | 55,3 | 43,4 | 15 | Madeira escura |
+| 21 | 40,0 | 65,5 | 15 ⚠️ | Branco |
+| 22 | 38,0 | 80,0 | 15 | Branco |
+| 23 | 32,5 | 80,0 | 15 | Madeira escura |
 
 > Obs.: as peças 6 e 7 são iguais (duas unidades da mesma medida), assim como as peças 9 e 10.
 >
 > Peça 11: ditada primeiro como 14,1, corrigida na hora para **14,6**.
 >
 > Peça 20: transcrição saiu "bandeira escura" — assumido como "madeira escura". Confirmar se estiver errado.
+>
+> ⚠️ **Peça 21:** transcrição saiu "quinhentos milímetros" (500 mm) — assumido como **15 mm** (erro de transcrição, igual às demais). Confirmar a espessura real.
 
 ## Resumo
 
-- **Total de peças:** 20
-- **Espessura 15 mm:** 17 peças (1, 2, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20)
+- **Total de peças:** 23
+- **Espessura 15 mm:** 20 peças (1, 2, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23)
 - **Espessura 18 mm:** 3 peças (3, 4, 5)
-- **Cor:** madeira escura (14 peças) · madeira clara/branco (5 peças — nº 14, 15, 16, 17, 18) · café (1 peça — nº 19)
+- **Cor:** madeira escura (16 peças) · madeira clara/branco (7 peças — nº 14, 15, 16, 17, 18, 21, 22) · café (1 peça — nº 19)
