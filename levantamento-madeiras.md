@@ -12,13 +12,11 @@ Anotações do levantamento feito em casa (medidas em centímetros, espessura em
 | 6 | 10,3 | 63,0 | 15 | Madeira escura |
 | 7 | 10,3 | 63,0 | 15 | Madeira escura |
 | 8 | 13,0 | 73,1 | 15 | Madeira escura |
-| 9 | 11,0 ⚠️ | 65,0 | 15 | Madeira escura |
-| 10 | 11,0 ⚠️ | 65,0 | 15 | Madeira escura |
+| 9 | 11,5 | 65,0 | 15 | Madeira escura |
+| 10 | 11,5 | 65,0 | 15 | Madeira escura |
 | 11 | 14,6 | 50,1 | 15 | Madeira escura |
 
 > Obs.: as peças 6 e 7 são iguais (duas unidades da mesma medida), assim como as peças 9 e 10.
->
-> ⚠️ **Conferir peças 9/10:** a transcrição do áudio saiu como "onze email por sessenta e cinco" — anotei **11,0**, mas pode ter sido "onze e meio" (**11,5**). Confirmar a medida.
 >
 > Peça 11: ditada primeiro como 14,1, corrigida na hora para **14,6**.
 
