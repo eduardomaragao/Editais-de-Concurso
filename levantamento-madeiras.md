@@ -45,8 +45,16 @@ Anotações do levantamento feito em casa (medidas em centímetros, espessura em
 | 39 | 91,1 | 185,0 | 15 | Madeira escura |
 | 40 | 29,5 | 198,0 | 15 | Madeira escura |
 | 41 | 43,4 | 55,3 | 15 | Madeira escura |
+| 42 | 9,0 | 31,5 | 15 | Madeira (cor a confirmar ⚠️) |
+| 43 | 9,0 | 31,5 | 15 | Madeira (cor a confirmar ⚠️) |
+| 44 | 15,7 | 28,8 | 15 | Branco |
+| 45 | 13,5 | 44,3 | 15 | Madeira (cor a confirmar ⚠️) |
+| 46 | 20,0 | 33,1 | 15 | Tecido |
+| 47 | 16,5 | 37,7 | 15 | Branco |
+| 48 | 15,8 | 23,5 | 15 | Branco |
+| 49 | 28,5 | 35,0 | 6 | Madeira (cor a confirmar ⚠️) |
 
-> Obs.: as peças 6 e 7 são iguais (duas unidades da mesma medida), assim como as peças 9 e 10. As peças 30, 31 e 32 são três unidades da mesma medida.
+> Obs.: as peças 6 e 7 são iguais (duas unidades da mesma medida), assim como as peças 9 e 10, e as peças 42 e 43. As peças 30, 31 e 32 são três unidades da mesma medida.
 >
 > Peça 41 tem as mesmas medidas da peça 20 (43,4 × 55,3), só com largura/comprimento invertidos — confirmar se é peça repetida ou diferente mesmo.
 >
@@ -59,11 +67,15 @@ Anotações do levantamento feito em casa (medidas em centímetros, espessura em
 > Peça 27: ditada primeiro como 90,7, corrigida na hora para **90,1**.
 >
 > Peças 36 e 37: primeira espessura de 6 mm do levantamento (provavelmente fundo/compensado fino) — diferente das demais, que são 15 ou 18 mm.
+>
+> ⚠️ **Peças 42, 43, 45, 49:** ditadas só como "madeira", sem dizer se é escura, café ou outra cor. Deixadas como "cor a confirmar" até você especificar.
+>
+> Peça 46: nova cor "tecido" (confirmado que é um tipo/acabamento de madeira, não pano de verdade).
 
 ## Resumo
 
-- **Total de peças:** 41
-- **Espessura 6 mm:** 2 peças (36, 37)
-- **Espessura 15 mm:** 36 peças (1, 2, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 38, 39, 40, 41)
+- **Total de peças:** 49
+- **Espessura 6 mm:** 3 peças (36, 37, 49)
+- **Espessura 15 mm:** 46 peças (1, 2, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48)
 - **Espessura 18 mm:** 3 peças (3, 4, 5)
-- **Cor:** madeira escura (25 peças) · madeira clara/branco (13 peças — nº 14, 15, 16, 17, 18, 21, 22, 28, 30, 31, 32, 36, 37) · café (4 peças — nº 19, 33, 34, 38)
+- **Cor:** madeira escura (25 peças) · madeira clara/branco (16 peças — nº 14, 15, 16, 17, 18, 21, 22, 28, 30, 31, 32, 36, 37, 44, 47, 48) · café (4 peças — nº 19, 33, 34, 38) · tecido (1 peça — nº 46) · cor a confirmar (4 peças — nº 42, 43, 45, 49)
