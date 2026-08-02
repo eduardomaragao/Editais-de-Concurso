@@ -15,6 +15,9 @@ Anotações do levantamento feito em casa (medidas em centímetros, espessura em
 | 9 | 11,5 | 65,0 | 15 | Madeira escura |
 | 10 | 11,5 | 65,0 | 15 | Madeira escura |
 | 11 | 14,6 | 50,1 | 15 | Madeira escura |
+| 12 | 30,0 | 24,1 | 15 | Madeira escura |
+| 13 | 16,1 | 14,3 | 15 | Madeira escura |
+| 14 | 36,0 | 16,3 | 15 | Madeira clara, branco |
 
 > Obs.: as peças 6 e 7 são iguais (duas unidades da mesma medida), assim como as peças 9 e 10.
 >
@@ -22,7 +25,7 @@ Anotações do levantamento feito em casa (medidas em centímetros, espessura em
 
 ## Resumo
 
-- **Total de peças:** 11
-- **Espessura 15 mm:** 8 peças (1, 2, 6, 7, 8, 9, 10, 11)
+- **Total de peças:** 14
+- **Espessura 15 mm:** 11 peças (1, 2, 6, 7, 8, 9, 10, 11, 12, 13, 14)
 - **Espessura 18 mm:** 3 peças (3, 4, 5)
-- **Cor:** todas em madeira escura
+- **Cor:** madeira escura (13 peças) · madeira clara/branco (1 peça — nº 14)
