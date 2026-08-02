@@ -33,8 +33,11 @@ Anotações do levantamento feito em casa (medidas em centímetros, espessura em
 | 27 | 7,5 | 90,1 | 15 | Madeira escura |
 | 28 | 12,9 | 49,5 | 15 | Branco |
 | 29 | 12,2 | 53,5 | 15 | Madeira escura |
+| 30 | 23,0 | 81,0 | 15 | Branco |
+| 31 | 23,0 | 81,0 | 15 | Branco |
+| 32 | 23,0 | 81,0 | 15 | Branco |
 
-> Obs.: as peças 6 e 7 são iguais (duas unidades da mesma medida), assim como as peças 9 e 10.
+> Obs.: as peças 6 e 7 são iguais (duas unidades da mesma medida), assim como as peças 9 e 10. As peças 30, 31 e 32 são três unidades da mesma medida.
 >
 > Peça 11: ditada primeiro como 14,1, corrigida na hora para **14,6**.
 >
@@ -46,7 +49,7 @@ Anotações do levantamento feito em casa (medidas em centímetros, espessura em
 
 ## Resumo
 
-- **Total de peças:** 29
-- **Espessura 15 mm:** 26 peças (1, 2, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29)
+- **Total de peças:** 32
+- **Espessura 15 mm:** 29 peças (1, 2, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32)
 - **Espessura 18 mm:** 3 peças (3, 4, 5)
-- **Cor:** madeira escura (21 peças) · madeira clara/branco (8 peças — nº 14, 15, 16, 17, 18, 21, 22, 28) · café (1 peça — nº 19)
+- **Cor:** madeira escura (21 peças) · madeira clara/branco (11 peças — nº 14, 15, 16, 17, 18, 21, 22, 28, 30, 31, 32) · café (1 peça — nº 19)
