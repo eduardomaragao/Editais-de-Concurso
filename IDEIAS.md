@@ -73,9 +73,12 @@ conteúdo: um cantinho público "Direito & Clássicos".
 ## 7. Flashcards das Teses (repetição espaçada)
 
 Transformar o material de teses vinculantes em deck de flashcards com repetição
-espaçada (Anki-like) dentro do ecossistema do app de Editais — o aluno que compra o
-material ganha o modo revisão. Sinergia direta com as ideias 1 e com a gamificação já
-construída no app (pontos, constância, insígnias).
+espaçada (Anki-like). **Importante (correção do Eduardo, 03/08/2026): isso pertence ao
+aplicativo de Teses, NÃO ao app de Editais** — o app de Editais é gratuito; o modo
+revisão é benefício de quem compra o material de teses, então fica dentro do produto
+de Teses. Sinergia direta com a ideia 1 (Radar de Teses). Padrões de gamificação do
+app de Editais (pontos, constância, insígnias) podem servir de referência técnica.
+**Status: só anotar por enquanto — não implementar.**
 
 ## 8. Corretor de peças/discursivas para alunos
 
