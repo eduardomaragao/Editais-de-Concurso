@@ -37,19 +37,24 @@ Reaproveita infraestrutura e conhecimento já construídos neste repo.
 rápido (PWA ou app Flutter simples com banco local + backup). O desafio não é técnico,
 é de hábito — o app precisa tornar o registro mais rápido que a preguiça (voz ajuda).
 
-## 3. App de dieta + treino + preços de alimentos (ideia antiga, espec. avançada)
+## 3. Marmita Planner — planejamento alimentar + custos (espec. COMPLETA ✅)
 
-**Status da busca (03/08/2026):** o Eduardo lembra de ter especificado essa ideia de
-forma bem avançada com alguma IA, faltando só implementar. Procurado neste repositório
-(nada), no Gmail (nada direto). **Não foi nesta base de trabalho.** Pistas:
-- e-mails do Lovable insistindo "Your project hasn't moved" — pode ser que a espec.
-  esteja em um projeto Lovable parado; conferir em lovable.dev;
-- se foi em conversa do claude.ai, procurar no histórico de chats do site (esta sessão
-  não tem acesso ao histórico de conversas).
+**Encontrada em 03/08/2026** (o Eduardo especificou em outra IA e recuperou o PRD).
+**Documento mestre completo em [`docs/ideias/marmita-planner-prd.md`](docs/ideias/marmita-planner-prd.md).**
 
-**O que se sabe da ideia:** controle de treino + dieta, com registro de **preços de
-alimentos** (planejamento de compra/custo da dieta) e afins. Quando a espec. original
-for localizada, colar/resumir aqui.
+**Resumo:** app de planejamento alimentar para quem faz marmitas (consumo próprio ou
+venda), unindo 18 módulos: marmitas, receitas, lista de compras, **Scanner Inteligente**
+(uma foto reconhece nota fiscal, tabela nutricional, embalagem, código de barras e
+validade), banco de alimentos com **histórico de preços**, diário alimentar, cardápio
+semanal com **Planejador Inteligente por IA** (prioriza o que está perto de vencer,
+respeita metas nutricionais e explica as decisões), controle de custos por
+marmita/receita/proteína, **comparador de mercados**, estoque (despensa, geladeira,
+freezer) com validade, Modo Dia de Preparo e estatísticas.
+
+**Roadmap do PRD:** V1 marmitas + compras + receitas · V2 scanner + IA + custos ·
+V3 estoque + planejamento automático · V4 venda de marmitas + sync + smartwatch.
+
+**Status: espec. pronta, aguardando decisão de implementar.**
 
 ## 4. Caça-apartamento inteligente
 
