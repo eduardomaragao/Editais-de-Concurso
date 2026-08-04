@@ -1,0 +1,758 @@
+solid banheiro_274x165
+facet normal 0 0 0
+outer loop
+vertex -12.00 -12.00 0.00
+vertex 0.00 177.00 0.00
+vertex 0.00 -12.00 0.00
+endloop
+endfacet
+facet normal 0 0 0
+outer loop
+vertex -12.00 -12.00 0.00
+vertex -12.00 177.00 0.00
+vertex 0.00 177.00 0.00
+endloop
+endfacet
+facet normal 0 0 0
+outer loop
+vertex -12.00 -12.00 250.00
+vertex 0.00 -12.00 250.00
+vertex 0.00 177.00 250.00
+endloop
+endfacet
+facet normal 0 0 0
+outer loop
+vertex -12.00 -12.00 250.00
+vertex 0.00 177.00 250.00
+vertex -12.00 177.00 250.00
+endloop
+endfacet
+facet normal 0 0 0
+outer loop
+vertex -12.00 -12.00 0.00
+vertex 0.00 -12.00 0.00
+vertex 0.00 -12.00 250.00
+endloop
+endfacet
+facet normal 0 0 0
+outer loop
+vertex -12.00 -12.00 0.00
+vertex 0.00 -12.00 250.00
+vertex -12.00 -12.00 250.00
+endloop
+endfacet
+facet normal 0 0 0
+outer loop
+vertex 0.00 177.00 0.00
+vertex -12.00 177.00 0.00
+vertex -12.00 177.00 250.00
+endloop
+endfacet
+facet normal 0 0 0
+outer loop
+vertex 0.00 177.00 0.00
+vertex -12.00 177.00 250.00
+vertex 0.00 177.00 250.00
+endloop
+endfacet
+facet normal 0 0 0
+outer loop
+vertex -12.00 177.00 0.00
+vertex -12.00 -12.00 0.00
+vertex -12.00 -12.00 250.00
+endloop
+endfacet
+facet normal 0 0 0
+outer loop
+vertex -12.00 177.00 0.00
+vertex -12.00 -12.00 250.00
+vertex -12.00 177.00 250.00
+endloop
+endfacet
+facet normal 0 0 0
+outer loop
+vertex 0.00 -12.00 0.00
+vertex 0.00 177.00 0.00
+vertex 0.00 177.00 250.00
+endloop
+endfacet
+facet normal 0 0 0
+outer loop
+vertex 0.00 -12.00 0.00
+vertex 0.00 177.00 250.00
+vertex 0.00 -12.00 250.00
+endloop
+endfacet
+facet normal 0 0 0
+outer loop
+vertex 274.00 -12.00 0.00
+vertex 286.00 177.00 0.00
+vertex 286.00 -12.00 0.00
+endloop
+endfacet
+facet normal 0 0 0
+outer loop
+vertex 274.00 -12.00 0.00
+vertex 274.00 177.00 0.00
+vertex 286.00 177.00 0.00
+endloop
+endfacet
+facet normal 0 0 0
+outer loop
+vertex 274.00 -12.00 250.00
+vertex 286.00 -12.00 250.00
+vertex 286.00 177.00 250.00
+endloop
+endfacet
+facet normal 0 0 0
+outer loop
+vertex 274.00 -12.00 250.00
+vertex 286.00 177.00 250.00
+vertex 274.00 177.00 250.00
+endloop
+endfacet
+facet normal 0 0 0
+outer loop
+vertex 274.00 -12.00 0.00
+vertex 286.00 -12.00 0.00
+vertex 286.00 -12.00 250.00
+endloop
+endfacet
+facet normal 0 0 0
+outer loop
+vertex 274.00 -12.00 0.00
+vertex 286.00 -12.00 250.00
+vertex 274.00 -12.00 250.00
+endloop
+endfacet
+facet normal 0 0 0
+outer loop
+vertex 286.00 177.00 0.00
+vertex 274.00 177.00 0.00
+vertex 274.00 177.00 250.00
+endloop
+endfacet
+facet normal 0 0 0
+outer loop
+vertex 286.00 177.00 0.00
+vertex 274.00 177.00 250.00
+vertex 286.00 177.00 250.00
+endloop
+endfacet
+facet normal 0 0 0
+outer loop
+vertex 274.00 177.00 0.00
+vertex 274.00 -12.00 0.00
+vertex 274.00 -12.00 250.00
+endloop
+endfacet
+facet normal 0 0 0
+outer loop
+vertex 274.00 177.00 0.00
+vertex 274.00 -12.00 250.00
+vertex 274.00 177.00 250.00
+endloop
+endfacet
+facet normal 0 0 0
+outer loop
+vertex 286.00 -12.00 0.00
+vertex 286.00 177.00 0.00
+vertex 286.00 177.00 250.00
+endloop
+endfacet
+facet normal 0 0 0
+outer loop
+vertex 286.00 -12.00 0.00
+vertex 286.00 177.00 250.00
+vertex 286.00 -12.00 250.00
+endloop
+endfacet
+facet normal 0 0 0
+outer loop
+vertex 0.00 165.00 0.00
+vertex 274.00 177.00 0.00
+vertex 274.00 165.00 0.00
+endloop
+endfacet
+facet normal 0 0 0
+outer loop
+vertex 0.00 165.00 0.00
+vertex 0.00 177.00 0.00
+vertex 274.00 177.00 0.00
+endloop
+endfacet
+facet normal 0 0 0
+outer loop
+vertex 0.00 165.00 250.00
+vertex 274.00 165.00 250.00
+vertex 274.00 177.00 250.00
+endloop
+endfacet
+facet normal 0 0 0
+outer loop
+vertex 0.00 165.00 250.00
+vertex 274.00 177.00 250.00
+vertex 0.00 177.00 250.00
+endloop
+endfacet
+facet normal 0 0 0
+outer loop
+vertex 0.00 165.00 0.00
+vertex 274.00 165.00 0.00
+vertex 274.00 165.00 250.00
+endloop
+endfacet
+facet normal 0 0 0
+outer loop
+vertex 0.00 165.00 0.00
+vertex 274.00 165.00 250.00
+vertex 0.00 165.00 250.00
+endloop
+endfacet
+facet normal 0 0 0
+outer loop
+vertex 274.00 177.00 0.00
+vertex 0.00 177.00 0.00
+vertex 0.00 177.00 250.00
+endloop
+endfacet
+facet normal 0 0 0
+outer loop
+vertex 274.00 177.00 0.00
+vertex 0.00 177.00 250.00
+vertex 274.00 177.00 250.00
+endloop
+endfacet
+facet normal 0 0 0
+outer loop
+vertex 0.00 177.00 0.00
+vertex 0.00 165.00 0.00
+vertex 0.00 165.00 250.00
+endloop
+endfacet
+facet normal 0 0 0
+outer loop
+vertex 0.00 177.00 0.00
+vertex 0.00 165.00 250.00
+vertex 0.00 177.00 250.00
+endloop
+endfacet
+facet normal 0 0 0
+outer loop
+vertex 274.00 165.00 0.00
+vertex 274.00 177.00 0.00
+vertex 274.00 177.00 250.00
+endloop
+endfacet
+facet normal 0 0 0
+outer loop
+vertex 274.00 165.00 0.00
+vertex 274.00 177.00 250.00
+vertex 274.00 165.00 250.00
+endloop
+endfacet
+facet normal 0 0 0
+outer loop
+vertex 0.00 -12.00 0.00
+vertex 90.10 0.00 0.00
+vertex 90.10 -12.00 0.00
+endloop
+endfacet
+facet normal 0 0 0
+outer loop
+vertex 0.00 -12.00 0.00
+vertex 0.00 0.00 0.00
+vertex 90.10 0.00 0.00
+endloop
+endfacet
+facet normal 0 0 0
+outer loop
+vertex 0.00 -12.00 250.00
+vertex 90.10 -12.00 250.00
+vertex 90.10 0.00 250.00
+endloop
+endfacet
+facet normal 0 0 0
+outer loop
+vertex 0.00 -12.00 250.00
+vertex 90.10 0.00 250.00
+vertex 0.00 0.00 250.00
+endloop
+endfacet
+facet normal 0 0 0
+outer loop
+vertex 0.00 -12.00 0.00
+vertex 90.10 -12.00 0.00
+vertex 90.10 -12.00 250.00
+endloop
+endfacet
+facet normal 0 0 0
+outer loop
+vertex 0.00 -12.00 0.00
+vertex 90.10 -12.00 250.00
+vertex 0.00 -12.00 250.00
+endloop
+endfacet
+facet normal 0 0 0
+outer loop
+vertex 90.10 0.00 0.00
+vertex 0.00 0.00 0.00
+vertex 0.00 0.00 250.00
+endloop
+endfacet
+facet normal 0 0 0
+outer loop
+vertex 90.10 0.00 0.00
+vertex 0.00 0.00 250.00
+vertex 90.10 0.00 250.00
+endloop
+endfacet
+facet normal 0 0 0
+outer loop
+vertex 0.00 0.00 0.00
+vertex 0.00 -12.00 0.00
+vertex 0.00 -12.00 250.00
+endloop
+endfacet
+facet normal 0 0 0
+outer loop
+vertex 0.00 0.00 0.00
+vertex 0.00 -12.00 250.00
+vertex 0.00 0.00 250.00
+endloop
+endfacet
+facet normal 0 0 0
+outer loop
+vertex 90.10 -12.00 0.00
+vertex 90.10 0.00 0.00
+vertex 90.10 0.00 250.00
+endloop
+endfacet
+facet normal 0 0 0
+outer loop
+vertex 90.10 -12.00 0.00
+vertex 90.10 0.00 250.00
+vertex 90.10 -12.00 250.00
+endloop
+endfacet
+facet normal 0 0 0
+outer loop
+vertex 190.10 -12.00 0.00
+vertex 274.00 0.00 0.00
+vertex 274.00 -12.00 0.00
+endloop
+endfacet
+facet normal 0 0 0
+outer loop
+vertex 190.10 -12.00 0.00
+vertex 190.10 0.00 0.00
+vertex 274.00 0.00 0.00
+endloop
+endfacet
+facet normal 0 0 0
+outer loop
+vertex 190.10 -12.00 250.00
+vertex 274.00 -12.00 250.00
+vertex 274.00 0.00 250.00
+endloop
+endfacet
+facet normal 0 0 0
+outer loop
+vertex 190.10 -12.00 250.00
+vertex 274.00 0.00 250.00
+vertex 190.10 0.00 250.00
+endloop
+endfacet
+facet normal 0 0 0
+outer loop
+vertex 190.10 -12.00 0.00
+vertex 274.00 -12.00 0.00
+vertex 274.00 -12.00 250.00
+endloop
+endfacet
+facet normal 0 0 0
+outer loop
+vertex 190.10 -12.00 0.00
+vertex 274.00 -12.00 250.00
+vertex 190.10 -12.00 250.00
+endloop
+endfacet
+facet normal 0 0 0
+outer loop
+vertex 274.00 0.00 0.00
+vertex 190.10 0.00 0.00
+vertex 190.10 0.00 250.00
+endloop
+endfacet
+facet normal 0 0 0
+outer loop
+vertex 274.00 0.00 0.00
+vertex 190.10 0.00 250.00
+vertex 274.00 0.00 250.00
+endloop
+endfacet
+facet normal 0 0 0
+outer loop
+vertex 190.10 0.00 0.00
+vertex 190.10 -12.00 0.00
+vertex 190.10 -12.00 250.00
+endloop
+endfacet
+facet normal 0 0 0
+outer loop
+vertex 190.10 0.00 0.00
+vertex 190.10 -12.00 250.00
+vertex 190.10 0.00 250.00
+endloop
+endfacet
+facet normal 0 0 0
+outer loop
+vertex 274.00 -12.00 0.00
+vertex 274.00 0.00 0.00
+vertex 274.00 0.00 250.00
+endloop
+endfacet
+facet normal 0 0 0
+outer loop
+vertex 274.00 -12.00 0.00
+vertex 274.00 0.00 250.00
+vertex 274.00 -12.00 250.00
+endloop
+endfacet
+facet normal 0 0 0
+outer loop
+vertex 26.50 97.00 0.00
+vertex 64.50 165.00 0.00
+vertex 64.50 97.00 0.00
+endloop
+endfacet
+facet normal 0 0 0
+outer loop
+vertex 26.50 97.00 0.00
+vertex 26.50 165.00 0.00
+vertex 64.50 165.00 0.00
+endloop
+endfacet
+facet normal 0 0 0
+outer loop
+vertex 26.50 97.00 42.00
+vertex 64.50 97.00 42.00
+vertex 64.50 165.00 42.00
+endloop
+endfacet
+facet normal 0 0 0
+outer loop
+vertex 26.50 97.00 42.00
+vertex 64.50 165.00 42.00
+vertex 26.50 165.00 42.00
+endloop
+endfacet
+facet normal 0 0 0
+outer loop
+vertex 26.50 97.00 0.00
+vertex 64.50 97.00 0.00
+vertex 64.50 97.00 42.00
+endloop
+endfacet
+facet normal 0 0 0
+outer loop
+vertex 26.50 97.00 0.00
+vertex 64.50 97.00 42.00
+vertex 26.50 97.00 42.00
+endloop
+endfacet
+facet normal 0 0 0
+outer loop
+vertex 64.50 165.00 0.00
+vertex 26.50 165.00 0.00
+vertex 26.50 165.00 42.00
+endloop
+endfacet
+facet normal 0 0 0
+outer loop
+vertex 64.50 165.00 0.00
+vertex 26.50 165.00 42.00
+vertex 64.50 165.00 42.00
+endloop
+endfacet
+facet normal 0 0 0
+outer loop
+vertex 26.50 165.00 0.00
+vertex 26.50 97.00 0.00
+vertex 26.50 97.00 42.00
+endloop
+endfacet
+facet normal 0 0 0
+outer loop
+vertex 26.50 165.00 0.00
+vertex 26.50 97.00 42.00
+vertex 26.50 165.00 42.00
+endloop
+endfacet
+facet normal 0 0 0
+outer loop
+vertex 64.50 97.00 0.00
+vertex 64.50 165.00 0.00
+vertex 64.50 165.00 42.00
+endloop
+endfacet
+facet normal 0 0 0
+outer loop
+vertex 64.50 97.00 0.00
+vertex 64.50 165.00 42.00
+vertex 64.50 97.00 42.00
+endloop
+endfacet
+facet normal 0 0 0
+outer loop
+vertex 188.60 0.00 0.00
+vertex 189.40 92.00 0.00
+vertex 189.40 0.00 0.00
+endloop
+endfacet
+facet normal 0 0 0
+outer loop
+vertex 188.60 0.00 0.00
+vertex 188.60 92.00 0.00
+vertex 189.40 92.00 0.00
+endloop
+endfacet
+facet normal 0 0 0
+outer loop
+vertex 188.60 0.00 200.00
+vertex 189.40 0.00 200.00
+vertex 189.40 92.00 200.00
+endloop
+endfacet
+facet normal 0 0 0
+outer loop
+vertex 188.60 0.00 200.00
+vertex 189.40 92.00 200.00
+vertex 188.60 92.00 200.00
+endloop
+endfacet
+facet normal 0 0 0
+outer loop
+vertex 188.60 0.00 0.00
+vertex 189.40 0.00 0.00
+vertex 189.40 0.00 200.00
+endloop
+endfacet
+facet normal 0 0 0
+outer loop
+vertex 188.60 0.00 0.00
+vertex 189.40 0.00 200.00
+vertex 188.60 0.00 200.00
+endloop
+endfacet
+facet normal 0 0 0
+outer loop
+vertex 189.40 92.00 0.00
+vertex 188.60 92.00 0.00
+vertex 188.60 92.00 200.00
+endloop
+endfacet
+facet normal 0 0 0
+outer loop
+vertex 189.40 92.00 0.00
+vertex 188.60 92.00 200.00
+vertex 189.40 92.00 200.00
+endloop
+endfacet
+facet normal 0 0 0
+outer loop
+vertex 188.60 92.00 0.00
+vertex 188.60 0.00 0.00
+vertex 188.60 0.00 200.00
+endloop
+endfacet
+facet normal 0 0 0
+outer loop
+vertex 188.60 92.00 0.00
+vertex 188.60 0.00 200.00
+vertex 188.60 92.00 200.00
+endloop
+endfacet
+facet normal 0 0 0
+outer loop
+vertex 189.40 0.00 0.00
+vertex 189.40 92.00 0.00
+vertex 189.40 92.00 200.00
+endloop
+endfacet
+facet normal 0 0 0
+outer loop
+vertex 189.40 0.00 0.00
+vertex 189.40 92.00 200.00
+vertex 189.40 0.00 200.00
+endloop
+endfacet
+facet normal 0 0 0
+outer loop
+vertex 188.60 91.20 0.00
+vertex 234.00 92.00 0.00
+vertex 234.00 91.20 0.00
+endloop
+endfacet
+facet normal 0 0 0
+outer loop
+vertex 188.60 91.20 0.00
+vertex 188.60 92.00 0.00
+vertex 234.00 92.00 0.00
+endloop
+endfacet
+facet normal 0 0 0
+outer loop
+vertex 188.60 91.20 200.00
+vertex 234.00 91.20 200.00
+vertex 234.00 92.00 200.00
+endloop
+endfacet
+facet normal 0 0 0
+outer loop
+vertex 188.60 91.20 200.00
+vertex 234.00 92.00 200.00
+vertex 188.60 92.00 200.00
+endloop
+endfacet
+facet normal 0 0 0
+outer loop
+vertex 188.60 91.20 0.00
+vertex 234.00 91.20 0.00
+vertex 234.00 91.20 200.00
+endloop
+endfacet
+facet normal 0 0 0
+outer loop
+vertex 188.60 91.20 0.00
+vertex 234.00 91.20 200.00
+vertex 188.60 91.20 200.00
+endloop
+endfacet
+facet normal 0 0 0
+outer loop
+vertex 234.00 92.00 0.00
+vertex 188.60 92.00 0.00
+vertex 188.60 92.00 200.00
+endloop
+endfacet
+facet normal 0 0 0
+outer loop
+vertex 234.00 92.00 0.00
+vertex 188.60 92.00 200.00
+vertex 234.00 92.00 200.00
+endloop
+endfacet
+facet normal 0 0 0
+outer loop
+vertex 188.60 92.00 0.00
+vertex 188.60 91.20 0.00
+vertex 188.60 91.20 200.00
+endloop
+endfacet
+facet normal 0 0 0
+outer loop
+vertex 188.60 92.00 0.00
+vertex 188.60 91.20 200.00
+vertex 188.60 92.00 200.00
+endloop
+endfacet
+facet normal 0 0 0
+outer loop
+vertex 234.00 91.20 0.00
+vertex 234.00 92.00 0.00
+vertex 234.00 92.00 200.00
+endloop
+endfacet
+facet normal 0 0 0
+outer loop
+vertex 234.00 91.20 0.00
+vertex 234.00 92.00 200.00
+vertex 234.00 91.20 200.00
+endloop
+endfacet
+facet normal 0 0 0
+outer loop
+vertex 127.50 10.00 0.00
+vertex 172.50 45.00 0.00
+vertex 172.50 10.00 0.00
+endloop
+endfacet
+facet normal 0 0 0
+outer loop
+vertex 127.50 10.00 0.00
+vertex 127.50 45.00 0.00
+vertex 172.50 45.00 0.00
+endloop
+endfacet
+facet normal 0 0 0
+outer loop
+vertex 127.50 10.00 85.00
+vertex 172.50 10.00 85.00
+vertex 172.50 45.00 85.00
+endloop
+endfacet
+facet normal 0 0 0
+outer loop
+vertex 127.50 10.00 85.00
+vertex 172.50 45.00 85.00
+vertex 127.50 45.00 85.00
+endloop
+endfacet
+facet normal 0 0 0
+outer loop
+vertex 127.50 10.00 0.00
+vertex 172.50 10.00 0.00
+vertex 172.50 10.00 85.00
+endloop
+endfacet
+facet normal 0 0 0
+outer loop
+vertex 127.50 10.00 0.00
+vertex 172.50 10.00 85.00
+vertex 127.50 10.00 85.00
+endloop
+endfacet
+facet normal 0 0 0
+outer loop
+vertex 172.50 45.00 0.00
+vertex 127.50 45.00 0.00
+vertex 127.50 45.00 85.00
+endloop
+endfacet
+facet normal 0 0 0
+outer loop
+vertex 172.50 45.00 0.00
+vertex 127.50 45.00 85.00
+vertex 172.50 45.00 85.00
+endloop
+endfacet
+facet normal 0 0 0
+outer loop
+vertex 127.50 45.00 0.00
+vertex 127.50 10.00 0.00
+vertex 127.50 10.00 85.00
+endloop
+endfacet
+facet normal 0 0 0
+outer loop
+vertex 127.50 45.00 0.00
+vertex 127.50 10.00 85.00
+vertex 127.50 45.00 85.00
+endloop
+endfacet
+facet normal 0 0 0
+outer loop
+vertex 172.50 10.00 0.00
+vertex 172.50 45.00 0.00
+vertex 172.50 45.00 85.00
+endloop
+endfacet
+facet normal 0 0 0
+outer loop
+vertex 172.50 10.00 0.00
+vertex 172.50 45.00 85.00
+vertex 172.50 10.00 85.00
+endloop
+endfacet
+endsolid banheiro_274x165
