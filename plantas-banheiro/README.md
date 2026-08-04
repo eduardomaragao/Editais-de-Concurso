@@ -1,7 +1,8 @@
 # Plantas de banheiro → SketchUp (.skp)
 
 Modelos gerados a partir das duas plantas cotadas (fotos enviadas em 04/08/2026).
-Unidades em **centímetros**, pé-direito de **250 cm**.
+Unidades em **centímetros**. Pé-direito: **253 cm** no banheiro de 282 e
+**253,8 cm** no de 274.
 
 O formato `.skp` é proprietário da Trimble e não pode ser gerado diretamente por
 ferramenta externa — mas qualquer um dos arquivos abaixo vira `.skp` com um

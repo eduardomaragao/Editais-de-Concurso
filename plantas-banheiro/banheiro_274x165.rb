@@ -1,4 +1,4 @@
-# banheiro_274x165 — gerado a partir da planta cotada (unidades: cm, pé-direito 250 cm)
+# banheiro_274x165 — gerado a partir da planta cotada (unidades: cm, pé-direito 253.8 cm)
 # Como usar: SketchUp desktop > Janela > Console Ruby > cole tudo e Enter.
 # Depois é só salvar o modelo como .skp.
 model = Sketchup.active_model
@@ -13,11 +13,11 @@ end
 
 paredes = model.active_entities.add_group
 paredes.name = "Paredes"
-caixa(paredes.entities, -12.00, -12.00, 0.00, 177.00, 0.00, 250.00)
-caixa(paredes.entities, 274.00, -12.00, 286.00, 177.00, 0.00, 250.00)
-caixa(paredes.entities, 0.00, 165.00, 274.00, 177.00, 0.00, 250.00)
-caixa(paredes.entities, 0.00, -12.00, 90.10, 0.00, 0.00, 250.00)
-caixa(paredes.entities, 190.10, -12.00, 274.00, 0.00, 0.00, 250.00)
+caixa(paredes.entities, -12.00, -12.00, 0.00, 177.00, 0.00, 253.80)
+caixa(paredes.entities, 274.00, -12.00, 286.00, 177.00, 0.00, 253.80)
+caixa(paredes.entities, 0.00, 165.00, 274.00, 177.00, 0.00, 253.80)
+caixa(paredes.entities, 0.00, -12.00, 90.10, 0.00, 0.00, 253.80)
+caixa(paredes.entities, 190.10, -12.00, 274.00, 0.00, 0.00, 253.80)
 
 loucas = model.active_entities.add_group
 loucas.name = "Loucas e box"

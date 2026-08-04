@@ -1,14 +1,14 @@
 #!/usr/bin/env python3
 """Gera DXF (2D), STL (3D) e script Ruby do SketchUp para as duas plantas de banheiro.
 
-Unidades: centímetros. Pé-direito: 250 cm (informado pelo Eduardo).
+Unidades: centímetros. Pé-direito informado pelo Eduardo: 253 cm no ambiente
+de 282 e 253,8 cm no de 274 (campo "H" de cada planta).
 Origem (0,0) = canto interno inferior-esquerdo de cada ambiente; eixo Y aponta
 para a parede do fundo (topo da imagem).
 """
 import math
 import os
 
-ALTURA_PAREDE = 250.0   # pé-direito 2,50 m
 ESPESSURA_PAREDE = 12.0 # assumida (não cotada nas imagens)
 VIDRO = 0.8             # espessura do vidro do box
 H_VIDRO = 200.0
@@ -18,16 +18,16 @@ OUT = os.environ.get("OUT_DIR", ".")
 
 # ---------------------------------------------------------------- geometria
 
-def paredes(W, D, T, porta):
+def paredes(W, D, T, porta, H):
     """Caixas (x0,y0,x1,y1,z0,z1) das 4 paredes, com vão de porta na parede
     inferior de x=a até x=a+w (vão até o teto — sem verga, ajustar no SketchUp)."""
     a, w = porta
     return [
-        (-T, -T, 0, D + T, 0, ALTURA_PAREDE),          # esquerda
-        (W, -T, W + T, D + T, 0, ALTURA_PAREDE),       # direita
-        (0, D, W, D + T, 0, ALTURA_PAREDE),            # fundo (topo da imagem)
-        (0, -T, a, 0, 0, ALTURA_PAREDE),               # frente, trecho esquerdo
-        (a + w, -T, W, 0, 0, ALTURA_PAREDE),           # frente, trecho direito
+        (-T, -T, 0, D + T, 0, H),          # esquerda
+        (W, -T, W + T, D + T, 0, H),       # direita
+        (0, D, W, D + T, 0, H),            # fundo (topo da imagem)
+        (0, -T, a, 0, 0, H),               # frente, trecho esquerdo
+        (a + w, -T, W, 0, 0, H),           # frente, trecho direito
     ]
 
 
@@ -39,7 +39,7 @@ def oval(cx, cy, rx, ry, n=32):
 # Planta 1 — 282 x 176 (imagem 05d80bd8)
 P1 = {
     "nome": "banheiro_282x176",
-    "W": 282.0, "D": 176.0,
+    "W": 282.0, "D": 176.0, "H": 253.0,
     "porta": (96.8, 76.7),           # cotas 96,8 / 76,7 / 103,5 na base
     "caixas": [
         # box de banho 87 x 93 no canto superior esquerdo (vidro)
@@ -59,7 +59,7 @@ P1 = {
 # adotado 165, conferir no modelo)
 P2 = {
     "nome": "banheiro_274x165",
-    "W": 274.0, "D": 165.0,
+    "W": 274.0, "D": 165.0, "H": 253.8,
     "porta": (90.1, 100.0),          # cotas 90,1 / 100 / 90 na base
     "caixas": [
         # vaso sanitário, centro a 45,5 da parede esquerda, junto ao fundo
@@ -128,7 +128,7 @@ def stl_caixa(f, x0, y0, x1, y1, z0, z1):
 def stl(plan, caminho):
     with open(caminho, "w") as f:
         f.write(f"solid {plan['nome']}\n")
-        for c in paredes(plan["W"], plan["D"], ESPESSURA_PAREDE, plan["porta"]):
+        for c in paredes(plan["W"], plan["D"], ESPESSURA_PAREDE, plan["porta"], plan["H"]):
             stl_caixa(f, *c)
         for c in plan["caixas"]:
             stl_caixa(f, *c)
@@ -137,7 +137,7 @@ def stl(plan, caminho):
 
 # ---------------------------------------------------------------- Ruby (SketchUp)
 
-RUBY_TOPO = """# %s — gerado a partir da planta cotada (unidades: cm, pé-direito 250 cm)
+RUBY_TOPO = """# %s — gerado a partir da planta cotada (unidades: cm, pé-direito %s cm)
 # Como usar: SketchUp desktop > Janela > Console Ruby > cole tudo e Enter.
 # Depois é só salvar o modelo como .skp.
 model = Sketchup.active_model
@@ -154,9 +154,9 @@ end
 
 
 def ruby(plan):
-    out = [RUBY_TOPO % (plan["nome"], plan["nome"])]
+    out = [RUBY_TOPO % (plan["nome"], ("%g" % plan["H"]), plan["nome"])]
     out.append('paredes = model.active_entities.add_group\nparedes.name = "Paredes"\n')
-    for c in paredes(plan["W"], plan["D"], ESPESSURA_PAREDE, plan["porta"]):
+    for c in paredes(plan["W"], plan["D"], ESPESSURA_PAREDE, plan["porta"], plan["H"]):
         out.append("caixa(paredes.entities, %.2f, %.2f, %.2f, %.2f, %.2f, %.2f)\n" % c)
     out.append('\nloucas = model.active_entities.add_group\nloucas.name = "Loucas e box"\n')
     for c in plan["caixas"]:
