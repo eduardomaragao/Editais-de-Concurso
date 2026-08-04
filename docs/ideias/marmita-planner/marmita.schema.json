@@ -1,0 +1,103 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://eduardoaragao.com/schemas/marmita-planner/v1",
+  "title": "Marmita Planner — contrato de dados da V1 (rascunho)",
+  "description": "Escopo V1: receitas, marmitas da semana e lista de compras. Estoque, scanner e IA entram nas versões seguintes sem quebrar este contrato (campos novos, nunca renomear os existentes).",
+  "type": "object",
+  "required": ["versao", "receitas", "marmitas", "listas_compras"],
+  "properties": {
+    "versao": { "const": 1 },
+    "receitas": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/receita" }
+    },
+    "marmitas": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/marmita" }
+    },
+    "listas_compras": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/lista_compras" }
+    }
+  },
+  "$defs": {
+    "dinheiro": {
+      "type": "number",
+      "minimum": 0,
+      "description": "Valor em reais (BRL), duas casas decimais."
+    },
+    "ingrediente": {
+      "type": "object",
+      "required": ["nome", "quantidade", "unidade"],
+      "properties": {
+        "nome": { "type": "string", "minLength": 1 },
+        "quantidade": { "type": "number", "exclusiveMinimum": 0 },
+        "unidade": { "enum": ["g", "kg", "ml", "l", "un", "maço", "cx", "colher", "xícara"] },
+        "preco_pago": { "$ref": "#/$defs/dinheiro" },
+        "categoria": {
+          "enum": ["açougue", "hortifrúti", "mercearia", "laticínios", "padaria", "outros"],
+          "description": "Agrupa a lista de compras por seção do mercado."
+        }
+      }
+    },
+    "receita": {
+      "type": "object",
+      "required": ["id", "nome", "rendimento_porcoes", "ingredientes"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^rec_[a-z0-9]+$" },
+        "nome": { "type": "string", "minLength": 1 },
+        "rendimento_porcoes": { "type": "integer", "minimum": 1 },
+        "ingredientes": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/ingrediente" }
+        },
+        "modo_preparo": { "type": "string" },
+        "kcal_porcao": { "type": "number", "minimum": 0 },
+        "proteina_g_porcao": { "type": "number", "minimum": 0 },
+        "custo_total": {
+          "$ref": "#/$defs/dinheiro",
+          "description": "Derivado dos ingredientes; recalculado, nunca digitado (mesmo princípio da gamificação do app de Editais: função pura dos dados)."
+        }
+      }
+    },
+    "marmita": {
+      "type": "object",
+      "required": ["id", "data", "receita_id", "porcoes", "status"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^mar_[a-z0-9]+$" },
+        "data": { "type": "string", "format": "date" },
+        "receita_id": { "type": "string", "pattern": "^rec_[a-z0-9]+$" },
+        "porcoes": { "type": "integer", "minimum": 1 },
+        "status": { "enum": ["planejada", "pronta", "congelada", "consumida"] }
+      }
+    },
+    "lista_compras": {
+      "type": "object",
+      "required": ["id", "semana_inicio", "itens"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^lis_[a-z0-9]+$" },
+        "semana_inicio": {
+          "type": "string",
+          "format": "date",
+          "description": "Segunda-feira da semana planejada; itens agregados a partir das marmitas dessa semana."
+        },
+        "itens": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["nome", "quantidade", "unidade", "comprado"],
+            "properties": {
+              "nome": { "type": "string", "minLength": 1 },
+              "quantidade": { "type": "number", "exclusiveMinimum": 0 },
+              "unidade": { "enum": ["g", "kg", "ml", "l", "un", "maço", "cx", "colher", "xícara"] },
+              "categoria": { "enum": ["açougue", "hortifrúti", "mercearia", "laticínios", "padaria", "outros"] },
+              "preco_estimado": { "$ref": "#/$defs/dinheiro" },
+              "comprado": { "type": "boolean" }
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,449 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+<title>Marmita Planner — Protótipo V1</title>
+<style>
+  :root {
+    --papel: #F4F6F3;
+    --carta: #FFFFFF;
+    --tinta: #142F52;
+    --tinta-fraca: #5A6B80;
+    --linha: #DDE3E0;
+    --azulejo: #2D5FA8;
+    --azulejo-suave: #E7EEF9;
+    --tomate: #D6452C;
+    --tomate-suave: #FBEAE6;
+    --milho: #B97F1E;
+    --milho-suave: #F9EED8;
+    --sombra: 0 10px 30px rgba(20, 47, 82, .10);
+    --botao-texto: #FFFFFF;
+    --d: "ui-rounded", "SF Pro Rounded", "Nunito", "Segoe UI", system-ui, sans-serif;
+    --c: system-ui, "Segoe UI", Roboto, sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --papel: #0E1620;
+      --carta: #172230;
+      --tinta: #E9EFF7;
+      --tinta-fraca: #93A3B8;
+      --linha: #26344655;
+      --azulejo: #7CA9EA;
+      --azulejo-suave: #1D3050;
+      --tomate: #F0765F;
+      --tomate-suave: #47201A;
+      --milho: #E4B05C;
+      --milho-suave: #3D2F14;
+      --sombra: 0 10px 30px rgba(0, 0, 0, .45);
+      --botao-texto: #0E1620;
+    }
+  }
+  :root[data-theme="light"] {
+    --papel: #F4F6F3; --carta: #FFFFFF; --tinta: #142F52; --tinta-fraca: #5A6B80;
+    --linha: #DDE3E0; --azulejo: #2D5FA8; --azulejo-suave: #E7EEF9;
+    --tomate: #D6452C; --tomate-suave: #FBEAE6; --milho: #B97F1E; --milho-suave: #F9EED8;
+    --sombra: 0 10px 30px rgba(20, 47, 82, .10);
+    --botao-texto: #FFFFFF;
+  }
+  :root[data-theme="dark"] {
+    --papel: #0E1620; --carta: #172230; --tinta: #E9EFF7; --tinta-fraca: #93A3B8;
+    --linha: #26344655; --azulejo: #7CA9EA; --azulejo-suave: #1D3050;
+    --tomate: #F0765F; --tomate-suave: #47201A; --milho: #E4B05C; --milho-suave: #3D2F14;
+    --sombra: 0 10px 30px rgba(0, 0, 0, .45);
+    --botao-texto: #0E1620;
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--papel); color: var(--tinta);
+    font-family: var(--c); line-height: 1.5;
+  }
+  .palco {
+    min-height: 100vh; display: flex; flex-wrap: wrap; gap: 2.5rem;
+    align-items: flex-start; justify-content: center; padding: 2.5rem 1rem 4rem;
+  }
+  .nota { max-width: 300px; padding-top: 1rem; }
+  .nota .rotulo {
+    font-size: .72rem; letter-spacing: .12em; text-transform: uppercase;
+    color: var(--tomate); font-weight: 700;
+  }
+  .nota h1 {
+    font-family: var(--d); font-size: 1.9rem; line-height: 1.15;
+    margin: .35rem 0 .6rem; text-wrap: balance;
+  }
+  .nota p { color: var(--tinta-fraca); font-size: .92rem; margin: 0 0 .8rem; }
+  .nota ul { color: var(--tinta-fraca); font-size: .88rem; padding-left: 1.1rem; margin: 0; }
+  .nota li { margin-bottom: .45rem; }
+  .nota li strong { color: var(--tinta); font-weight: 600; }
+
+  /* ---------- moldura do celular ---------- */
+  .fone {
+    width: 400px; max-width: 100%; background: var(--carta);
+    border: 1px solid var(--linha); border-radius: 34px; box-shadow: var(--sombra);
+    overflow: hidden; display: flex; flex-direction: column; height: 780px;
+  }
+  .status-fake {
+    display: flex; justify-content: space-between; padding: .55rem 1.4rem .2rem;
+    font-size: .7rem; color: var(--tinta-fraca); font-variant-numeric: tabular-nums;
+  }
+  main.telas { flex: 1; overflow-y: auto; scrollbar-width: thin; }
+  .tela { display: none; padding: .4rem 1.15rem 1.4rem; }
+  .tela.ativa { display: block; }
+
+  .topo { padding: .6rem 0 .9rem; }
+  .topo .ola { color: var(--tinta-fraca); font-size: .85rem; }
+  .topo h2 {
+    font-family: var(--d); font-size: 1.55rem; margin: .1rem 0 0;
+    line-height: 1.2; text-wrap: balance;
+  }
+
+  /* ---------- cartões e blocos ---------- */
+  .grade { display: grid; grid-template-columns: 1fr 1fr; gap: .7rem; }
+  .tile {
+    background: var(--papel); border: 1px solid var(--linha);
+    border-radius: 16px; padding: .8rem .9rem;
+  }
+  .tile .num {
+    font-family: var(--d); font-size: 1.45rem; font-weight: 700;
+    font-variant-numeric: tabular-nums; line-height: 1.1;
+  }
+  .tile .num.custo { color: var(--tomate); }
+  .tile .leg { font-size: .74rem; color: var(--tinta-fraca); margin-top: .15rem; }
+
+  .cartao {
+    background: var(--carta); border: 1px solid var(--linha); border-radius: 18px;
+    padding: .9rem 1rem; margin-top: .7rem;
+  }
+  .cartao h3 {
+    margin: 0 0 .5rem; font-size: .78rem; letter-spacing: .1em;
+    text-transform: uppercase; color: var(--tinta-fraca); font-weight: 700;
+  }
+
+  .botao {
+    display: block; width: 100%; border: 0; cursor: pointer; text-align: center;
+    background: var(--azulejo); color: var(--botao-texto); font-family: var(--d);
+    font-size: .95rem; font-weight: 700; padding: .8rem 1rem;
+    border-radius: 14px; margin-top: .9rem;
+  }
+  .botao:focus-visible, .chip:focus-visible, .aba:focus-visible, .linha-receita:focus-visible {
+    outline: 2px solid var(--tomate); outline-offset: 2px;
+  }
+
+  /* ---------- marmitas ---------- */
+  .dia {
+    display: flex; align-items: center; gap: .8rem;
+    padding: .65rem 0; border-bottom: 1px solid var(--linha);
+  }
+  .dia:last-child { border-bottom: 0; }
+  .dia .d {
+    font-family: var(--d); font-weight: 800; font-size: .8rem; width: 2.4rem;
+    color: var(--azulejo); text-transform: uppercase; letter-spacing: .05em;
+  }
+  .dia .info { flex: 1; min-width: 0; }
+  .dia .info .nome { font-size: .9rem; font-weight: 600; }
+  .dia .info .sub { font-size: .76rem; color: var(--tinta-fraca); font-variant-numeric: tabular-nums; }
+  .chip {
+    border: 1.5px solid var(--azulejo); background: transparent; color: var(--azulejo);
+    font-size: .7rem; font-weight: 700; padding: .28rem .6rem; border-radius: 999px;
+    cursor: pointer; font-family: var(--d); white-space: nowrap;
+  }
+  .chip[data-st="pronta"] { border-color: var(--milho); background: var(--milho-suave); color: var(--milho); }
+  .chip[data-st="congelada"] { border-color: transparent; background: var(--azulejo-suave); color: var(--azulejo); }
+  .dica { font-size: .74rem; color: var(--tinta-fraca); margin-top: .55rem; }
+
+  /* ---------- receitas ---------- */
+  .linha-receita {
+    display: flex; align-items: center; gap: .75rem; width: 100%;
+    background: none; border: 0; border-bottom: 1px solid var(--linha);
+    padding: .7rem 0; cursor: pointer; text-align: left; color: inherit; font: inherit;
+  }
+  .linha-receita:last-child { border-bottom: 0; }
+  .ini {
+    width: 40px; height: 40px; border-radius: 12px; background: var(--azulejo-suave);
+    color: var(--azulejo); display: grid; place-items: center;
+    font-family: var(--d); font-weight: 800; flex-shrink: 0;
+  }
+  .linha-receita .meio { flex: 1; min-width: 0; }
+  .linha-receita .meio .nome { font-weight: 600; font-size: .92rem; }
+  .linha-receita .meio .sub { font-size: .76rem; color: var(--tinta-fraca); }
+  .preco {
+    font-variant-numeric: tabular-nums; font-weight: 700; color: var(--tomate);
+    font-size: .88rem; white-space: nowrap;
+  }
+  .preco small { font-weight: 400; color: var(--tinta-fraca); }
+
+  .ing { display: flex; justify-content: space-between; gap: 1rem; padding: .4rem 0; border-bottom: 1px dashed var(--linha); font-size: .88rem; }
+  .ing:last-child { border-bottom: 0; }
+  .ing .q { color: var(--tinta-fraca); font-variant-numeric: tabular-nums; }
+  .voltar {
+    background: none; border: 0; color: var(--azulejo); font-weight: 700;
+    font-family: var(--d); font-size: .88rem; cursor: pointer; padding: .4rem 0;
+  }
+
+  /* ---------- compras ---------- */
+  .total-bar {
+    display: flex; justify-content: space-between; align-items: baseline;
+    background: var(--tomate-suave); border-radius: 14px; padding: .7rem .9rem;
+    font-variant-numeric: tabular-nums; margin-top: .3rem;
+  }
+  .total-bar .rot { font-size: .78rem; color: var(--tinta-fraca); }
+  .total-bar strong { font-family: var(--d); font-size: 1.15rem; color: var(--tomate); }
+  .item-c { display: flex; align-items: center; gap: .7rem; padding: .5rem 0; border-bottom: 1px solid var(--linha); }
+  .item-c:last-child { border-bottom: 0; }
+  .item-c input { width: 1.15rem; height: 1.15rem; accent-color: var(--azulejo); flex-shrink: 0; }
+  .item-c label { flex: 1; font-size: .9rem; cursor: pointer; }
+  .item-c .p { font-variant-numeric: tabular-nums; font-size: .84rem; color: var(--tinta-fraca); white-space: nowrap; }
+  .item-c.ok label { text-decoration: line-through; color: var(--tinta-fraca); }
+
+  /* ---------- abas ---------- */
+  .abas {
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    border-top: 1px solid var(--linha); background: var(--carta);
+  }
+  .aba {
+    background: none; border: 0; cursor: pointer; padding: .55rem 0 .8rem;
+    display: flex; flex-direction: column; align-items: center; gap: .15rem;
+    color: var(--tinta-fraca); font-family: var(--d); font-size: .68rem; font-weight: 700;
+  }
+  .aba svg { width: 22px; height: 22px; stroke: currentColor; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+  .aba.ativa { color: var(--azulejo); }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .tela.ativa { animation: surge .18s ease-out; }
+    @keyframes surge { from { opacity: .4; transform: translateY(4px); } to { opacity: 1; transform: none; } }
+  }
+  @media (max-width: 760px) {
+    .palco { padding-top: 1.2rem; gap: 1.2rem; }
+    .fone { height: 82vh; min-height: 560px; }
+  }
+</style>
+
+<div class="palco">
+  <aside class="nota">
+    <div class="rotulo">Protótipo navegável · V1</div>
+    <h1>Marmita Planner</h1>
+    <p>As quatro telas da V1 (marmitas + receitas + lista de compras), com dados de exemplo reais. Tudo aqui é clicável:</p>
+    <ul>
+      <li><strong>Status da marmita</strong> — toque no selo do dia para alternar planejada → pronta → congelada.</li>
+      <li><strong>Receitas</strong> — toque numa receita para abrir o detalhe com ingredientes e custo por porção.</li>
+      <li><strong>Compras</strong> — marque itens no mercado e veja o total restante recalcular.</li>
+    </ul>
+  </aside>
+
+  <div class="fone">
+    <div class="status-fake"><span>21:53</span><span>5G · 84%</span></div>
+    <main class="telas">
+
+      <!-- INÍCIO -->
+      <section class="tela ativa" id="tela-inicio">
+        <div class="topo">
+          <div class="ola">segunda-feira, 3 de agosto</div>
+          <h2>Sua semana na cozinha</h2>
+        </div>
+        <div class="grade">
+          <div class="tile"><div class="num">5</div><div class="leg">marmitas planejadas</div></div>
+          <div class="tile"><div class="num">2</div><div class="leg">no freezer</div></div>
+          <div class="tile"><div class="num custo">R$ 9,04</div><div class="leg">custo médio por marmita</div></div>
+          <div class="tile"><div class="num custo">R$ 148,70</div><div class="leg">lista de compras da semana</div></div>
+        </div>
+        <div class="cartao">
+          <h3>Hoje no cardápio</h3>
+          <div class="dia" style="border-bottom:0">
+            <span class="d">seg</span>
+            <div class="info">
+              <div class="nome">Frango grelhado, arroz e brócolis</div>
+              <div class="sub">1 porção · 520 kcal · 42 g proteína</div>
+            </div>
+            <span class="chip" data-st="congelada">congelada ❄</span>
+          </div>
+        </div>
+        <button class="botao" data-ir="tela-compras">Ver lista de compras da semana</button>
+      </section>
+
+      <!-- MARMITAS -->
+      <section class="tela" id="tela-marmitas">
+        <div class="topo"><h2>Marmitas da semana</h2></div>
+        <div class="cartao">
+          <h3>3 – 7 de agosto</h3>
+          <div class="dia">
+            <span class="d">seg</span>
+            <div class="info"><div class="nome">Frango grelhado, arroz e brócolis</div><div class="sub">R$ 8,40 / porção</div></div>
+            <button class="chip st" data-st="congelada">congelada ❄</button>
+          </div>
+          <div class="dia">
+            <span class="d">ter</span>
+            <div class="info"><div class="nome">Frango grelhado, arroz e brócolis</div><div class="sub">R$ 8,40 / porção</div></div>
+            <button class="chip st" data-st="congelada">congelada ❄</button>
+          </div>
+          <div class="dia">
+            <span class="d">qua</span>
+            <div class="info"><div class="nome">Carne moída com abóbora e feijão</div><div class="sub">R$ 9,10 / porção</div></div>
+            <button class="chip st" data-st="pronta">pronta</button>
+          </div>
+          <div class="dia">
+            <span class="d">qui</span>
+            <div class="info"><div class="nome">Strogonoff de frango com arroz</div><div class="sub">R$ 10,80 / porção</div></div>
+            <button class="chip st" data-st="planejada">planejada</button>
+          </div>
+          <div class="dia">
+            <span class="d">sex</span>
+            <div class="info"><div class="nome">Strogonoff de frango com arroz</div><div class="sub">R$ 10,80 / porção</div></div>
+            <button class="chip st" data-st="planejada">planejada</button>
+          </div>
+        </div>
+        <p class="dica">Toque no selo para atualizar o status da marmita.</p>
+        <button class="botao" data-ir="tela-receitas">Montar a próxima semana</button>
+      </section>
+
+      <!-- RECEITAS -->
+      <section class="tela" id="tela-receitas">
+        <div class="topo"><h2>Receitas</h2></div>
+        <div class="cartao">
+          <h3>Suas receitas · custo por porção</h3>
+          <button class="linha-receita" data-ir="tela-detalhe">
+            <span class="ini">FG</span>
+            <span class="meio"><span class="nome">Frango grelhado, arroz e brócolis</span><br>
+            <span class="sub">rende 6 porções · 520 kcal</span></span>
+            <span class="preco">R$ 8,40</span>
+          </button>
+          <button class="linha-receita">
+            <span class="ini">CM</span>
+            <span class="meio"><span class="nome">Carne moída com abóbora e feijão</span><br>
+            <span class="sub">rende 8 porções · 480 kcal</span></span>
+            <span class="preco">R$ 9,10</span>
+          </button>
+          <button class="linha-receita">
+            <span class="ini">SF</span>
+            <span class="meio"><span class="nome">Strogonoff de frango com arroz</span><br>
+            <span class="sub">rende 6 porções · 610 kcal</span></span>
+            <span class="preco">R$ 10,80</span>
+          </button>
+          <button class="linha-receita">
+            <span class="ini">OF</span>
+            <span class="meio"><span class="nome">Omelete de forno com legumes</span><br>
+            <span class="sub">rende 4 porções · 320 kcal</span></span>
+            <span class="preco">R$ 5,20</span>
+          </button>
+          <button class="linha-receita">
+            <span class="ini">EB</span>
+            <span class="meio"><span class="nome">Escondidinho de batata-doce</span><br>
+            <span class="sub">rende 6 porções · 450 kcal</span></span>
+            <span class="preco">R$ 7,60</span>
+          </button>
+        </div>
+        <button class="botao">Nova receita</button>
+      </section>
+
+      <!-- DETALHE DA RECEITA -->
+      <section class="tela" id="tela-detalhe">
+        <button class="voltar" data-ir="tela-receitas">‹ Receitas</button>
+        <div class="topo" style="padding-top:0">
+          <h2>Frango grelhado, arroz e brócolis</h2>
+          <div class="ola">Rende 6 porções · custo total R$ 50,40 · <strong style="color:var(--tomate)">R$ 8,40/porção</strong></div>
+        </div>
+        <div class="cartao">
+          <h3>Ingredientes</h3>
+          <div class="ing"><span>Peito de frango</span><span class="q">1,2 kg · R$ 22,68</span></div>
+          <div class="ing"><span>Arroz branco</span><span class="q">500 g · R$ 2,49</span></div>
+          <div class="ing"><span>Brócolis</span><span class="q">2 maços · R$ 9,00</span></div>
+          <div class="ing"><span>Alho, azeite e temperos</span><span class="q">— · R$ 4,23</span></div>
+          <div class="ing"><span>Cenoura</span><span class="q">300 g · R$ 2,10</span></div>
+        </div>
+        <div class="cartao">
+          <h3>Por porção</h3>
+          <div class="grade">
+            <div class="tile"><div class="num">520</div><div class="leg">kcal</div></div>
+            <div class="tile"><div class="num">42 g</div><div class="leg">proteína</div></div>
+          </div>
+        </div>
+        <button class="botao" data-ir="tela-marmitas">Usar nas marmitas da semana</button>
+      </section>
+
+      <!-- COMPRAS -->
+      <section class="tela" id="tela-compras">
+        <div class="topo">
+          <h2>Lista de compras</h2>
+          <div class="ola">Gerada a partir das marmitas de 3–7 de agosto</div>
+        </div>
+        <div class="total-bar">
+          <span class="rot">Falta comprar</span>
+          <strong id="falta">R$ 148,70</strong>
+        </div>
+        <div class="cartao">
+          <h3>Açougue</h3>
+          <div class="item-c"><input type="checkbox" id="i1" data-p="37.80"><label for="i1">Peito de frango · 2 kg</label><span class="p">R$ 37,80</span></div>
+          <div class="item-c"><input type="checkbox" id="i2" data-p="42.00"><label for="i2">Patinho moído · 1 kg</label><span class="p">R$ 42,00</span></div>
+        </div>
+        <div class="cartao">
+          <h3>Hortifrúti</h3>
+          <div class="item-c"><input type="checkbox" id="i3" data-p="9.00"><label for="i3">Brócolis · 2 maços</label><span class="p">R$ 9,00</span></div>
+          <div class="item-c"><input type="checkbox" id="i4" data-p="6.50"><label for="i4">Abóbora cabotiá · 1 kg</label><span class="p">R$ 6,50</span></div>
+          <div class="item-c"><input type="checkbox" id="i5" data-p="4.20"><label for="i5">Cebola · 1 kg</label><span class="p">R$ 4,20</span></div>
+          <div class="item-c"><input type="checkbox" id="i6" data-p="5.90"><label for="i6">Cenoura · 1 kg</label><span class="p">R$ 5,90</span></div>
+        </div>
+        <div class="cartao">
+          <h3>Mercearia</h3>
+          <div class="item-c"><input type="checkbox" id="i7" data-p="24.90"><label for="i7">Arroz · 5 kg</label><span class="p">R$ 24,90</span></div>
+          <div class="item-c"><input type="checkbox" id="i8" data-p="8.90"><label for="i8">Feijão-carioca · 1 kg</label><span class="p">R$ 8,90</span></div>
+          <div class="item-c"><input type="checkbox" id="i9" data-p="6.40"><label for="i9">Creme de leite · 2 cx</label><span class="p">R$ 6,40</span></div>
+          <div class="item-c"><input type="checkbox" id="i10" data-p="3.10"><label for="i10">Extrato de tomate</label><span class="p">R$ 3,10</span></div>
+        </div>
+      </section>
+    </main>
+
+    <nav class="abas">
+      <button class="aba ativa" data-ir="tela-inicio" data-tab="1">
+        <svg viewBox="0 0 24 24"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/></svg>Início
+      </button>
+      <button class="aba" data-ir="tela-marmitas" data-tab="1">
+        <svg viewBox="0 0 24 24"><rect x="3" y="8" width="18" height="12" rx="2"/><path d="M3 12h18M8 8V5h8v3"/></svg>Marmitas
+      </button>
+      <button class="aba" data-ir="tela-receitas" data-tab="1">
+        <svg viewBox="0 0 24 24"><path d="M4 4h13a3 3 0 0 1 3 3v13H7a3 3 0 0 1-3-3z"/><path d="M8 8h8M8 12h8"/></svg>Receitas
+      </button>
+      <button class="aba" data-ir="tela-compras" data-tab="1">
+        <svg viewBox="0 0 24 24"><circle cx="9" cy="20" r="1.4"/><circle cx="17" cy="20" r="1.4"/><path d="M3 4h3l2.4 11h9.8L21 8H7"/></svg>Compras
+      </button>
+    </nav>
+  </div>
+</div>
+
+<script>
+  const telas = document.querySelectorAll('.tela');
+  const abas = document.querySelectorAll('.aba');
+  const mapaAba = { 'tela-inicio': 0, 'tela-marmitas': 1, 'tela-receitas': 2, 'tela-detalhe': 2, 'tela-compras': 3 };
+
+  function irPara(id) {
+    telas.forEach(t => t.classList.toggle('ativa', t.id === id));
+    abas.forEach((a, i) => a.classList.toggle('ativa', i === mapaAba[id]));
+    document.querySelector('.telas').scrollTop = 0;
+  }
+  document.querySelectorAll('[data-ir]').forEach(el =>
+    el.addEventListener('click', () => irPara(el.dataset.ir)));
+
+  const ordem = ['planejada', 'pronta', 'congelada'];
+  const rotulo = { planejada: 'planejada', pronta: 'pronta', congelada: 'congelada ❄' };
+  document.querySelectorAll('.chip.st').forEach(ch =>
+    ch.addEventListener('click', () => {
+      const prox = ordem[(ordem.indexOf(ch.dataset.st) + 1) % ordem.length];
+      ch.dataset.st = prox;
+      ch.textContent = rotulo[prox];
+    }));
+
+  const caixas = document.querySelectorAll('.item-c input');
+  const falta = document.getElementById('falta');
+  function recalc() {
+    let resta = 0;
+    caixas.forEach(c => {
+      c.closest('.item-c').classList.toggle('ok', c.checked);
+      if (!c.checked) resta += parseFloat(c.dataset.p);
+    });
+    falta.textContent = 'R$ ' + resta.toFixed(2).replace('.', ',');
+  }
+  caixas.forEach(c => c.addEventListener('change', recalc));
+</script>
+</body>
+</html>
