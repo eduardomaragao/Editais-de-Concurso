@@ -1,0 +1,1205 @@
+<meta charset="utf-8">
+<title>A Carteira — gamificação do app de questões da OAB</title>
+
+<style>
+/*@FONTES@*/
+
+/* ---------------------------------------------------------------- tokens */
+:root{
+  color-scheme: light dark;
+
+  --vinho:      #7C1D2B;
+  --vinho-vivo: #A22F42;
+  --ouro:       #8F6C1E;      /* ouro legivel sobre papel */
+  --ouro-foil:  #C79A44;      /* ouro de folha, so em superficie escura */
+
+  --fundo:   #F1ECE3;
+  --papel:   #FBF8F2;
+  --papel-2: #EDE6DA;
+  --tinta:   #1A1216;
+  --tinta-2: #5C4A4E;
+  --tinta-3: #8C7A7C;
+  --linha:   #DCD1C1;
+  --linha-forte: #C6B7A2;
+
+  --disco-vazio: #E3DACB;
+
+  --fs-micro: .688rem;
+  --fs-mini:  .781rem;
+  --fs-corpo: .938rem;
+  --fs-lead:  1.125rem;
+
+  --col: min(1180px, 100% - 2.5rem);
+  --raio: 3px;
+}
+
+@media (prefers-color-scheme: dark){
+  :root{
+    --vinho:      #C0455A;
+    --vinho-vivo: #E0687D;
+    --ouro:       #D8AC58;
+    --ouro-foil:  #E8C67E;
+
+    --fundo:   #170709;
+    --papel:   #240F13;
+    --papel-2: #2E151A;
+    --tinta:   #F3E7DC;
+    --tinta-2: #C3A7A6;
+    --tinta-3: #8E7472;
+    --linha:   #45242A;
+    --linha-forte: #5E333A;
+
+    --disco-vazio: #351A1F;
+  }
+}
+:root[data-theme="dark"]{
+  --vinho:#C0455A; --vinho-vivo:#E0687D; --ouro:#D8AC58; --ouro-foil:#E8C67E;
+  --fundo:#170709; --papel:#240F13; --papel-2:#2E151A;
+  --tinta:#F3E7DC; --tinta-2:#C3A7A6; --tinta-3:#8E7472;
+  --linha:#45242A; --linha-forte:#5E333A; --disco-vazio:#351A1F;
+}
+:root[data-theme="light"]{
+  --vinho:#7C1D2B; --vinho-vivo:#A22F42; --ouro:#8F6C1E; --ouro-foil:#C79A44;
+  --fundo:#F1ECE3; --papel:#FBF8F2; --papel-2:#EDE6DA;
+  --tinta:#1A1216; --tinta-2:#5C4A4E; --tinta-3:#8C7A7C;
+  --linha:#DCD1C1; --linha-forte:#C6B7A2; --disco-vazio:#E3DACB;
+}
+
+/* ------------------------------------------------------------------ base */
+*{ box-sizing:border-box }
+
+body{
+  margin:0;
+  background:var(--fundo);
+  color:var(--tinta);
+  font-family:'IBM Plex Sans', system-ui, sans-serif;
+  font-size:var(--fs-corpo);
+  line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+}
+
+h1,h2,h3,h4{ font-family:'Bodoni Moda', Georgia, serif; font-weight:700; text-wrap:balance; margin:0; line-height:1.08 }
+h1{ font-size:clamp(2.4rem, 6vw, 4rem); letter-spacing:-.01em }
+h2{ font-size:clamp(1.6rem, 3.4vw, 2.3rem) }
+h3{ font-size:1.15rem; font-weight:600 }
+p{ margin:0 }
+a{ color:var(--vinho) }
+
+.faixa{ width:var(--col); margin-inline:auto }
+
+.eyebrow{
+  font-family:'IBM Plex Mono', ui-monospace, monospace;
+  font-size:var(--fs-micro); font-weight:500;
+  letter-spacing:.18em; text-transform:uppercase; color:var(--ouro);
+}
+.num{ font-family:'IBM Plex Mono', ui-monospace, monospace; font-variant-numeric:tabular-nums }
+
+:where(a,button,input,summary):focus-visible{
+  outline:2px solid var(--vinho-vivo); outline-offset:3px; border-radius:2px;
+}
+
+/* ----------------------------------------------------------------- topo */
+.topo{
+  border-bottom:1px solid var(--linha);
+  background:color-mix(in srgb, var(--papel) 70%, transparent);
+  backdrop-filter:blur(8px);
+  position:sticky; top:0; z-index:40;
+}
+.topo-int{
+  width:var(--col); margin-inline:auto;
+  display:flex; align-items:center; gap:1.25rem;
+  min-height:52px; padding-block:.4rem;
+}
+.marca{ font-family:'Bodoni Moda',Georgia,serif; font-weight:700; font-size:1rem; letter-spacing:.01em }
+.marca span{ color:var(--vinho) }
+.placar{
+  margin-left:auto; display:flex; gap:1.15rem; align-items:baseline;
+  font-family:'IBM Plex Mono',monospace; font-size:var(--fs-mini);
+  font-variant-numeric:tabular-nums;
+  opacity:0; transform:translateY(-4px); transition:opacity .25s, transform .25s;
+}
+.placar.vivo{ opacity:1; transform:none }
+.placar b{ color:var(--ouro); font-weight:600 }
+.placar i{ font-style:normal; color:var(--tinta-3) }
+.tema{
+  background:none; border:1px solid var(--linha-forte); color:var(--tinta-2);
+  border-radius:99px; padding:.25rem .7rem; font:inherit; font-size:var(--fs-micro);
+  letter-spacing:.1em; text-transform:uppercase; cursor:pointer;
+}
+.tema:hover{ border-color:var(--vinho); color:var(--vinho) }
+
+/* ----------------------------------------------------------------- heroi */
+.heroi{
+  width:var(--col); margin-inline:auto;
+  display:grid; grid-template-columns:1fr .92fr; gap:clamp(2rem,5vw,4.5rem);
+  align-items:center;
+  padding-block:clamp(3rem,7vw,5.5rem) clamp(2rem,4vw,3rem);
+}
+.heroi h1{ margin-block:.7rem .9rem }
+.heroi h1 em{ font-style:italic; color:var(--vinho) }
+.lead{ font-size:var(--fs-lead); color:var(--tinta-2); max-width:46ch }
+.assinatura-heroi{
+  margin-top:1.6rem; padding-top:1.1rem; border-top:1px solid var(--linha);
+  display:flex; gap:2rem; flex-wrap:wrap;
+}
+.assinatura-heroi div{ display:flex; flex-direction:column }
+.assinatura-heroi b{ font-family:'Bodoni Moda',serif; font-size:1.7rem; line-height:1; color:var(--vinho) }
+.assinatura-heroi small{ font-size:var(--fs-micro); letter-spacing:.14em; text-transform:uppercase; color:var(--tinta-3); margin-top:.35rem }
+
+/* --------------------------------------------------------------- carteira */
+.carteira-caixa{ display:flex; flex-direction:column; gap:1rem; align-items:center }
+.carteira{ width:100%; max-width:430px; filter:drop-shadow(0 18px 30px rgba(40,8,14,.28)) }
+.peca{
+  opacity:0; transform:scale(.94);
+  transform-box:fill-box; transform-origin:center;   /* sem isso o SVG escala a partir do canto */
+  transition:opacity .5s ease, transform .5s cubic-bezier(.2,.9,.3,1.4);
+}
+.peca.on{ opacity:1; transform:none }
+.peca.selando{ animation:selar .7s cubic-bezier(.2,.9,.3,1.3) }
+@keyframes selar{ 0%{opacity:0;transform:scale(1.5) rotate(-6deg)} 55%{opacity:1;transform:scale(.97)} 100%{transform:none} }
+
+.legenda-carteira{
+  font-size:var(--fs-micro); letter-spacing:.1em; text-transform:uppercase;
+  color:var(--tinta-3); text-align:center;
+}
+
+/* -------------------------------------------------------------- simulador */
+.simulador{
+  width:var(--col); margin-inline:auto;
+  background:var(--papel); border:1px solid var(--linha);
+  border-top:2px solid var(--vinho);
+  padding:1.4rem clamp(1.1rem,2.5vw,2rem) 1.6rem;
+}
+.sim-topo{ display:flex; align-items:baseline; gap:1rem; flex-wrap:wrap; margin-bottom:1.1rem }
+.sim-topo p{ font-size:var(--fs-mini); color:var(--tinta-2) }
+.presets{ margin-left:auto; display:flex; gap:.4rem; flex-wrap:wrap }
+.presets button{
+  font:inherit; font-size:var(--fs-mini); cursor:pointer;
+  background:transparent; color:var(--tinta-2);
+  border:1px solid var(--linha-forte); border-radius:99px; padding:.28rem .85rem;
+  transition:background .15s, color .15s, border-color .15s;
+}
+.presets button:hover{ border-color:var(--vinho); color:var(--vinho) }
+.presets button[aria-pressed="true"]{ background:var(--vinho); border-color:var(--vinho); color:var(--papel) }
+
+.controles{ display:grid; grid-template-columns:repeat(auto-fit,minmax(215px,1fr)); gap:1.1rem 1.6rem }
+.ctrl{ display:flex; flex-direction:column; gap:.35rem }
+.ctrl-cab{ display:flex; justify-content:space-between; align-items:baseline; gap:.6rem }
+.ctrl label{ font-size:var(--fs-micro); letter-spacing:.13em; text-transform:uppercase; color:var(--tinta-3) }
+.ctrl output{ font-family:'IBM Plex Mono',monospace; font-size:var(--fs-mini); font-weight:500; color:var(--vinho); font-variant-numeric:tabular-nums }
+.ctrl select{
+  font:inherit; font-size:var(--fs-mini); color:var(--tinta);
+  background:var(--papel-2); border:1px solid var(--linha-forte); border-radius:2px; padding:.3rem .5rem;
+}
+
+input[type=range]{ -webkit-appearance:none; appearance:none; width:100%; height:20px; background:none; cursor:pointer }
+input[type=range]::-webkit-slider-runnable-track{ height:2px; background:var(--linha-forte) }
+input[type=range]::-moz-range-track{ height:2px; background:var(--linha-forte) }
+input[type=range]::-webkit-slider-thumb{
+  -webkit-appearance:none; width:15px; height:15px; margin-top:-6.5px; border-radius:50%;
+  background:var(--vinho); border:2px solid var(--papel); box-shadow:0 0 0 1px var(--vinho);
+}
+input[type=range]::-moz-range-thumb{
+  width:15px; height:15px; border-radius:50%;
+  background:var(--vinho); border:2px solid var(--papel); box-shadow:0 0 0 1px var(--vinho);
+}
+
+.resumo{
+  margin-top:1.4rem; padding-top:1.1rem; border-top:1px solid var(--linha);
+  display:grid; grid-template-columns:repeat(auto-fit,minmax(135px,1fr)); gap:1rem;
+}
+.resumo div{ display:flex; flex-direction:column; gap:.2rem }
+.resumo b{ font-family:'IBM Plex Mono',monospace; font-size:1.45rem; font-weight:600; color:var(--tinta); font-variant-numeric:tabular-nums; line-height:1 }
+.resumo small{ font-size:var(--fs-micro); letter-spacing:.12em; text-transform:uppercase; color:var(--tinta-3) }
+.resumo .destaque b{ color:var(--vinho) }
+.resumo .txt b{ font-family:'Bodoni Moda',serif; font-size:1.2rem; color:var(--vinho); line-height:1.2 }
+
+/* --------------------------------------------------------------- secoes */
+section{ width:var(--col); margin-inline:auto; padding-block:clamp(2.6rem,5.5vw,4.2rem) }
+.cab-secao{ border-top:1px solid var(--linha-forte); padding-top:1.1rem; margin-bottom:1.9rem }
+.cab-secao .linha1{ display:flex; align-items:baseline; gap:.9rem; flex-wrap:wrap }
+.cab-secao h2{ margin-top:.35rem }
+.cab-secao p{ color:var(--tinta-2); max-width:62ch; margin-top:.6rem }
+.contagem{
+  margin-left:auto; font-family:'IBM Plex Mono',monospace; font-size:var(--fs-mini);
+  color:var(--tinta-3); font-variant-numeric:tabular-nums;
+}
+.contagem b{ color:var(--ouro); font-weight:600 }
+
+/* --------------------------------------------------------------- trilha */
+/* 8 pecas em 4x2 — a grade fluida deixava um buraco na segunda fileira */
+.trilha{ display:grid; grid-template-columns:repeat(4,1fr); gap:1px; background:var(--linha) }
+@media (max-width:1000px){ .trilha{ grid-template-columns:repeat(2,1fr) } }
+@media (max-width:560px){ .trilha{ grid-template-columns:1fr } }
+.etapa{
+  background:var(--papel); padding:1.15rem 1.1rem 1.3rem;
+  display:flex; flex-direction:column; gap:.55rem; position:relative;
+  transition:background .3s;
+}
+.etapa .passo{ font-family:'IBM Plex Mono',monospace; font-size:var(--fs-micro); color:var(--tinta-3); letter-spacing:.1em }
+.etapa h3{ font-family:'Bodoni Moda',serif; font-size:1.28rem; color:var(--tinta-3); transition:color .3s }
+.etapa.on h3{ color:var(--vinho) }
+.etapa p{ font-size:var(--fs-mini); color:var(--tinta-2) }
+.etapa .peca-nome{
+  margin-top:auto; padding-top:.7rem; font-size:var(--fs-micro);
+  letter-spacing:.1em; text-transform:uppercase; color:var(--tinta-3);
+}
+.etapa.on .peca-nome{ color:var(--ouro) }
+.etapa.on{ background:color-mix(in srgb, var(--ouro) 7%, var(--papel)) }
+.etapa .sinete{
+  position:absolute; top:1rem; right:1rem; width:22px; height:22px; border-radius:50%;
+  border:1px solid var(--linha-forte); display:grid; place-items:center;
+  color:transparent; font-size:12px; transition:.3s;
+}
+.etapa.on .sinete{ border-color:var(--ouro); background:var(--ouro); color:var(--papel) }
+
+/* ------------------------------------------------------------ medalhoes */
+.grade{ display:grid; grid-template-columns:repeat(auto-fill,minmax(152px,1fr)); gap:1.5rem .9rem }
+.med{ display:flex; flex-direction:column; align-items:center; text-align:center; gap:.45rem }
+.disco{
+  width:78px; height:78px; border-radius:50%; position:relative;
+  display:grid; place-items:center; color:var(--disco-vazio);
+  background:var(--papel-2);
+  box-shadow:inset 0 0 0 1px var(--linha-forte);
+  transition:transform .3s, box-shadow .3s, background .3s, color .3s;
+}
+.disco::after{
+  content:''; position:absolute; inset:6px; border-radius:50%;
+  border:1px dashed var(--linha-forte); opacity:.7; transition:.3s;
+}
+.disco .glifo{ width:38px; height:38px; opacity:.5; transition:opacity .3s }
+.rank{
+  position:absolute; bottom:-6px; left:50%; transform:translateX(-50%);
+  font-family:'IBM Plex Mono',monospace; font-size:9px; letter-spacing:.06em;
+  background:var(--papel); color:var(--tinta-3);
+  border:1px solid var(--linha-forte); border-radius:99px; padding:.02rem .38rem;
+  transition:.3s;
+}
+.med h4{ font-family:'Bodoni Moda',serif; font-size:.98rem; font-weight:600; color:var(--tinta-3); margin-top:.25rem; transition:color .3s }
+.med .crit{ font-family:'IBM Plex Mono',monospace; font-size:var(--fs-micro); color:var(--tinta-3); font-variant-numeric:tabular-nums }
+
+.med.on .disco{
+  background:radial-gradient(circle at 32% 26%, var(--metal-a), var(--metal-b) 72%);
+  box-shadow:inset 0 0 0 1px rgba(0,0,0,.32), inset 0 1.5px 0 rgba(255,255,255,.4), 0 3px 9px rgba(40,8,14,.24);
+  color:var(--metal-glifo);
+}
+.med.on .disco::after{ border:1px solid rgba(255,255,255,.32); inset:7px }
+.med.on .disco .glifo{ opacity:1 }
+.med.on .rank{ background:var(--metal-b); border-color:rgba(255,255,255,.35); color:#F7EEDD }
+.med.on h4{ color:var(--tinta) }
+.med.on .crit{ color:var(--tinta-2) }
+
+.t1{ --metal-a:#C08A57; --metal-b:#7B4622; --metal-glifo:#FBEEDC }
+/* prata precisa fechar bem escura: em fundo de papel ela se confundia com o disco vazio */
+.t2{ --metal-a:#DEDAD2; --metal-b:#6B655D; --metal-glifo:#211C19 }
+.t3{ --metal-a:#F0CE7C; --metal-b:#9A7523; --metal-glifo:#3A2A06 }
+.t4{ --metal-a:#B8394F; --metal-b:#5D1220; --metal-glifo:#F6DCA6 }
+.t5{ --metal-a:#EBD9A8; --metal-b:#6E1D2B; --metal-glifo:#FDF4E2 }
+.med.on.t5 .disco{
+  background:conic-gradient(from 210deg, #F3DFB0, #B8394F 25%, #6E1D2B 45%, #E7C77E 70%, #8E2438 88%, #F3DFB0);
+}
+
+.med.novo .disco{ animation:carimbar .65s cubic-bezier(.2,.9,.3,1.35) }
+@keyframes carimbar{
+  0%{ transform:scale(1.55) rotate(-8deg); filter:brightness(1.7) }
+  50%{ transform:scale(.94) rotate(1deg) }
+  100%{ transform:none; filter:none }
+}
+
+.barra-prox{ width:64px; height:3px; background:var(--linha); overflow:hidden; margin-top:.15rem }
+.barra-prox i{ display:block; height:100%; background:var(--vinho); transition:width .35s }
+.falta{ font-family:'IBM Plex Mono',monospace; font-size:var(--fs-micro); color:var(--vinho) }
+
+/* -------------------------------------------------------------- materias */
+.tabela-caixa{ overflow-x:auto; border:1px solid var(--linha) }
+table{ border-collapse:collapse; width:100%; min-width:660px; background:var(--papel) }
+th,td{ text-align:left; padding:.62rem .85rem; border-bottom:1px solid var(--linha); font-size:var(--fs-mini) }
+thead th{
+  font-size:var(--fs-micro); letter-spacing:.12em; text-transform:uppercase;
+  color:var(--tinta-3); font-weight:500; background:var(--papel-2); border-bottom:1px solid var(--linha-forte);
+}
+td.n, th.n{ text-align:right; font-family:'IBM Plex Mono',monospace; font-variant-numeric:tabular-nums }
+tbody tr:hover{ background:color-mix(in srgb, var(--ouro) 6%, var(--papel)) }
+.selo-mat{
+  display:inline-flex; align-items:center; gap:.32rem;
+  font-size:var(--fs-micro); letter-spacing:.08em; text-transform:uppercase;
+  border:1px solid var(--linha-forte); color:var(--tinta-3);
+  border-radius:99px; padding:.05rem .5rem; white-space:nowrap;
+}
+.selo-mat.ok{ border-color:var(--ouro); color:var(--ouro); background:color-mix(in srgb, var(--ouro) 12%, transparent) }
+.selo-mat.ok.t5{ border-color:var(--vinho); color:var(--vinho); background:color-mix(in srgb, var(--vinho) 12%, transparent) }
+
+/* -------------------------------------------------------------- secretas */
+.grade-secreta{ display:grid; grid-template-columns:repeat(auto-fit,minmax(258px,1fr)); gap:1px; background:var(--linha) }
+/* .secreta e tambem .med — precisa desfazer explicitamente a coluna centralizada do medalhao */
+.secreta{
+  background:var(--papel); padding:1.05rem 1.1rem;
+  display:flex; flex-direction:row; align-items:flex-start; text-align:left; gap:.85rem;
+}
+.secreta .disco{ width:54px; height:54px; flex:none }
+.secreta .disco .glifo{ width:27px; height:27px }
+.secreta h4{ font-family:'Bodoni Moda',serif; font-size:1.05rem; font-weight:600; margin:0 0 .15rem }
+.secreta p{ font-size:var(--fs-mini); color:var(--tinta-2) }
+
+/* ----------------------------------------------------------- integracao */
+.dupla{ display:grid; grid-template-columns:1fr 1fr; gap:1.6rem }
+.nota{ background:var(--papel); border:1px solid var(--linha); padding:1.2rem 1.3rem }
+.nota h3{ margin-bottom:.5rem; color:var(--vinho) }
+.nota ul{ margin:.4rem 0 0; padding-left:1.05rem; color:var(--tinta-2); font-size:var(--fs-mini) }
+.nota li{ margin-bottom:.35rem }
+pre{
+  margin:0; overflow-x:auto; background:var(--papel-2); border:1px solid var(--linha);
+  padding:1rem 1.1rem; font-family:'IBM Plex Mono',monospace; font-size:var(--fs-mini); line-height:1.65;
+}
+code{ font-family:'IBM Plex Mono',monospace }
+.k{ color:var(--vinho) } .c{ color:var(--tinta-3); font-style:italic } .s{ color:var(--ouro) }
+
+footer{
+  border-top:1px solid var(--linha-forte); margin-top:2rem;
+  padding-block:2rem 3rem; text-align:center;
+  font-size:var(--fs-mini); color:var(--tinta-3);
+}
+
+@media (max-width:900px){
+  .heroi{ grid-template-columns:1fr; padding-block:2.2rem 1.5rem }
+  .carteira-caixa{ order:-1 }
+  .dupla{ grid-template-columns:1fr }
+  .placar span:nth-child(2){ display:none }
+}
+/* a linha do topo nao encolhe: sem isso ela alarga a pagina inteira no celular */
+@media (max-width:720px){
+  .topo-int > .eyebrow{ display:none }
+  .placar{ font-size:var(--fs-micro) }
+  .placar span:nth-child(3){ display:none }
+}
+@media (prefers-reduced-motion:reduce){
+  *{ animation-duration:.001ms !important; transition-duration:.001ms !important }
+}
+</style>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <g id="g-balanca" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+      <path d="M12 3v16M8 19h8M5.5 7.5h13M12 5.2 5.5 7.5 12 9.8l6.5-2.3z"/>
+      <path d="M2.6 13.4h5.8L5.5 7.9zM15.6 13.4h5.8L18.5 7.9z"/>
+      <path d="M2.6 13.4a2.9 2.9 0 0 0 5.8 0M15.6 13.4a2.9 2.9 0 0 0 5.8 0"/>
+    </g>
+    <g id="g-coluna" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+      <path d="M3.5 6h17M5.5 6v12M18.5 6v12M9.5 6v12M14.5 6v12M4 18h16M2.5 21h19M12 2.5 3.5 6h17z"/>
+    </g>
+    <g id="g-livro" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round">
+      <path d="M12 6.2C10 4.4 6.9 4 3.5 4.4v13.2C6.9 17.2 10 17.6 12 19.4c2-1.8 5.1-2.2 8.5-1.8V4.4C17.1 4 14 4.4 12 6.2z"/>
+      <path d="M12 6.2v13.2"/>
+    </g>
+    <g id="g-pena" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M20 3.5c-8.5.6-13 5-13.7 10.8L3 21M6.3 14.3c5.8-.5 9.7-3.6 11.4-8.1"/>
+      <path d="M8.2 10.1c2.6.2 5-.2 7-1.3M6.6 17.2c1.3.6 2.8.8 4.4.6"/>
+    </g>
+    <g id="g-martelo" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="m5.5 9.5 4-4M4 8l3-3M8 12l3-3M13.5 6.5 17 10M10.5 12.5 20 22M4.5 22h9"/>
+      <path d="m11.2 4.8 8 8"/>
+    </g>
+    <g id="g-selo" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round">
+      <path d="m12 2.2 2.2 1.7 2.8-.3 1 2.6 2.4 1.5-.8 2.7.8 2.7-2.4 1.5-1 2.6-2.8-.3L12 18.6l-2.2-1.7-2.8.3-1-2.6L3.6 13l.8-2.7-.8-2.7 2.4-1.5 1-2.6 2.8.3z"/>
+      <circle cx="12" cy="10.4" r="3.2"/>
+      <path d="M8.6 17.4 7.2 22l4.8-1.9L16.8 22l-1.4-4.6"/>
+    </g>
+    <g id="g-escudo" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round">
+      <path d="M12 2.4 4 5.2v6.3c0 4.6 3.3 8.5 8 10.1 4.7-1.6 8-5.5 8-10.1V5.2z"/>
+      <path d="m7.6 11.6 4.4-3.4 4.4 3.4M7.6 15.4l4.4-3.4 4.4 3.4"/>
+    </g>
+    <g id="g-tocha" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M12 2.2c-2.4 2.5-3.6 4.5-3.6 6.2a3.6 3.6 0 0 0 7.2 0c0-1.7-1.2-3.7-3.6-6.2z"/>
+      <path d="M8.8 11.6h6.4l-.7 2.2H9.5zM10 13.8h4l-.6 8h-2.8z"/>
+    </g>
+    <g id="g-ampulheta" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round">
+      <path d="M5.5 2.5h13M5.5 21.5h13M7 2.5v3.2c0 2.4 5 4.6 5 6.3 0-1.7 5-3.9 5-6.3V2.5M7 21.5v-3.2c0-2.4 5-4.6 5-6.3 0 1.7 5 3.9 5 6.3v3.2"/>
+    </g>
+    <g id="g-alvo" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+      <circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5.2"/><circle cx="12" cy="12" r="1.4"/>
+      <path d="M12 .8v3.4M12 19.8v3.4M.8 12h3.4M19.8 12h3.4"/>
+    </g>
+    <g id="g-coroa" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round">
+      <path d="M3 8.2 6.4 15h11.2L21 8.2l-4.6 3L12 4.4l-4.4 6.8z"/>
+      <path d="M6.4 18h11.2"/><circle cx="3" cy="6.8" r="1.3"/><circle cx="21" cy="6.8" r="1.3"/><circle cx="12" cy="2.9" r="1.3"/>
+    </g>
+    <g id="g-laurel" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+      <path d="M12 21.5C7.4 19.6 4.6 15.6 4.6 10.4c0-2.8.8-5.4 2.2-7.6M12 21.5c4.6-1.9 7.4-5.9 7.4-11.1 0-2.8-.8-5.4-2.2-7.6"/>
+      <path d="M6 7.6c1.6.1 2.8-.5 3.4-1.9M5.2 12c1.7.2 3-.4 3.7-1.9M6.4 16.2c1.7.2 3-.5 3.7-1.9M18 7.6c-1.6.1-2.8-.5-3.4-1.9M18.8 12c-1.7.2-3-.4-3.7-1.9M17.6 16.2c-1.7.2-3-.5-3.7-1.9"/>
+    </g>
+  </defs>
+</svg>
+
+<header class="topo">
+  <div class="topo-int">
+    <span class="marca">A <span>Carteira</span></span>
+    <span class="eyebrow">Gamificação · Exame de Ordem</span>
+    <div class="placar" id="placar">
+      <span><b id="pl-ins">0</b> <i>insígnias</i></span>
+      <span><b id="pl-pontos">0</b> <i>pontos</i></span>
+      <span><i id="pl-etapa">nenhuma peça</i></span>
+    </div>
+    <button class="tema" id="btn-tema" type="button">Tema</button>
+  </div>
+</header>
+
+<div class="heroi">
+  <div>
+    <p class="eyebrow">146 insígnias · 8 peças · 17 matérias</p>
+    <h1>A carteira se monta <em>a cada questão</em>.</h1>
+    <p class="lead">
+      O prêmio maior não é um troféu genérico: é a carteira vermelha, montada peça
+      por peça. Cada marco de estudo — volume, acerto, fôlego, domínio de matéria —
+      solda uma parte dela. Quem chega ao fim já respondeu dez mil questões e
+      dominou as dezessete disciplinas do exame.
+    </p>
+    <div class="assinatura-heroi">
+      <div><b id="hd-pecas">0 de 8</b><small>peças da carteira</small></div>
+      <div><b id="hd-ins">0</b><small>insígnias conquistadas</small></div>
+      <div><b id="hd-pontos">0</b><small>pontos de ordem</small></div>
+    </div>
+  </div>
+  <div class="carteira-caixa">
+    <svg class="carteira" viewBox="0 0 400 252" role="img" aria-labelledby="tit-cart">
+      <title id="tit-cart">Carteira do Exame de Ordem montando-se peça por peça</title>
+      <defs>
+        <linearGradient id="couro" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stop-color="#962A3A"/><stop offset=".5" stop-color="#761B29"/><stop offset="1" stop-color="#4E0F1B"/>
+        </linearGradient>
+        <linearGradient id="foil" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stop-color="#F4DCA4"/><stop offset=".45" stop-color="#C79A44"/><stop offset="1" stop-color="#8A6420"/>
+        </linearGradient>
+        <linearGradient id="holo" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stop-color="#F6E7BE"/><stop offset=".35" stop-color="#9ED2C4"/>
+          <stop offset=".7" stop-color="#E3A9B8"/><stop offset="1" stop-color="#F1D79A"/>
+        </linearGradient>
+      </defs>
+
+      <!-- 1. couro -->
+      <g class="peca" data-peca="1">
+        <rect x="8" y="8" width="384" height="236" rx="14" fill="url(#couro)"/>
+        <rect x="8" y="8" width="384" height="236" rx="14" fill="none" stroke="#3B0A14" stroke-width="1.5"/>
+        <g opacity=".16" stroke="#F7D9A0" stroke-width=".6">
+          <path d="M8 60h384M8 108h384M8 156h384M8 204h384"/>
+        </g>
+      </g>
+
+      <!-- 2. moldura -->
+      <g class="peca" data-peca="2">
+        <rect x="20" y="20" width="360" height="212" rx="8" fill="none" stroke="url(#foil)" stroke-width="1.6"/>
+        <rect x="25" y="25" width="350" height="202" rx="6" fill="none" stroke="url(#foil)" stroke-width=".6" opacity=".75"/>
+        <text x="200" y="45" text-anchor="middle" fill="url(#foil)" font-family="Bodoni Moda, serif"
+              font-size="12.5" letter-spacing="3.4">CARTEIRA DO EXAME DE ORDEM</text>
+        <path d="M120 52h160" stroke="url(#foil)" stroke-width=".7" opacity=".8"/>
+      </g>
+
+      <!-- 3. retrato -->
+      <g class="peca" data-peca="3">
+        <rect x="40" y="70" width="86" height="108" rx="4" fill="#3E0C16" stroke="url(#foil)" stroke-width="1"/>
+        <g fill="none" stroke="#C79A44" stroke-width="1.6" opacity=".62">
+          <circle cx="83" cy="107" r="19"/>
+          <path d="M53 166c0-16.5 13.4-30 30-30s30 13.5 30 30"/>
+        </g>
+      </g>
+
+      <!-- 4. nome -->
+      <g class="peca" data-peca="4">
+        <text x="145" y="86" fill="#E7C589" font-family="IBM Plex Mono, monospace" font-size="8" letter-spacing="2">NOME</text>
+        <text x="145" y="105" fill="#FBEED3" font-family="Bodoni Moda, serif" font-size="19">Seu nome aqui</text>
+        <path d="M145 112h215" stroke="#C79A44" stroke-width=".5" opacity=".5"/>
+      </g>
+
+      <!-- 5. numero de inscricao -->
+      <g class="peca" data-peca="5">
+        <text x="145" y="132" fill="#E7C589" font-family="IBM Plex Mono, monospace" font-size="8" letter-spacing="2">INSCRIÇÃO</text>
+        <text x="145" y="150" fill="#FBEED3" font-family="IBM Plex Mono, monospace" font-size="16" letter-spacing="1.5">000.000</text>
+      </g>
+
+      <!-- 6. seccional -->
+      <g class="peca" data-peca="6">
+        <text x="272" y="132" fill="#E7C589" font-family="IBM Plex Mono, monospace" font-size="8" letter-spacing="2">SECCIONAL</text>
+        <text x="272" y="150" fill="#FBEED3" font-family="IBM Plex Mono, monospace" font-size="16" letter-spacing="1.5">UF</text>
+      </g>
+
+      <!-- 7. assinatura / juramento -->
+      <g class="peca" data-peca="7">
+        <path d="M147 196c9-13 16-15 19-9s-6 15-9 12 4-14 16-15 15 7 24 3" fill="none" stroke="#FBEED3" stroke-width="1.7" stroke-linecap="round" opacity=".9"/>
+        <path d="M145 204h115" stroke="#C79A44" stroke-width=".6"/>
+        <text x="145" y="217" fill="#E7C589" font-family="IBM Plex Mono, monospace" font-size="7.5" letter-spacing="1.8">JURAMENTO PRESTADO</text>
+      </g>
+
+      <!-- 8. brasao + selo holografico -->
+      <g class="peca" data-peca="8">
+        <circle cx="322" cy="196" r="30" fill="url(#holo)" opacity=".9"/>
+        <circle cx="322" cy="196" r="30" fill="none" stroke="url(#foil)" stroke-width="1.2"/>
+        <g transform="translate(322 196) scale(1.5) translate(-12 -12)" style="color:#5E1523" opacity=".85">
+          <use href="#g-balanca"/>
+        </g>
+        <g opacity=".5" stroke="#5E1523" stroke-width=".5" fill="none">
+          <circle cx="322" cy="196" r="24"/><circle cx="322" cy="196" r="27"/>
+        </g>
+      </g>
+
+      <text x="41" y="222" fill="#C79A44" opacity=".72" font-family="IBM Plex Mono, monospace" font-size="6.5" letter-spacing="1.2">
+        INSÍGNIA DE ESTUDO — NÃO É DOCUMENTO OFICIAL
+      </text>
+    </svg>
+    <p class="legenda-carteira" id="legenda-carteira">Arraste o simulador abaixo e veja a carteira nascer</p>
+  </div>
+</div>
+
+<div class="simulador" id="simulador">
+  <div class="sim-topo">
+    <div>
+      <p class="eyebrow">Simulador</p>
+      <p>Mexa nos números de um candidato imaginário — a página inteira reage.</p>
+    </div>
+    <div class="presets" id="presets">
+      <button type="button" data-preset="estreante">Estreante</button>
+      <button type="button" data-preset="cruzeiro">Ritmo de cruzeiro</button>
+      <button type="button" data-preset="vespera">Véspera da prova</button>
+      <button type="button" data-preset="ordem">Carteira completa</button>
+    </div>
+  </div>
+
+  <div class="controles">
+    <div class="ctrl">
+      <div class="ctrl-cab"><label for="c-resp">Questões respondidas</label><output id="o-resp">0</output></div>
+      <input type="range" id="c-resp" min="0" max="25000" step="25" value="0">
+    </div>
+    <div class="ctrl">
+      <div class="ctrl-cab"><label for="c-taxa">Taxa de acerto</label><output id="o-taxa">0%</output></div>
+      <input type="range" id="c-taxa" min="20" max="100" step="1" value="62">
+    </div>
+    <div class="ctrl">
+      <div class="ctrl-cab"><label for="c-mar">Maior maratona (sessão)</label><output id="o-mar">0</output></div>
+      <input type="range" id="c-mar" min="0" max="300" step="1" value="0">
+    </div>
+    <div class="ctrl">
+      <div class="ctrl-cab"><label for="c-pont">Melhor pontaria (seguidas)</label><output id="o-pont">0</output></div>
+      <input type="range" id="c-pont" min="0" max="100" step="1" value="0">
+    </div>
+    <div class="ctrl">
+      <div class="ctrl-cab"><label for="c-perfil">Como distribui o estudo</label></div>
+      <select id="c-perfil">
+        <option value="uniforme">Espalhado por todas as matérias</option>
+        <option value="foco">Concentrado em 5 matérias</option>
+        <option value="etica">Só Ética + Constitucional</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="resumo">
+    <div class="destaque"><b id="r-ins">0</b><small>insígnias / 146</small></div>
+    <div><b id="r-pontos">0</b><small>pontos de ordem</small></div>
+    <div><b id="r-acertos">0</b><small>acertos</small></div>
+    <div><b id="r-dom">0</b><small>matérias dominadas</small></div>
+    <div class="txt"><b id="r-etapa">—</b><small>última peça da carteira</small></div>
+  </div>
+</div>
+
+<section id="trilha">
+  <div class="cab-secao">
+    <div class="linha1">
+      <p class="eyebrow">Trilha principal</p>
+      <p class="contagem"><b id="ct-trilha">0</b> / 8 peças</p>
+    </div>
+    <h2>As oito peças da carteira</h2>
+    <p>
+      Cada peça exige um tipo diferente de esforço — não dá para chegar ao fim só
+      moendo questão nem só acertando pouco em muita matéria. A carteira é a soma
+      de volume, precisão, fôlego e domínio.
+    </p>
+  </div>
+  <div class="trilha" id="lista-trilha"></div>
+</section>
+
+<section id="volume">
+  <div class="cab-secao">
+    <div class="linha1">
+      <p class="eyebrow">Escada de volume · 30 níveis</p>
+      <p class="contagem"><b id="ct-volume">0</b> / 30</p>
+    </div>
+    <h2>Questões respondidas</h2>
+    <p>Da primeira audiência ao vade mecum vivo: 10 questões abrem a escada, 25.000 a fecham. Os degraus seguem o percurso de um processo — inicial, sentença, recurso, trânsito em julgado.</p>
+  </div>
+  <div class="grade" id="grade-volume"></div>
+</section>
+
+<section id="acertos">
+  <div class="cab-secao">
+    <div class="linha1">
+      <p class="eyebrow">Escada de acertos · 25 níveis</p>
+      <p class="contagem"><b id="ct-acertos">0</b> / 25</p>
+    </div>
+    <h2>Acertos na jornada</h2>
+    <p>Conta o placar da vida inteira no app, independentemente de sequência ou matéria. É a insígnia que premia quem erra, revisa e volta.</p>
+  </div>
+  <div class="grade" id="grade-acertos"></div>
+</section>
+
+<section id="maratona">
+  <div class="cab-secao">
+    <div class="linha1">
+      <p class="eyebrow">Fôlego · 12 níveis</p>
+      <p class="contagem"><b id="ct-maratona">0</b> / 12</p>
+    </div>
+    <h2>Maratona: questões seguidas na mesma sessão</h2>
+    <p>Quantas questões o candidato encara de uma sentada só, sem fechar o app. Mede resistência — a prova da OAB tem 80 questões em 5 horas, e a insígnia de 100 existe justamente para deixar o dia da prova parecer pouco.</p>
+  </div>
+  <div class="grade" id="grade-maratona"></div>
+</section>
+
+<section id="pontaria">
+  <div class="cab-secao">
+    <div class="linha1">
+      <p class="eyebrow">Precisão · 12 níveis</p>
+      <p class="contagem"><b id="ct-pontaria">0</b> / 12</p>
+    </div>
+    <h2>Pontaria: acertos consecutivos</h2>
+    <p>A sequência limpa, sem nenhum erro no meio. Zera ao primeiro tropeço, e é por isso que vale tanto.</p>
+  </div>
+  <div class="grade" id="grade-pontaria"></div>
+</section>
+
+<section id="dominio">
+  <div class="cab-secao">
+    <div class="linha1">
+      <p class="eyebrow">Domínio por matéria · 51 insígnias</p>
+      <p class="contagem"><b id="ct-dominio">0</b> / 51</p>
+    </div>
+    <h2>Dominador de matérias</h2>
+    <p>
+      A meta de cada matéria sai do tamanho do banco de questões dela, não de um
+      número fixo: <b>10% do banco com 80% de acerto</b> dá o Domínio; 20% com 85%
+      dá a Excelência; 35% com 90% dá a Cátedra. Se Constitucional tem 800
+      questões, o Domínio sai com 80 respondidas e pelo menos 64 acertos entre elas.
+      A meta anda sozinha quando você cadastra questões novas.
+    </p>
+    <p style="margin-top:.7rem">
+      O acerto é medido numa <b>janela móvel</b> — as últimas <i>meta</i> questões
+      respondidas naquela matéria. É de propósito: quem foi mal no começo não
+      carrega o tropeço para sempre, basta voltar e fazer um novo bloco bem feito.
+      Insígnia de domínio não cai depois de conquistada.
+    </p>
+  </div>
+  <div class="tabela-caixa">
+    <table>
+      <thead>
+        <tr>
+          <th>Matéria</th>
+          <th class="n">Banco</th>
+          <th class="n">Respondidas</th>
+          <th class="n">Acerto</th>
+          <th class="n">Domínio<br>10% do banco · 80%</th>
+          <th class="n">Excelência<br>20% do banco · 85%</th>
+          <th class="n">Cátedra<br>35% do banco · 90%</th>
+          <th>Estado</th>
+        </tr>
+      </thead>
+      <tbody id="tb-materias"></tbody>
+    </table>
+  </div>
+</section>
+
+<section id="secretas">
+  <div class="cab-secao">
+    <div class="linha1">
+      <p class="eyebrow">Ordem secreta · 8 insígnias</p>
+      <p class="contagem"><b id="ct-secretas">0</b> / 8</p>
+    </div>
+    <h2>As que ninguém avisa que existem</h2>
+    <p>Aparecem sem aviso, no meio do estudo. Ficam ocultas na tela de conquistas até serem desbloqueadas — só o contorno do medalhão fica visível, como uma gaveta fechada. (Aqui estão reveladas de propósito, para você ver o conjunto.)</p>
+  </div>
+  <div class="grade-secreta" id="grade-secretas"></div>
+</section>
+
+<section id="integracao">
+  <div class="cab-secao">
+    <div class="linha1"><p class="eyebrow">Para juntar no app</p></div>
+    <h2>O que o app precisa entregar</h2>
+    <p>A regra é a mesma do outro produto: insígnia e ponto são <b>função pura</b> do histórico de respostas — recalculados do zero a cada abertura de tela, nunca acumulados. Assim o placar nunca diverge do estudo real, e mudar uma regra aqui reescreve o passado de todo mundo de forma consistente.</p>
+  </div>
+  <div class="dupla">
+    <div class="nota">
+      <h3>Entrada</h3>
+      <ul>
+        <li><code>respondidas</code>, <code>acertos</code> — totais da vida no app</li>
+        <li><code>maiorMaratona</code> — maior número de questões numa mesma sessão</li>
+        <li><code>melhorPontaria</code> — maior sequência de acertos sem erro</li>
+        <li><code>porMateria[id]</code> → totais da matéria <b>+ as últimas 300 respostas</b> (a janela móvel do domínio sai daí)</li>
+        <li><code>banco[id]</code> → quantas questões existem hoje naquela matéria</li>
+        <li><code>segredos</code> — ids das secretas já disparadas pelo app</li>
+        <li><code>permanentes</code> — ids já conquistados, que não podem cair</li>
+      </ul>
+      <h3 style="margin-top:1rem">Saída</h3>
+      <ul>
+        <li>lista de insígnias com <code>conquistada</code>, <code>progresso</code> e <code>pontos</code></li>
+        <li>as 8 peças da carteira, na ordem</li>
+        <li>total de pontos de ordem</li>
+      </ul>
+    </div>
+    <pre><code><span class="c">// gamificacao_oab.dart — Dart puro, sem Flutter</span>
+<span class="k">final</span> e = EstatisticasOab(
+  respondidas: 3120, acertos: 2184,
+  maiorMaratona: 112, melhorPontaria: 27,
+  porMateria: {
+    <span class="s">'constitucional'</span>: HistoricoMateria(
+      respondidas: 533, acertos: 452,
+      recentes: ultimas300De(<span class="s">'constitucional'</span>),
+    ),
+  },
+  segredos: {<span class="s">'primario'</span>, <span class="s">'vigilia'</span>},
+);
+
+<span class="k">final</span> r = calcularOab(e, banco, permanentes: jaConquistadas);
+
+r.pontos;                          <span class="c">// 50 324</span>
+r.conquistadas.length;             <span class="c">// 59 de 146</span>
+r.pecasAbertas;                    <span class="c">// 5</span>
+r.ultimaPeca?.titulo;              <span class="c">// Número de Inscrição</span>
+r.proxima(CategoriaOab.volume);    <span class="c">// Recurso Especial — faltam 80</span>
+
+<span class="c">// insignia de domínio nao cai: guarde o que caiu agora</span>
+jaConquistadas.addAll(r.paraGuardar);</code></pre>
+  </div>
+</section>
+
+<footer>
+  Protótipo de gamificação · desenhado para o app de questões do Exame de Ordem<br>
+  A carteira mostrada é uma insígnia de estudo, não reproduz documento nem marca oficial da OAB.
+</footer>
+
+<script>
+/* =====================================================================
+   Catalogo. Espelha gamificacao_oab.dart — mudou aqui, muda la.
+   ===================================================================== */
+
+const MATERIAS = [
+  { id:'etica',            nome:'Ética e Estatuto da OAB',      curto:'Ética',            banco:900  },
+  { id:'filosofia',        nome:'Filosofia do Direito',          curto:'Filosofia',        banco:220  },
+  { id:'constitucional',   nome:'Direito Constitucional',        curto:'Constitucional',   banco:800  },
+  { id:'humanos',          nome:'Direitos Humanos',              curto:'Humanos',          banco:260  },
+  { id:'internacional',    nome:'Direito Internacional',         curto:'Internacional',    banco:300  },
+  { id:'tributario',       nome:'Direito Tributário',            curto:'Tributário',       banco:620  },
+  { id:'administrativo',   nome:'Direito Administrativo',        curto:'Administrativo',   banco:780  },
+  { id:'ambiental',        nome:'Direito Ambiental',             curto:'Ambiental',        banco:300  },
+  { id:'civil',            nome:'Direito Civil',                 curto:'Civil',            banco:1100 },
+  { id:'eca',              nome:'ECA',                           curto:'ECA',              banco:240  },
+  { id:'consumidor',       nome:'Direito do Consumidor',         curto:'Consumidor',       banco:380  },
+  { id:'empresarial',      nome:'Direito Empresarial',           curto:'Empresarial',      banco:620  },
+  { id:'processocivil',    nome:'Direito Processual Civil',      curto:'Proc. Civil',      banco:1000 },
+  { id:'penal',            nome:'Direito Penal',                 curto:'Penal',            banco:800  },
+  { id:'processopenal',    nome:'Direito Processual Penal',      curto:'Proc. Penal',      banco:700  },
+  { id:'trabalho',         nome:'Direito do Trabalho',           curto:'Trabalho',         banco:820  },
+  { id:'processotrabalho', nome:'Direito Processual do Trabalho',curto:'Proc. Trabalho',   banco:520  },
+];
+
+const TIERS_DOMINIO = [
+  { id:'dominio',    nome:'Domínio',    pct:.10, min:20, max:100, acerto:.80, tier:3, glifo:'g-balanca' },
+  { id:'excelencia', nome:'Excelência', pct:.20, min:40, max:180, acerto:.85, tier:4, glifo:'g-laurel'  },
+  { id:'catedra',    nome:'Cátedra',    pct:.35, min:70, max:300, acerto:.90, tier:5, glifo:'g-coluna'  },
+];
+
+const metaDominio = (banco, t) => Math.min(t.max, Math.max(t.min, Math.round(banco * t.pct)));
+
+// [meta, titulo]
+const VOLUME = [
+  [10,'Primeira Audiência'],[25,'Autuação'],[50,'Distribuição'],[100,'Petição Inicial'],
+  [175,'Citação'],[250,'Contestação'],[350,'Réplica'],[500,'Saneamento'],
+  [700,'Instrução'],[900,'Alegações Finais'],[1100,'Sentença'],[1400,'Apelação'],
+  [1700,'Contrarrazões'],[2000,'Acórdão'],[2400,'Embargos de Declaração'],[2800,'Agravo Interno'],
+  [3200,'Recurso Especial'],[3700,'Recurso Extraordinário'],[4200,'Repercussão Geral'],[4800,'Súmula'],
+  [5500,'Trânsito em Julgado'],[6500,'Cumprimento de Sentença'],[7500,'Precatório'],[8500,'Jurisprudência Firmada'],
+  [10000,'Tribuna'],[12000,'Sustentação Oral'],[14000,'Banca Examinadora'],[17000,'Cátedra Livre'],
+  [20000,'Doutrina'],[25000,'Vade Mecum Vivo'],
+];
+
+const ACERTOS = [
+  [5,'Primeira Vitória'],[25,'Liminar Deferida'],[50,'Tutela de Urgência'],[100,'Sentença Procedente'],
+  [200,'Provimento'],[350,'Precedente'],[500,'Segunda Instância'],[700,'Decisão Unânime'],
+  [1000,'Milhar Limpo'],[1300,'Tese Vencedora'],[1600,'Jurisprudência Reiterada'],[2000,'Súmula Pessoal'],
+  [2500,'Repetitivo'],[3000,'Vinculante'],[3600,'Tribuna de Ouro'],[4200,'Placar Aberto'],
+  [5000,'Cinco Mil Razões'],[6000,'Banca Vencida'],[7000,'Excelência Reconhecida'],[8500,'Ordem Honorífica'],
+  [10000,'Mestre do Exame'],[12000,'Referência'],[14000,'Grande Precedente'],[17000,'Legado'],
+  [20000,'Imortal do Exame'],
+];
+
+const MARATONA = [
+  [5,'Pauta Aberta'],[10,'Sessão Instalada'],[15,'Pauta do Dia'],[20,'Sustentação em Curso'],
+  [30,'Vista Concedida'],[40,'Sessão Prorrogada'],[50,'Meia Centena de Fôlego'],[75,'Plenário Cheio'],
+  [100,'Sessão Extraordinária'],[150,'Vigília Processual'],[200,'Resistência de Banca'],[300,'Maratona da Ordem'],
+];
+
+const PONTARIA = [
+  [3,'Fundamento Sólido'],[5,'Tese Coerente'],[8,'Sem Reparos'],[10,'Sem Divergência'],
+  [15,'Sem Contrarrazões'],[20,'Placar 20 a 0'],[25,'Voto Condutor'],[30,'Precedente Firme'],
+  [40,'Súmula Impecável'],[50,'Cinquenta sem Erro'],[75,'Infalível'],[100,'Centena Perfeita'],
+];
+
+/* As secretas dependem de eventos que so o app registra (hora do dia, dia da
+   semana, revisao de erro). Aqui cada uma tem um `proxy` que aproxima o
+   disparo a partir dos numeros do simulador, so para a previa ficar viva. */
+const SECRETAS = [
+  { id:'primario',  titulo:'Réu Primário',           glifo:'g-escudo',    tier:2,
+    desc:'Acertou as 10 primeiras questões da vida no app.',
+    proxy: e => e.respondidas >= 10 && e.taxa >= .70 },
+  { id:'vigilia',   titulo:'Vigília do Plantonista', glifo:'g-ampulheta', tier:2,
+    desc:'20 questões respondidas entre 0h e 5h.',
+    proxy: e => e.respondidas >= 400 },
+  { id:'orvalho',   titulo:'Antes do Fórum Abrir',   glifo:'g-tocha',     tier:2,
+    desc:'20 questões respondidas antes das 7h.',
+    proxy: e => e.respondidas >= 800 },
+  { id:'exofficio', titulo:'Ex Officio',             glifo:'g-selo',      tier:4,
+    desc:'Ao menos uma questão de cada uma das 17 matérias no mesmo dia.',
+    proxy: e => e.perfil === 'uniforme' && e.respondidas >= 900 },
+  { id:'limpa',     titulo:'Prova Limpa',            glifo:'g-alvo',      tier:4,
+    desc:'Simulado de 80 questões com 90% ou mais de acerto.',
+    proxy: e => e.respondidas >= 1200 && e.taxa >= .85 },
+  { id:'recesso',   titulo:'Sem Recesso',            glifo:'g-livro',     tier:3,
+    desc:'100 questões entre sábado e domingo do mesmo fim de semana.',
+    proxy: e => e.respondidas >= 1500 && e.maratona >= 50 },
+  { id:'virada',    titulo:'Reforma da Sentença',    glifo:'g-martelo',   tier:3,
+    desc:'Errou e, na revisão, acertou a mesma questão — 50 vezes.',
+    proxy: e => e.respondidas >= 2500 },
+  { id:'venia',     titulo:'Data Venia',             glifo:'g-pena',      tier:5,
+    desc:'Errou 10 seguidas e, no mesmo dia, acertou 10 seguidas.',
+    proxy: e => e.respondidas >= 3000 && e.pontaria >= 10 },
+];
+
+const CARTEIRA = [
+  { peca:1, nome:'O couro',            titulo:'Autos Abertos',      desc:'A primeira questão respondida. A carteira ainda é só o couro vermelho, sem nada escrito.' },
+  { peca:2, nome:'A moldura em ouro',  titulo:'Bacharel',           desc:'250 questões respondidas.' },
+  { peca:3, nome:'A fotografia',       titulo:'Retrato nos Autos',  desc:'1.000 questões com 60% de acerto ou mais.' },
+  { peca:4, nome:'O nome',             titulo:'Nome na Ordem',      desc:'3 matérias dominadas.' },
+  { peca:5, nome:'O número',           titulo:'Número de Inscrição',desc:'2.500 questões com 65% de acerto ou mais.' },
+  { peca:6, nome:'A seccional',        titulo:'Seccional',          desc:'8 matérias dominadas.' },
+  { peca:7, nome:'A assinatura',       titulo:'Juramento',          desc:'5.000 questões, 70% de acerto e uma maratona de 100.' },
+  { peca:8, nome:'O selo e o brasão',  titulo:'Carteira Vermelha',  desc:'As 17 matérias dominadas e 10.000 questões respondidas.' },
+];
+
+const PONTOS_TIER = [0, 60, 180, 500, 1400, 3500];
+const GLIFOS_ESCADA = {
+  volume:   ['g-pena','g-livro','g-balanca','g-coluna','g-coroa'],
+  acertos:  ['g-alvo','g-selo','g-laurel','g-escudo','g-coroa'],
+  maratona: ['g-ampulheta','g-tocha','g-coluna','g-escudo','g-laurel'],
+  pontaria: ['g-alvo','g-alvo','g-selo','g-laurel','g-coroa'],
+};
+
+/* --------------------------------------------------------------- helpers */
+const fmt = n => Math.round(n).toLocaleString('pt-BR');
+const ROMANOS = [[1000,'M'],[900,'CM'],[500,'D'],[400,'CD'],[100,'C'],[90,'XC'],[50,'L'],[40,'XL'],[10,'X'],[9,'IX'],[5,'V'],[4,'IV'],[1,'I']];
+function romano(n){ let s=''; for(const [v,l] of ROMANOS){ while(n>=v){ s+=l; n-=v } } return s }
+const tierDe = (i, total) => Math.min(5, Math.floor(i * 5 / total) + 1);
+
+/* ---------------------------------------------------- distribuicao do foco */
+const ELEITAS = new Set(['etica','constitucional','civil','penal','administrativo']);
+const DUAS    = new Set(['etica','constitucional']);
+// quem concentra o estudo responde mais E acerta mais naquelas materias
+const PERFIS = {
+  uniforme: { peso: m => m.banco,
+              bonus: () => 0 },
+  foco:     { peso: m => ELEITAS.has(m.id) ? m.banco * 5 : m.banco * .35,
+              bonus: m => ELEITAS.has(m.id) ? .08 : -.04 },
+  etica:    { peso: m => DUAS.has(m.id) ? m.banco : 0,
+              bonus: m => DUAS.has(m.id) ? .10 : 0 },
+};
+// desvio deterministico por materia: umas rendem mais que outras
+const DESVIO = MATERIAS.map((m,i) => (((i*37)%11) - 5) / 100);
+
+/* ------------------------------------------------------------- calculadora */
+function calcular(est){
+  const perfil = PERFIS[est.perfil];
+  const brutos = MATERIAS.map(perfil.peso);
+  const somaPesos = brutos.reduce((a,b)=>a+b,0);
+  const materias = MATERIAS.map((m,i) => {
+    const resp = Math.min(m.banco, Math.round(est.respondidas * brutos[i] / somaPesos));
+    const taxa = Math.max(0, Math.min(1, est.taxa + DESVIO[i] + perfil.bonus(m)));
+    return { ...m, resp, acertos: Math.round(resp * taxa), taxa: resp ? taxa : 0 };
+  });
+
+  const dominios = {};   // id da materia -> maior tier alcancado
+  const insignias = [];
+  const add = o => { insignias.push(o); return o };
+
+  const escada = (cat, tabela, valor) => tabela.forEach(([meta, titulo], i) => {
+    const tier = tierDe(i, tabela.length);
+    add({
+      id:`${cat}-${meta}`, cat, titulo, tier,
+      glifo: GLIFOS_ESCADA[cat][tier-1],
+      rank: i+1,
+      criterio: cat==='volume'   ? `${fmt(meta)} respondidas`
+              : cat==='acertos'  ? `${fmt(meta)} acertos`
+              : cat==='maratona' ? `${fmt(meta)} numa sessão`
+              :                    `${fmt(meta)} seguidas`,
+      meta, valor, on: valor >= meta, pontos: PONTOS_TIER[tier],
+    });
+  });
+
+  escada('volume', VOLUME, est.respondidas);
+  escada('acertos', ACERTOS, est.acertos);
+  escada('maratona', MARATONA, est.maratona);
+  escada('pontaria', PONTARIA, est.pontaria);
+
+  materias.forEach(m => {
+    TIERS_DOMINIO.forEach(t => {
+      const meta = metaDominio(m.banco, t);
+      const on = m.resp >= meta && m.taxa >= t.acerto;
+      if (on) dominios[m.id] = Math.max(dominios[m.id] || 0, t.tier);
+      add({
+        id:`${t.id}-${m.id}`, cat:'dominio', titulo:`${t.nome} · ${m.curto}`, tier:t.tier,
+        glifo:t.glifo, rank:null,
+        criterio:`${fmt(meta)} q. · ${Math.round(t.acerto*100)}%`,
+        meta, valor:m.resp, on, pontos:PONTOS_TIER[t.tier], materia:m.id, tierDom:t,
+      });
+    });
+  });
+
+  SECRETAS.forEach(s => {
+    const on = s.proxy(est);
+    add({
+      id:`secreta-${s.id}`, cat:'secreta', titulo:s.titulo, tier:s.tier, glifo:s.glifo,
+      rank:null, criterio:s.desc, meta:1, valor:on ? 1 : 0, on, pontos:PONTOS_TIER[s.tier],
+    });
+  });
+
+  const dominadas = Object.keys(dominios).length;
+  const taxaReal = est.respondidas ? est.acertos / est.respondidas : 0;
+
+  const pecas = [
+    est.respondidas >= 1,
+    est.respondidas >= 250,
+    est.respondidas >= 1000  && taxaReal >= .60,
+    dominadas >= 3,
+    est.respondidas >= 2500  && taxaReal >= .65,
+    dominadas >= 8,
+    est.respondidas >= 5000  && taxaReal >= .70 && est.maratona >= 100,
+    dominadas >= MATERIAS.length && est.respondidas >= 10000,
+  ];
+  // a carteira e sequencial: uma peca so entra se todas as anteriores entraram
+  let corte = pecas.findIndex(p => !p);
+  if (corte === -1) corte = pecas.length;
+  const pecasOn = pecas.map((p,i) => i < corte);
+
+  CARTEIRA.forEach((c,i) => add({
+    id:`carteira-${c.peca}`, cat:'carteira', titulo:c.titulo, tier:Math.min(5, i<2?2:i<4?3:i<6?4:5),
+    glifo:'g-selo', rank:null, criterio:c.desc, meta:1, valor:pecasOn[i]?1:0,
+    on:pecasOn[i], pontos:PONTOS_TIER[Math.min(5, i<2?2:i<4?3:i<6?4:5)] * 2,
+  }));
+
+  const conquistadas = insignias.filter(i => i.on);
+  const pontos = est.acertos * 10
+               + (est.respondidas - est.acertos) * 2
+               + conquistadas.reduce((s,i) => s + i.pontos, 0);
+
+  return { insignias, conquistadas, materias, dominadas, pecasOn, pontos, taxaReal };
+}
+
+/* ----------------------------------------------------------------- render */
+const $ = s => document.querySelector(s);
+const anterior = new Set();
+let primeiraVez = true;
+
+function medalhao(ins, proxima){
+  const el = document.createElement('article');
+  el.className = `med t${ins.tier}${ins.on ? ' on' : ''}`;
+  el.innerHTML = `
+    <div class="disco">
+      <svg class="glifo" viewBox="0 0 24 24"><use href="#${ins.glifo}"></use></svg>
+      ${ins.rank ? `<span class="rank">${romano(ins.rank)}</span>` : ''}
+    </div>
+    <h4>${ins.titulo}</h4>
+    <p class="crit">${ins.criterio}</p>`;
+  if (proxima && !ins.on){
+    const falta = ins.meta - ins.valor;
+    const pct = Math.max(0, Math.min(100, ins.valor / ins.meta * 100));
+    const b = document.createElement('div');
+    b.className = 'barra-prox';
+    b.innerHTML = `<i style="width:${pct}%"></i>`;
+    const f = document.createElement('p');
+    f.className = 'falta';
+    f.textContent = `faltam ${fmt(falta)}`;
+    el.append(b, f);
+  }
+  if (ins.on && !primeiraVez && !anterior.has(ins.id)) el.classList.add('novo');
+  return el;
+}
+
+function pintarEscada(cat, alvo, contador, lista){
+  const el = $(alvo); el.textContent = '';
+  const proxima = lista.find(i => !i.on);
+  lista.forEach(i => el.append(medalhao(i, proxima && i.id === proxima.id)));
+  $(contador).textContent = lista.filter(i => i.on).length;
+}
+
+function pintarTrilha(r){
+  const el = $('#lista-trilha'); el.textContent = '';
+  CARTEIRA.forEach((c,i) => {
+    const d = document.createElement('div');
+    d.className = 'etapa' + (r.pecasOn[i] ? ' on' : '');
+    d.innerHTML = `
+      <span class="passo">PEÇA ${String(c.peca).padStart(2,'0')}</span>
+      <h3>${c.titulo}</h3>
+      <p>${c.desc}</p>
+      <span class="peca-nome">${c.nome}</span>
+      <span class="sinete">✓</span>`;
+    el.append(d);
+  });
+  $('#ct-trilha').textContent = r.pecasOn.filter(Boolean).length;
+}
+
+function pintarMaterias(r){
+  const tb = $('#tb-materias'); tb.textContent = '';
+  r.materias.forEach(m => {
+    const metas = TIERS_DOMINIO.map(t => {
+      const meta = metaDominio(m.banco, t);
+      const on = m.resp >= meta && m.taxa >= t.acerto;
+      return { t, meta, on };
+    });
+    const maior = [...metas].reverse().find(x => x.on);
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td>${m.nome}</td>
+      <td class="n">${fmt(m.banco)}</td>
+      <td class="n">${fmt(m.resp)}</td>
+      <td class="n">${m.resp ? Math.round(m.taxa*100)+'%' : '—'}</td>
+      ${metas.map(x => `<td class="n">${fmt(x.meta)} · ${fmt(Math.ceil(x.meta*x.t.acerto))}</td>`).join('')}
+      <td>${maior
+        ? `<span class="selo-mat ok${maior.t.tier===5?' t5':''}">${maior.t.nome}</span>`
+        : `<span class="selo-mat">em curso</span>`}</td>`;
+    tb.append(tr);
+  });
+}
+
+function pintarSecretas(r){
+  const el = $('#grade-secretas'); el.textContent = '';
+  const ins = r.insignias.filter(i => i.cat === 'secreta');
+  SECRETAS.forEach((s,i) => {
+    const d = document.createElement('div');
+    d.className = `med secreta t${s.tier}${ins[i].on ? ' on' : ''}`;
+    d.innerHTML = `
+      <div class="disco"><svg class="glifo" viewBox="0 0 24 24"><use href="#${s.glifo}"></use></svg></div>
+      <div><h4>${s.titulo}</h4><p>${s.desc}</p></div>`;
+    if (ins[i].on && !primeiraVez && !anterior.has(ins[i].id)) d.classList.add('novo');
+    el.append(d);
+  });
+  $('#ct-secretas').textContent = ins.filter(i => i.on).length;
+}
+
+const estado = { respondidas: 0, taxa: .74, maratona: 0, pontaria: 0, perfil: 'uniforme' };
+
+function atualizar(){
+  const est = {
+    respondidas: estado.respondidas,
+    acertos: Math.round(estado.respondidas * estado.taxa),
+    taxa: estado.taxa,
+    maratona: estado.maratona,
+    pontaria: estado.pontaria,
+    perfil: estado.perfil,
+  };
+  const r = calcular(est);
+
+  $('#o-resp').textContent = fmt(est.respondidas);
+  $('#o-taxa').textContent = Math.round(estado.taxa*100) + '%';
+  $('#o-mar').textContent  = fmt(est.maratona);
+  $('#o-pont').textContent = fmt(est.pontaria);
+
+  $('#r-ins').textContent     = fmt(r.conquistadas.length);
+  $('#r-pontos').textContent  = fmt(r.pontos);
+  $('#r-acertos').textContent = fmt(est.acertos);
+  $('#r-dom').textContent     = `${r.dominadas}/17`;
+
+  const ultima = [...r.pecasOn].lastIndexOf(true);
+  $('#r-etapa').textContent   = ultima >= 0 ? CARTEIRA[ultima].titulo : '—';
+  $('#pl-etapa').textContent  = ultima >= 0 ? CARTEIRA[ultima].titulo : 'nenhuma peça';
+  $('#pl-ins').textContent    = fmt(r.conquistadas.length);
+  $('#pl-pontos').textContent = fmt(r.pontos);
+  $('#hd-pecas').textContent  = `${r.pecasOn.filter(Boolean).length} de 8`;
+  $('#hd-ins').textContent    = fmt(r.conquistadas.length);
+  $('#hd-pontos').textContent = fmt(r.pontos);
+  $('#legenda-carteira').textContent = ultima >= 0
+    ? `Última peça soldada: ${CARTEIRA[ultima].nome.toLowerCase()}`
+    : 'Arraste o simulador abaixo e veja a carteira nascer';
+
+  document.querySelectorAll('.peca').forEach((p,i) => {
+    const on = r.pecasOn[i];
+    const era = p.classList.contains('on');
+    p.classList.toggle('on', on);
+    if (on && !era && !primeiraVez){
+      p.classList.remove('selando'); void p.offsetWidth; p.classList.add('selando');
+    }
+  });
+
+  pintarTrilha(r);
+  pintarEscada('volume',   '#grade-volume',   '#ct-volume',   r.insignias.filter(i=>i.cat==='volume'));
+  pintarEscada('acertos',  '#grade-acertos',  '#ct-acertos',  r.insignias.filter(i=>i.cat==='acertos'));
+  pintarEscada('maratona', '#grade-maratona', '#ct-maratona', r.insignias.filter(i=>i.cat==='maratona'));
+  pintarEscada('pontaria', '#grade-pontaria', '#ct-pontaria', r.insignias.filter(i=>i.cat==='pontaria'));
+  pintarMaterias(r);
+  pintarSecretas(r);
+  $('#ct-dominio').textContent = r.insignias.filter(i=>i.cat==='dominio' && i.on).length;
+
+  anterior.clear();
+  r.conquistadas.forEach(i => anterior.add(i.id));
+  primeiraVez = false;
+}
+
+/* -------------------------------------------------------------- controles */
+const liga = (sel, campo, transf = v => +v) => {
+  const el = $(sel);
+  el.addEventListener('input', () => {
+    estado[campo] = transf(el.value);
+    document.querySelectorAll('#presets button').forEach(b => b.setAttribute('aria-pressed','false'));
+    atualizar();
+  });
+};
+liga('#c-resp','respondidas');
+liga('#c-taxa','taxa', v => +v / 100);
+liga('#c-mar','maratona');
+liga('#c-pont','pontaria');
+$('#c-perfil').addEventListener('change', e => { estado.perfil = e.target.value; atualizar(); });
+
+const PRESETS = {
+  estreante: { respondidas: 180,   taxa:.56, maratona:12,  pontaria:6,  perfil:'uniforme' },
+  cruzeiro:  { respondidas: 3200,  taxa:.74, maratona:64,  pontaria:22, perfil:'foco' },
+  vespera:   { respondidas: 7800,  taxa:.80, maratona:118, pontaria:41, perfil:'uniforme' },
+  ordem:     { respondidas: 25000, taxa:.93, maratona:300, pontaria:100,perfil:'uniforme' },
+};
+document.querySelectorAll('#presets button').forEach(b => {
+  b.setAttribute('aria-pressed','false');
+  b.addEventListener('click', () => {
+    Object.assign(estado, PRESETS[b.dataset.preset]);
+    $('#c-resp').value  = estado.respondidas;
+    $('#c-taxa').value  = Math.round(estado.taxa*100);
+    $('#c-mar').value   = estado.maratona;
+    $('#c-pont').value  = estado.pontaria;
+    $('#c-perfil').value= estado.perfil;
+    document.querySelectorAll('#presets button').forEach(o => o.setAttribute('aria-pressed','false'));
+    b.setAttribute('aria-pressed','true');
+    atualizar();
+  });
+});
+
+/* ------------------------------------------------------------ tema + topo */
+let temaAtual = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+$('#btn-tema').textContent = temaAtual === 'dark' ? 'Claro' : 'Escuro';
+$('#btn-tema').addEventListener('click', () => {
+  temaAtual = temaAtual === 'dark' ? 'light' : 'dark';
+  document.documentElement.dataset.theme = temaAtual;
+  $('#btn-tema').textContent = temaAtual === 'dark' ? 'Claro' : 'Escuro';
+});
+
+new IntersectionObserver(([e]) => {
+  $('#placar').classList.toggle('vivo', !e.isIntersecting);
+}, { rootMargin: '-60px 0px 0px 0px' }).observe($('#simulador'));
+
+// estado inicial: o candidato de "ritmo de cruzeiro", ja com algo conquistado
+Object.assign(estado, PRESETS.cruzeiro);
+$('#c-resp').value = estado.respondidas;
+$('#c-taxa').value = Math.round(estado.taxa*100);
+$('#c-mar').value  = estado.maratona;
+$('#c-pont').value = estado.pontaria;
+$('#c-perfil').value = estado.perfil;
+document.querySelector('#presets button[data-preset="cruzeiro"]').setAttribute('aria-pressed','true');
+atualizar();
+</script>
