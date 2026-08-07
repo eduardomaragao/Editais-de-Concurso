@@ -74,6 +74,8 @@ Anotações do levantamento feito em casa (medidas em centímetros, espessura em
 | 68 | 39,5 | 71,8 | 6 | Branco | Dispensa |
 | 69 | 32,2 | 85,6 | 6 | Branco | Dispensa |
 | 70 | 32,2 | 85,6 | 6 | Branco | Dispensa |
+| 71 | 29,5 | 51,0 | 6 | Carvalho Brun (verso branco) | — |
+| 72 | 33,6 | 50,0 ⚠️ | 6 | Branco | — |
 
 > Obs.: "Madeira escura" foi renomeada para **Carvalho Brun** (nome do acabamento) em todas as peças, a pedido do Eduardo. As peças que tinham sido ditadas só como "madeira" (42, 43, 45, 49) foram confirmadas como Carvalho Brun também.
 >
@@ -84,6 +86,10 @@ Anotações do levantamento feito em casa (medidas em centímetros, espessura em
 > Peça 67 tem as mesmas medidas da peça 26 (10,5 × 74,5, Carvalho Brun 15 mm) — se forem a mesma tábua contada duas vezes, avisar para remover uma.
 >
 > Peças 69 e 70: confirmado pelo Eduardo que são **duas peças iguais** (32,2 × 85,6). O "corrigindo" no ditado foi só ajuste do número (32,8 → 32,2).
+>
+> ⚠️ **Peça 72:** transcrição saiu "por cinquenta a seis milímetros" — interpretado como comprimento **50,0** e espessura **6 mm**. Se o comprimento era 56, confirmar (a espessura teria ficado sem ser ditada).
+>
+> Peças 71 e 72: local ainda não informado.
 >
 > Peça 11: ditada primeiro como 14,1, corrigida na hora para **14,6**.
 >
@@ -101,9 +107,9 @@ Anotações do levantamento feito em casa (medidas em centímetros, espessura em
 
 ## Resumo
 
-- **Total de peças:** 70
-- **Espessura 6 mm:** 10 peças (36, 37, 49, 50, 51, 52, 54, 68, 69, 70)
+- **Total de peças:** 72
+- **Espessura 6 mm:** 12 peças (36, 37, 49, 50, 51, 52, 54, 68, 69, 70, 71, 72)
 - **Espessura 15 mm:** 53 peças (1, 2, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 53, 57, 58, 59, 62, 63, 64, 65, 66, 67)
 - **Espessura 18 mm:** 7 peças (3, 4, 5, 55, 56, 60, 61)
-- **Cor:** Carvalho Brun (37 peças) · madeira clara/branco (25 peças — nº 14, 15, 16, 17, 18, 21, 22, 28, 30, 31, 32, 36, 37, 44, 47, 48, 51, 62, 63, 64, 65, 66, 68, 69, 70) · café (5 peças — nº 19, 33, 34, 38, 52) · tecido (3 peças — nº 46, 50, 57)
-- **Local:** dispensa (peças 1–49 e 58–70) · corredor (peças 50–57)
+- **Cor:** Carvalho Brun (38 peças) · madeira clara/branco (26 peças — nº 14, 15, 16, 17, 18, 21, 22, 28, 30, 31, 32, 36, 37, 44, 47, 48, 51, 62, 63, 64, 65, 66, 68, 69, 70, 72) · café (5 peças — nº 19, 33, 34, 38, 52) · tecido (3 peças — nº 46, 50, 57)
+- **Local:** dispensa (peças 1–49 e 58–70) · corredor (peças 50–57) · peças 71–72 ainda sem local
