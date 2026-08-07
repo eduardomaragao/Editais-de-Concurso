@@ -77,13 +77,13 @@ Anotações do levantamento feito em casa (medidas em centímetros, espessura em
 
 > Obs.: "Madeira escura" foi renomeada para **Carvalho Brun** (nome do acabamento) em todas as peças, a pedido do Eduardo. As peças que tinham sido ditadas só como "madeira" (42, 43, 45, 49) foram confirmadas como Carvalho Brun também.
 >
-> As peças 6 e 7 são iguais (duas unidades da mesma medida), assim como as peças 9 e 10, as peças 42 e 43, e as peças 60 e 61. As peças 30, 31 e 32 são três unidades da mesma medida, assim como as peças 63, 64 e 65.
+> As peças 6 e 7 são iguais (duas unidades da mesma medida), assim como as peças 9 e 10, as peças 42 e 43, as peças 60 e 61, e as peças 69 e 70. As peças 30, 31 e 32 são três unidades da mesma medida, assim como as peças 63, 64 e 65.
 >
 > Peça 41 tem as mesmas medidas da peça 20 (43,4 × 55,3), só com largura/comprimento invertidos — confirmar se é peça repetida ou diferente mesmo.
 >
 > Peça 67 tem as mesmas medidas da peça 26 (10,5 × 74,5, Carvalho Brun 15 mm) — se forem a mesma tábua contada duas vezes, avisar para remover uma.
 >
-> ⚠️ **Peça 70:** o ditado começou "32,8", foi corrigido na hora para "32,2 × 85,6" — interpretado como uma **terceira peça, igual à 69**. Se a intenção era só corrigir a peça 69 (e são apenas duas peças no total), avisar para remover a 70.
+> Peças 69 e 70: confirmado pelo Eduardo que são **duas peças iguais** (32,2 × 85,6). O "corrigindo" no ditado foi só ajuste do número (32,8 → 32,2).
 >
 > Peça 11: ditada primeiro como 14,1, corrigida na hora para **14,6**.
 >
