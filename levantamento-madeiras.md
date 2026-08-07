@@ -53,6 +53,10 @@ Anotações do levantamento feito em casa (medidas em centímetros, espessura em
 | 47 | 16,5 | 37,7 | 15 | Branco |
 | 48 | 15,8 | 23,5 | 15 | Branco |
 | 49 | 28,5 | 35,0 | 6 | Carvalho Brun |
+| 50 | 108,5 | 275,4 | 6 | Tecido (verso branco) |
+| 51 | 105,0 | 275,4 | 6 | Branco |
+| 52 | 101,5 | 275,0 | 6 | Café |
+| 53 | 176,0 | 275,0 | 15 | Carvalho Brun |
 
 > Obs.: "Madeira escura" foi renomeada para **Carvalho Brun** (nome do acabamento) em todas as peças, a pedido do Eduardo. As peças que tinham sido ditadas só como "madeira" (42, 43, 45, 49) foram confirmadas como Carvalho Brun também.
 >
@@ -69,11 +73,13 @@ Anotações do levantamento feito em casa (medidas em centímetros, espessura em
 > Peças 36 e 37: primeira espessura de 6 mm do levantamento (provavelmente fundo/compensado fino) — diferente das demais, que são 15 ou 18 mm.
 >
 > Peça 46: nova cor "tecido" (confirmado que é um tipo/acabamento de madeira, não pano de verdade).
+>
+> Peças 50–53: chapas grandes (~2,75 m de comprimento). Peça 50 tem face em tecido e **verso branco** (transcrição saiu "converso branco" — assumido como "com verso branco"; confirmar).
 
 ## Resumo
 
-- **Total de peças:** 49
-- **Espessura 6 mm:** 3 peças (36, 37, 49)
-- **Espessura 15 mm:** 46 peças (1, 2, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48)
+- **Total de peças:** 53
+- **Espessura 6 mm:** 6 peças (36, 37, 49, 50, 51, 52)
+- **Espessura 15 mm:** 44 peças (1, 2, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 53)
 - **Espessura 18 mm:** 3 peças (3, 4, 5)
-- **Cor:** Carvalho Brun (29 peças) · madeira clara/branco (16 peças — nº 14, 15, 16, 17, 18, 21, 22, 28, 30, 31, 32, 36, 37, 44, 47, 48) · café (4 peças — nº 19, 33, 34, 38) · tecido (1 peça — nº 46)
+- **Cor:** Carvalho Brun (29 peças) · madeira clara/branco (17 peças — nº 14, 15, 16, 17, 18, 21, 22, 28, 30, 31, 32, 36, 37, 44, 47, 48, 51) · café (5 peças — nº 19, 33, 34, 38, 52) · tecido (2 peças — nº 46, 50)
