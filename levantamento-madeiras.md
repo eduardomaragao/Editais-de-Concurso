@@ -99,6 +99,9 @@ Anotações do levantamento feito em casa (medidas em centímetros, espessura em
 | 93 | 29,4 | 74,6 | 15 | Carvalho Brun | — |
 | 94 | 49,0 | 59,0 | 15 | Tecido | — |
 | 95 | 32,0 | 38,8 | 15 | Carvalho Brun | — |
+| 96 | 17,4 | 57,0 | 15 | Carvalho Brun | — |
+| 97 | 20,0 | 54,5 | 15 | Carvalho Brun | — |
+| 98 | 25,1 | 55,3 | 15 | Carvalho Brun | — |
 
 > Obs.: "Madeira escura" foi renomeada para **Carvalho Brun** (nome do acabamento) em todas as peças, a pedido do Eduardo. As peças que tinham sido ditadas só como "madeira" (42, 43, 45, 49) foram confirmadas como Carvalho Brun também.
 >
@@ -138,9 +141,9 @@ Anotações do levantamento feito em casa (medidas em centímetros, espessura em
 
 ## Resumo
 
-- **Total de peças:** 95
+- **Total de peças:** 98
 - **Espessura 6 mm:** 17 peças (36, 37, 49, 50, 51, 52, 54, 68, 69, 70, 71, 72, 73, 85, 86, 87, 88)
-- **Espessura 15 mm:** 69 peças (1, 2, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 53, 57, 58, 59, 62, 63, 64, 65, 66, 67, 74, 75, 76, 77, 78, 79, 80, 82, 83, 84, 89, 90, 91, 93, 94, 95)
+- **Espessura 15 mm:** 72 peças (1, 2, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 53, 57, 58, 59, 62, 63, 64, 65, 66, 67, 74, 75, 76, 77, 78, 79, 80, 82, 83, 84, 89, 90, 91, 93, 94, 95, 96, 97, 98)
 - **Espessura 18 mm:** 9 peças (3, 4, 5, 55, 56, 60, 61, 81, 92)
-- **Cor:** Carvalho Brun (49 peças) · madeira clara/branco (32 peças — nº 14, 15, 16, 17, 18, 21, 22, 28, 30, 31, 32, 36, 37, 44, 47, 48, 51, 62, 63, 64, 65, 66, 68, 69, 70, 72, 73, 76, 77, 78, 79, 83) · café (7 peças — nº 19, 33, 34, 38, 52, 85, 88) · tecido (8 peças — nº 46, 50, 57, 80, 87, 90, 91, 94)
-- **Local:** dispensa (peças 1–49 e 58–77) · corredor (peças 50–57) · peças 78–95 ainda sem local
+- **Cor:** Carvalho Brun (52 peças) · madeira clara/branco (32 peças — nº 14, 15, 16, 17, 18, 21, 22, 28, 30, 31, 32, 36, 37, 44, 47, 48, 51, 62, 63, 64, 65, 66, 68, 69, 70, 72, 73, 76, 77, 78, 79, 83) · café (7 peças — nº 19, 33, 34, 38, 52, 85, 88) · tecido (8 peças — nº 46, 50, 57, 80, 87, 90, 91, 94)
+- **Local:** dispensa (peças 1–49 e 58–77) · corredor (peças 50–57) · peças 78–98 ainda sem local
