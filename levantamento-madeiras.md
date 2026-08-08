@@ -89,6 +89,7 @@ Anotações do levantamento feito em casa (medidas em centímetros, espessura em
 | 83 | 64,2 | 185,3 | 15 | Branco | — |
 | 84 | 50,0 | 90,0 | 15 | Carvalho Brun | — |
 | 85 | 83,0 | 83,5 | 6 | Café | — |
+| 86 | 65,3 | 80,3 | 6 | Carvalho Brun (verso branco) | — |
 
 > Obs.: "Madeira escura" foi renomeada para **Carvalho Brun** (nome do acabamento) em todas as peças, a pedido do Eduardo. As peças que tinham sido ditadas só como "madeira" (42, 43, 45, 49) foram confirmadas como Carvalho Brun também.
 >
@@ -123,12 +124,14 @@ Anotações do levantamento feito em casa (medidas em centímetros, espessura em
 > Peças 50–53: chapas grandes (~2,75 m de comprimento). Peça 50 tem face em tecido e **verso branco** (transcrição saiu "converso branco" — assumido como "com verso branco"; confirmar).
 >
 > Peça 54: transcrição saiu "carvalho versus branco" — assumido como **Carvalho Brun com verso branco**, mesmo padrão da peça 50. Confirmar.
+>
+> Peça 86: transcrição saiu "caralho versus branco" — mesmo padrão das peças 50/54/71, assumido como **Carvalho Brun com verso branco**.
 
 ## Resumo
 
-- **Total de peças:** 85
-- **Espessura 6 mm:** 14 peças (36, 37, 49, 50, 51, 52, 54, 68, 69, 70, 71, 72, 73, 85)
+- **Total de peças:** 86
+- **Espessura 6 mm:** 15 peças (36, 37, 49, 50, 51, 52, 54, 68, 69, 70, 71, 72, 73, 85, 86)
 - **Espessura 15 mm:** 63 peças (1, 2, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 53, 57, 58, 59, 62, 63, 64, 65, 66, 67, 74, 75, 76, 77, 78, 79, 80, 82, 83, 84)
 - **Espessura 18 mm:** 8 peças (3, 4, 5, 55, 56, 60, 61, 81)
-- **Cor:** Carvalho Brun (43 peças) · madeira clara/branco (32 peças — nº 14, 15, 16, 17, 18, 21, 22, 28, 30, 31, 32, 36, 37, 44, 47, 48, 51, 62, 63, 64, 65, 66, 68, 69, 70, 72, 73, 76, 77, 78, 79, 83) · café (6 peças — nº 19, 33, 34, 38, 52, 85) · tecido (4 peças — nº 46, 50, 57, 80)
-- **Local:** dispensa (peças 1–49 e 58–77) · corredor (peças 50–57) · peças 78–85 ainda sem local
+- **Cor:** Carvalho Brun (44 peças) · madeira clara/branco (32 peças — nº 14, 15, 16, 17, 18, 21, 22, 28, 30, 31, 32, 36, 37, 44, 47, 48, 51, 62, 63, 64, 65, 66, 68, 69, 70, 72, 73, 76, 77, 78, 79, 83) · café (6 peças — nº 19, 33, 34, 38, 52, 85) · tecido (4 peças — nº 46, 50, 57, 80)
+- **Local:** dispensa (peças 1–49 e 58–77) · corredor (peças 50–57) · peças 78–86 ainda sem local
