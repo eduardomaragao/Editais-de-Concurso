@@ -110,6 +110,7 @@ Anotações do levantamento feito em casa (medidas em centímetros, espessura em
 | 104 | 37,5 | 164,0 | 15 | Carvalho Brun | — |
 | 105 | 31,0 | 170,0 | 15 | Café | — |
 | 106 | 30,0 | 210,5 | 15 | Carvalho Brun | — |
+| 107 | 30,4 | 243,5 | 18 | Carvalho Brun | — |
 
 > Obs.: "Madeira escura" foi renomeada para **Carvalho Brun** (nome do acabamento) em todas as peças, a pedido do Eduardo. As peças que tinham sido ditadas só como "madeira" (42, 43, 45, 49) foram confirmadas como Carvalho Brun também.
 >
@@ -155,9 +156,9 @@ Anotações do levantamento feito em casa (medidas em centímetros, espessura em
 
 ## Resumo
 
-- **Total de peças:** 106
+- **Total de peças:** 107
 - **Espessura 6 mm:** 19 peças (36, 37, 49, 50, 51, 52, 54, 68, 69, 70, 71, 72, 73, 85, 86, 87, 88, 99, 100)
 - **Espessura 15 mm:** 78 peças (1, 2, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 53, 57, 58, 59, 62, 63, 64, 65, 66, 67, 74, 75, 76, 77, 78, 79, 80, 82, 83, 84, 89, 90, 91, 93, 94, 95, 96, 97, 98, 101, 102, 103, 104, 105, 106)
-- **Espessura 18 mm:** 9 peças (3, 4, 5, 55, 56, 60, 61, 81, 92)
-- **Cor:** Carvalho Brun (59 peças) · madeira clara/branco (32 peças — nº 14, 15, 16, 17, 18, 21, 22, 28, 30, 31, 32, 36, 37, 44, 47, 48, 51, 62, 63, 64, 65, 66, 68, 69, 70, 72, 73, 76, 77, 78, 79, 83) · café (8 peças — nº 19, 33, 34, 38, 52, 85, 88, 105) · tecido (8 peças — nº 46, 50, 57, 80, 87, 90, 91, 94)
-- **Local:** dispensa (peças 1–49 e 58–77) · corredor (peças 50–57) · peças 78–106 ainda sem local
+- **Espessura 18 mm:** 10 peças (3, 4, 5, 55, 56, 60, 61, 81, 92, 107)
+- **Cor:** Carvalho Brun (60 peças) · madeira clara/branco (32 peças — nº 14, 15, 16, 17, 18, 21, 22, 28, 30, 31, 32, 36, 37, 44, 47, 48, 51, 62, 63, 64, 65, 66, 68, 69, 70, 72, 73, 76, 77, 78, 79, 83) · café (8 peças — nº 19, 33, 34, 38, 52, 85, 88, 105) · tecido (8 peças — nº 46, 50, 57, 80, 87, 90, 91, 94)
+- **Local:** dispensa (peças 1–49 e 58–77) · corredor (peças 50–57) · peças 78–107 ainda sem local
